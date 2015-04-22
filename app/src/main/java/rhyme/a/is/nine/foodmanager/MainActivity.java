@@ -1,9 +1,14 @@
 package rhyme.a.is.nine.foodmanager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -30,9 +35,28 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+            intentIntegrator.initiateScan();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if(result != null)
+        {
+            String scanContent = result.getContents();
+            Toast toast = Toast.makeText(getApplicationContext(), scanContent, Toast.LENGTH_LONG);
+            toast.show();
+        }
+        else
+        {
+            Toast toast = Toast.makeText(getApplicationContext(), "Invalid barcode", Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }
