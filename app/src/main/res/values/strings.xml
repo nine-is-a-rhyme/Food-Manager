@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Food Manager</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main_tab">Food Manager</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_fridge">K</string>
+    <string name="hello_list">L</string>
+    <string name="hello_recipe">R</string>
 </resources>
