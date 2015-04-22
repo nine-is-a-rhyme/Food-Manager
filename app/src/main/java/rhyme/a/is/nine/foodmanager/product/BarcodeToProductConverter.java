@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class BarcodeToProductConverter {
 
     private static final String REQUEST_URL = "http://codecheck.info/product.search?q=";
-    
+
     public static Product getProductForBarcode(String barcode) {
         String webContent = getFoodApiResponse(barcode);
 
@@ -37,7 +37,7 @@ public class BarcodeToProductConverter {
         }
     }
 
-    public static String getProductName(String content) {
+    private static String getProductName(String content) {
         Pattern pattern = Pattern.compile("<meta property=\"og:title\" content=\"(.*?)\"");
         Matcher matcher = pattern.matcher(content);
 
@@ -47,17 +47,17 @@ public class BarcodeToProductConverter {
         return null;
     }
 
-    public static String getProductCategory(String content) {
+    private static String getProductCategory(String content) {
         Pattern pattern = Pattern.compile("pathList = \\[\"(.*?)\"\\]");
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1);
+            return matcher.group(1).split("\", \"")[2];
 
         return null;
     }
 
-    public static String getProductSize(String content) {
+    private static String getProductSize(String content) {
         Pattern pattern = Pattern.compile("<p class=\"product-info-label\">Menge \\/ Grösse<\\/p>[ \\n\\r\\t]*?<p>(.*)<\\/p>");
         Matcher matcher = pattern.matcher(content);
 
