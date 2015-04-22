@@ -38,7 +38,7 @@ public class BarcodeToProductConverter {
     }
 
     public static String getProductName(String content) {
-        Pattern pattern = Pattern.compile("");
+        Pattern pattern = Pattern.compile("<meta property=\"og:title\" content=\"(.*?)\"");
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
@@ -48,7 +48,7 @@ public class BarcodeToProductConverter {
     }
 
     public static String getProductCategory(String content) {
-        Pattern pattern = Pattern.compile("");
+        Pattern pattern = Pattern.compile("pathList = \\[\"(.*?)\"\\]");
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
@@ -58,7 +58,7 @@ public class BarcodeToProductConverter {
     }
 
     public static String getProductSize(String content) {
-        Pattern pattern = Pattern.compile("");
+        Pattern pattern = Pattern.compile("<p class=\"product-info-label\">Menge \\/ Grösse<\\/p>[ \\n\\r\\t]*?<p>(.*)<\\/p>");
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
