@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -14,6 +15,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainTabActivity extends ActionBarActivity {
@@ -91,8 +98,7 @@ public class MainTabActivity extends ActionBarActivity {
 
         switch (id) {
             case R.id.action_add:
-                text = "Add clicked!";
-                Toast.makeText(context, text, duration).show();
+                new IntentIntegrator(this).initiateScan();
                 return true;
             case R.id.action_edit:
                 text = "Edit clicked!";
@@ -154,6 +160,19 @@ public class MainTabActivity extends ActionBarActivity {
 
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if(result != null)
+        {
+            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
+        }
+        else
+        {
+            //no product found
         }
     }
 }

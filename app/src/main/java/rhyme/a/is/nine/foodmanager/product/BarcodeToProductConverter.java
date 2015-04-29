@@ -39,7 +39,7 @@ public class BarcodeToProductConverter {
         String size = getProductSize(webContent);
 
         if(name != null)
-            return new Product(name, category, barcode, size);
+            return new Product(name, category, barcode, size, ProductPlace.FRIDGE);
         else
             return null;
     }
