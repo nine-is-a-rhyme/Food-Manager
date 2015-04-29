@@ -357,7 +357,7 @@ int id action_menu_presenter 0x7f090003
 int id action_mode_bar 0x7f09002e
 int id action_mode_bar_stub 0x7f09002d
 int id action_mode_close_button 0x7f090020
-int id action_settings 0x7f09003f
+int id action_settings 0x7f090040
 int id activity_chooser_view_content 0x7f090021
 int id always 0x7f090016
 int id beginning 0x7f090013
@@ -406,6 +406,7 @@ int id tabMode 0x7f09000b
 int id title 0x7f090027
 int id up 0x7f090008
 int id useLogo 0x7f090012
+int id webview 0x7f09003f
 int id withText 0x7f09001a
 int id wrap_content 0x7f09001d
 int integer abc_config_activityDefaultDur 0x7f0a0000
@@ -434,8 +435,10 @@ int layout abc_search_dropdown_item_icons_2line 0x7f040013
 int layout abc_search_view 0x7f040014
 int layout abc_simple_dropdown_hint 0x7f040015
 int layout activity_main 0x7f040016
-int layout support_simple_spinner_dropdown_item 0x7f040017
+int layout activity_recipe_external 0x7f040017
+int layout support_simple_spinner_dropdown_item 0x7f040018
 int menu menu_main 0x7f0d0000
+int menu menu_recipe_external 0x7f0d0001
 int mipmap ic_launcher 0x7f030000
 int string abc_action_bar_home_description 0x7f0b0000
 int string abc_action_bar_home_description_format 0x7f0b0001
@@ -456,6 +459,7 @@ int string abc_toolbar_collapse_description 0x7f0b000f
 int string action_settings 0x7f0b0010
 int string app_name 0x7f0b0011
 int string hello_world 0x7f0b0012
+int string title_activity_recipe_external 0x7f0b0013
 int style Animation_AppCompat_DropDownUp 0x7f0c0000
 int style AppTheme 0x7f0c0001
 int style Base_Animation_AppCompat_DropDownUp 0x7f0c0002
