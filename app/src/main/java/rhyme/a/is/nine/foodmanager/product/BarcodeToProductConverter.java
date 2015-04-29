@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
@@ -26,6 +28,7 @@ public class BarcodeToProductConverter {
             return null;
 
         Product product = DatabaseAccess.getDatabaseProductByBarcode(barcode);
+        product.setCount(1);
 
         if(product != null)
             return product;

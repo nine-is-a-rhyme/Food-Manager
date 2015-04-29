@@ -64,6 +64,7 @@ public class DatabaseAccess implements Serializable {
         for(Product i : products)
         {
             if (i.getBarcode().equals(product.getBarcode())) {
+                i.increaseCount();
                 isNew = false;
             }
         }
@@ -76,7 +77,7 @@ public class DatabaseAccess implements Serializable {
             if (i.getBarcode().equals(product.getBarcode()))
                 return;
         }
-        product.setCount(1);
+        product.setCount(0);
         products_db.add(product);
     }
 

@@ -187,7 +187,6 @@ public class MainTabActivity extends ActionBarActivity {
 
             DatabaseAccess.addProduct(product);
 
-            DatabaseAccess.addProduct(BarcodeToProductConverter.getProductForBarcode(result.getContents()));
             Toast.makeText(getApplicationContext(), "Product found", Toast.LENGTH_LONG).show();
         }
         else

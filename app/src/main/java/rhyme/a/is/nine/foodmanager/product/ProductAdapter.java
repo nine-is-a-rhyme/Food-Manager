@@ -1,6 +1,7 @@
 package rhyme.a.is.nine.foodmanager.product;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,11 +59,22 @@ public class ProductAdapter extends BaseAdapter {
             twoLineListItem = (TwoLineListItem) convertView;
         }
 
+        Product product = DatabaseAccess.getProducts(productPlace).get(position);
+
         TextView text1 = twoLineListItem.getText1();
         TextView text2 = twoLineListItem.getText2();
 
-        text1.setText(DatabaseAccess.getProducts(productPlace).get(position).getName());
-        text2.setText("Menge: " + DatabaseAccess.getProducts(productPlace).get(position).getCount() + " Kategorie: " + DatabaseAccess.getProducts(productPlace).get(position).getCategory());
+        text1.setText(product.getName());
+        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": product.getBestBeforeDate().toGMTString()));
+
+        if(product.getBestBeforeDate() == null)
+            twoLineListItem.setBackgroundColor(Color.LTGRAY);
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 0)
+            twoLineListItem.setBackgroundColor(Color.RED);
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 3600*24)
+            twoLineListItem.setBackgroundColor(Color.YELLOW);
+        else
+            twoLineListItem.setBackgroundColor(Color.GREEN);
 
         return twoLineListItem;
     }
