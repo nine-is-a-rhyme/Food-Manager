@@ -28,10 +28,12 @@ public class BarcodeToProductConverter {
             return null;
 
         Product product = DatabaseAccess.getDatabaseProductByBarcode(barcode);
-        product.setCount(1);
 
-        if(product != null)
+        if(product != null) {
+            product.setCount(1);
             return product;
+        }
+
 
         String webContent = "";
         ConnectionTask ct = new ConnectionTask();

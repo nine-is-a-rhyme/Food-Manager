@@ -77,7 +77,6 @@ public class DatabaseAccess implements Serializable {
             if (i.getBarcode().equals(product.getBarcode()))
                 return;
         }
-        product.setCount(0);
         products_db.add(product);
     }
 
