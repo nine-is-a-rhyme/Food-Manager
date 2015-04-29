@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -31,6 +32,9 @@ public class MainTabActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main_tab);
 
         ActionBar actionBar = getSupportActionBar();
+        if(actionBar.getTabCount() > 0)
+            return;
+
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(true);
 
