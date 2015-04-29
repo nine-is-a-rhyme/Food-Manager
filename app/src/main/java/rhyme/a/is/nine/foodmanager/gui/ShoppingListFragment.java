@@ -1,11 +1,9 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui;
 
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,22 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import rhyme.a.is.nine.foodmanager.R;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FridgeFragment extends ListFragment {
-
-    private FragmentActivity myContext;
+public class ShoppingListFragment extends ListFragment {
 
     private String items[];
 
-
-    public FridgeFragment() {
+    public ShoppingListFragment() {
         // Required empty public constructor
         items = new String[] {
                 "Milch",
@@ -39,21 +35,18 @@ public class FridgeFragment extends ListFragment {
         };
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
-        super.onAttach(activity);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         setHasOptionsMenu(true);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_single_choice, items);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_multiple_choice, items);
 
         /** Setting the array adapter to the listview */
         setListAdapter(adapter);
-        return inflater.inflate(R.layout.fragment_fridge, container, false);
+        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
 
     @Override
@@ -72,7 +65,7 @@ public class FridgeFragment extends ListFragment {
         super.onStart();
 
         /** Setting the multiselect choice mode for the listview */
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     @Override
@@ -87,12 +80,12 @@ public class FridgeFragment extends ListFragment {
 
         switch (id) {
             case R.id.action_add:
-                DialogFragment scannerDialog = new AddItemDialog();
-                scannerDialog.show(myContext.getFragmentManager(), "test");
+                text = "Add clicked!";
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_edit:
                 text = "Edit clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_delete:
                 text = "Delete clicked!";
@@ -102,5 +95,4 @@ public class FridgeFragment extends ListFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

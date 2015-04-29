@@ -12,6 +12,7 @@ import rhyme.a.is.nine.foodmanager.product.ProductPlace;
 public class DatabaseAccess {
 
     private static List<Product> products = new ArrayList<Product>();
+    private static List<Product> products_db = new ArrayList<Product>();
 
     public static List<Product> getAllProducts() {
         return products;
@@ -19,6 +20,9 @@ public class DatabaseAccess {
 
     public static List<Product> getProducts(ProductPlace productPlace) {
         List<Product> temp = new ArrayList<Product>();
+
+        if (products.isEmpty())
+            return null;
 
         for(Product i : products)
         {
@@ -30,6 +34,9 @@ public class DatabaseAccess {
 
     public static Product getProductByName(String name, ProductPlace productPlace)
     {
+        if (products.isEmpty())
+            return null;
+
         for(Product i : products)
         {
             if (i.getName().equals(name) && i.getProductPlace() == productPlace)
@@ -40,15 +47,47 @@ public class DatabaseAccess {
 
     public static void addProduct(Product product)
     {
-        products.add(product);
-    }
+        boolean isNew = true;
 
-    public static void deleteProductByName(String name, ProductPlace productPlace)
-    {
+        // check if exists
         for(Product i : products)
         {
-            if (i.getName().equals(name) && i.getProductPlace() == productPlace)
-                products.remove(i);
+            if (i.getBarcode().equals(product.getBarcode())) {
+                i.increaseCount();
+                isNew = false;
+            }
         }
+        if(isNew)
+            products.add(product);
+
+        // construct db
+        for(Product i : products_db)
+        {
+            if (i.getBarcode().equals(product.getBarcode()))
+                return;
+        }
+        product.setCount(1);
+        products_db.add(product);
+    }
+
+    public static void removeProductByPosition(int position)
+    {
+        if (products.isEmpty())
+            return;
+
+        products.remove(position);
+    }
+
+    public static Product getDatabaseProductByBarcode(String barcode)
+    {
+        if (products_db.isEmpty())
+            return null;
+
+        for(Product i : products_db)
+        {
+            if (i.getBarcode().equals(barcode))
+                return i;
+        }
+        return null;
     }
 }

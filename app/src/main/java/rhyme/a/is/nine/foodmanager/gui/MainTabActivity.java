@@ -1,15 +1,11 @@
-package rhyme.a.is.nine.foodmanager;
-
-import java.util.Locale;
+package rhyme.a.is.nine.foodmanager.gui;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -21,8 +17,9 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
-import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainTabActivity extends ActionBarActivity {
@@ -81,6 +78,41 @@ public class MainTabActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        Context context = getApplicationContext();
+        CharSequence text;
+        int duration = Toast.LENGTH_SHORT;
+
+        int id = item.getItemId();
+
+
+        switch (id) {
+            case R.id.action_add:
+                new IntentIntegrator(this).initiateScan();
+                return true;
+            case R.id.action_edit:
+                text = "Edit clicked!";
+                Toast.makeText(context, text, duration).show();
+                return true;
+            case R.id.action_delete:
+                text = "Delete clicked!";
+                Toast.makeText(context, text, duration).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private Fragment mFragment;
         private final Activity mActivity;
@@ -133,11 +165,12 @@ public class MainTabActivity extends ActionBarActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(result != null)
         {
-            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
+            DatabaseAccess.addProduct(BarcodeToProductConverter.getProductForBarcode(result.getContents()));
+            Toast.makeText(getApplicationContext(), "Product found", Toast.LENGTH_LONG).show();
         }
         else
         {
-            //no product found
+            Toast.makeText(getApplicationContext(), "no product found", Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -11,6 +11,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
+
 /**
  * Created by martinmaritsch on 22/04/15.
  */
@@ -19,6 +21,12 @@ public class BarcodeToProductConverter {
     private static final String REQUEST_URL = "http://www.codecheck.info/product.search?q=";
 
     public static Product getProductForBarcode(String barcode) {
+
+        Product product = DatabaseAccess.getDatabaseProductByBarcode(barcode);
+
+        if(product != null)
+            return product;
+
         String webContent = "";
         ConnectionTask ct = new ConnectionTask();
         try {
@@ -39,7 +47,7 @@ public class BarcodeToProductConverter {
         String size = getProductSize(webContent);
 
         if(name != null)
-            return new Product(name, category, barcode, size, ProductPlace.FRIDGE);
+            return new Product(name, category, barcode, size, 1, ProductPlace.FRIDGE);
         else
             return null;
     }

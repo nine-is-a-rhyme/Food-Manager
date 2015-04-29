@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui;
 
 
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import rhyme.a.is.nine.foodmanager.R;
 
 
 /**
