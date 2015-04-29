@@ -1,21 +1,11 @@
 package rhyme.a.is.nine.foodmanager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.content.Intent;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-import java.util.concurrent.ExecutionException;
-
-import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
-import rhyme.a.is.nine.foodmanager.product.ConnectionTask;
-import rhyme.a.is.nine.foodmanager.product.Product;
-
 
 public class MainActivity extends ActionBarActivity {
 
