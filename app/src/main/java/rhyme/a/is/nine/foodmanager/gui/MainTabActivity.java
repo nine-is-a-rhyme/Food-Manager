@@ -20,6 +20,7 @@ import com.google.zxing.integration.android.IntentResult;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainTabActivity extends ActionBarActivity {
@@ -165,6 +166,15 @@ public class MainTabActivity extends ActionBarActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(result != null)
         {
+            if(result.getContents() == null)
+                return;
+
+            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
+            if(product == null)
+                return;
+
+            DatabaseAccess.addProduct(product);
+
             DatabaseAccess.addProduct(BarcodeToProductConverter.getProductForBarcode(result.getContents()));
             Toast.makeText(getApplicationContext(), "Product found", Toast.LENGTH_LONG).show();
         }

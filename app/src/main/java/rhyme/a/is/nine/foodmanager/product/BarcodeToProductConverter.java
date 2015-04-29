@@ -22,6 +22,9 @@ public class BarcodeToProductConverter {
 
     public static Product getProductForBarcode(String barcode) {
 
+        if (barcode == null)
+            return null;
+
         Product product = DatabaseAccess.getDatabaseProductByBarcode(barcode);
 
         if(product != null)
