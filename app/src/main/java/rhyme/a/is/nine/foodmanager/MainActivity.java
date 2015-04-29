@@ -10,7 +10,10 @@ import android.content.Intent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.concurrent.ExecutionException;
+
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.ConnectionTask;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 
@@ -38,11 +41,8 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Product product = BarcodeToProductConverter.getProductForBarcode("90129025");
-            Toast toast = Toast.makeText(getApplicationContext(), product.getName(), Toast.LENGTH_LONG);
-            toast.show();
-            //IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-            //intentIntegrator.initiateScan();
+            IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+            intentIntegrator.initiateScan();
 
             return true;
         }

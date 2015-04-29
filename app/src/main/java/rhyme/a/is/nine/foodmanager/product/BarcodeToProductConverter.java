@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +19,20 @@ public class BarcodeToProductConverter {
     private static final String REQUEST_URL = "http://www.codecheck.info/product.search?q=";
 
     public static Product getProductForBarcode(String barcode) {
-        String webContent = getFoodApiResponse(barcode);
+        String webContent = "";
+        ConnectionTask ct = new ConnectionTask();
+        try {
+            webContent = ct.execute(REQUEST_URL + barcode).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(webContent == null || webContent == "")
+            return null;
 
         String name = getProductName(webContent);
         String category = getProductCategory(webContent);
