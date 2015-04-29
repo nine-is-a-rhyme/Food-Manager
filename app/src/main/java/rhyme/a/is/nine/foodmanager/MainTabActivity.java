@@ -3,11 +3,13 @@ package rhyme.a.is.nine.foodmanager;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.*;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -28,18 +30,21 @@ public class MainTabActivity extends ActionBarActivity {
         actionBar.setDisplayShowTitleEnabled(true);
 
         ActionBar.Tab tab = actionBar.newTab()
+                .setTag(1)
                 .setText("Kühlschrank")
                 .setTabListener(new TabListener<FridgeFragment>(
                         this, "fridge", FridgeFragment.class));
         actionBar.addTab(tab);
 
         tab = actionBar.newTab()
+                .setTag(2)
                 .setText("Einkaufsliste")
                 .setTabListener(new TabListener<ShoppingListFragment>(
                         this, "shoppinglist", ShoppingListFragment.class));
         actionBar.addTab(tab);
 
         tab = actionBar.newTab()
+                .setTag(3)
                 .setText("Rezepte")
                 .setTabListener(new TabListener<RecipeFragment>(
                         this, "recipe", RecipeFragment.class));
@@ -73,7 +78,6 @@ public class MainTabActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_tab, menu);
         return true;
     }
 
@@ -90,22 +94,6 @@ public class MainTabActivity extends ActionBarActivity {
 
 
         switch (id) {
-            case R.id.action_add:
-                text = "Add clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
-            case R.id.action_edit:
-                text = "Edit clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
-            case R.id.action_delete:
-                text = "Delete clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
-            case R.id.action_settings:
-                text = "Settings clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -140,6 +128,7 @@ public class MainTabActivity extends ActionBarActivity {
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
             // Check if the fragment is already initialized
             if (mFragment == null) {
                 // If not, instantiate and add it to the activity
