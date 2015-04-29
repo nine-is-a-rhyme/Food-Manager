@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainTabActivity extends ActionBarActivity {
@@ -94,6 +101,21 @@ public class MainTabActivity extends ActionBarActivity {
 
 
         switch (id) {
+            case R.id.action_add:
+                new IntentIntegrator(this).initiateScan();
+                return true;
+            case R.id.action_edit:
+                text = "Edit clicked!";
+                Toast.makeText(context, text, duration).show();
+                return true;
+            case R.id.action_delete:
+                text = "Delete clicked!";
+                Toast.makeText(context, text, duration).show();
+                return true;
+            case R.id.action_settings:
+                text = "Settings clicked!";
+                Toast.makeText(context, text, duration).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -143,6 +165,19 @@ public class MainTabActivity extends ActionBarActivity {
 
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if(result != null)
+        {
+            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
+        }
+        else
+        {
+            //no product found
         }
     }
 }

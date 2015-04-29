@@ -12,19 +12,31 @@ public class Product {
     private String size = null;
     private Date bestBeforeDate = null;
 
-    public Product(String name, String category, String barcode, String size, Date bestBeforeDate) {
+    public ProductPlace getProductPlace() {
+        return productPlace;
+    }
+
+    public void setProductPlace(ProductPlace productPlace) {
+        this.productPlace = productPlace;
+    }
+
+    private ProductPlace productPlace = null;
+
+    public Product(String name, String category, String barcode, String size, ProductPlace productPlace, Date bestBeforeDate) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
         this.bestBeforeDate = bestBeforeDate;
+        this.productPlace = productPlace;
     }
 
-    public Product(String name, String category, String barcode, String size) {
+    public Product(String name, String category, String barcode, String size, ProductPlace productPlace) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
+        this.productPlace = productPlace;
     }
 
     public String getName() {
