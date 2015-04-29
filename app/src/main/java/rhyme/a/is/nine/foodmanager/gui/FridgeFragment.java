@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui;
 
 
 import android.app.Activity;
@@ -13,10 +13,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.product.ProductAdapter;
+import rhyme.a.is.nine.foodmanager.product.ProductPlace;
+import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
 /**
@@ -26,17 +29,11 @@ public class FridgeFragment extends ListFragment {
 
     private FragmentActivity myContext;
 
-    private String items[];
+    private ProductAdapter productAdapter;
 
 
     public FridgeFragment() {
         // Required empty public constructor
-        items = new String[] {
-                "Milch",
-                "Salami",
-                "Käse",
-                "Eier"
-        };
     }
 
     @Override
@@ -49,15 +46,23 @@ public class FridgeFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_single_choice, items);
 
-        /** Setting the array adapter to the listview */
-        setListAdapter(adapter);
+        // Setting the array adapter to the listview
+        productAdapter = new ProductAdapter(getActivity().getBaseContext(), ProductPlace.FRIDGE);
+        setListAdapter(productAdapter);
+
         return inflater.inflate(R.layout.fragment_fridge, container, false);
     }
 
     @Override
+    public void onResume() {
+        productAdapter.notifyDataSetChanged();
+        super.onResume();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_main_tab, menu);
     }
 
@@ -72,6 +77,30 @@ public class FridgeFragment extends ListFragment {
 
         /** Setting the multiselect choice mode for the listview */
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        // enable swipe to delete
+        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
+                new SwipeDismissListViewTouchListener(
+                        getListView(),
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    productAdapter.removeItem(position);
+                                }
+                                productAdapter.notifyDataSetChanged();
+                            }
+                        }
+                );
+        swipeDismissListViewTouchListener.setEnabled(true);
+        getListView().setOnTouchListener(swipeDismissListViewTouchListener);
+        getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui;
 
 
 import android.app.DialogFragment;
@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import rhyme.a.is.nine.foodmanager.R;
 
 
 /**
@@ -49,6 +51,7 @@ public class ShoppingListFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_main_tab, menu);
     }
 
