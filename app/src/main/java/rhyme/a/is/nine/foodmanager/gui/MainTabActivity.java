@@ -59,6 +59,14 @@ public class MainTabActivity extends ActionBarActivity {
                         this, "recipe", RecipeFragment.class));
         actionBar.addTab(tab);
 
+        DatabaseAccess.readFromFile(this);
+    }
+
+    @Override
+    public void onStop() {
+        DatabaseAccess.writeToFile(this);
+
+        super.onStop();
     }
 
     @Override

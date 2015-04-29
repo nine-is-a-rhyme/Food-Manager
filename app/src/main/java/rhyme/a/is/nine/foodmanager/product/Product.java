@@ -1,17 +1,19 @@
 package rhyme.a.is.nine.foodmanager.product;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by martinmaritsch on 22/04/15.
  */
-public class Product {
+public class Product implements Serializable {
     private String name = null;
     private String category = null;
     private String barcode = null;
     private String size = null;
     private Date bestBeforeDate = null;
     private int count = 0;
+    private ProductPlace productPlace = null;
 
     public ProductPlace getProductPlace() {
         return productPlace;
@@ -20,8 +22,6 @@ public class Product {
     public void setProductPlace(ProductPlace productPlace) {
         this.productPlace = productPlace;
     }
-
-    private ProductPlace productPlace = null;
 
     public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace, Date bestBeforeDate) {
         this.name = name;
