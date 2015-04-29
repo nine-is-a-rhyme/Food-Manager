@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui;
 
 
 import android.app.AlertDialog;

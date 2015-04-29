@@ -11,6 +11,7 @@ public class Product {
     private String barcode = null;
     private String size = null;
     private Date bestBeforeDate = null;
+    private int count = 0;
 
     public ProductPlace getProductPlace() {
         return productPlace;
@@ -22,21 +23,23 @@ public class Product {
 
     private ProductPlace productPlace = null;
 
-    public Product(String name, String category, String barcode, String size, ProductPlace productPlace, Date bestBeforeDate) {
+    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace, Date bestBeforeDate) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
         this.bestBeforeDate = bestBeforeDate;
         this.productPlace = productPlace;
+        this.count = count;
     }
 
-    public Product(String name, String category, String barcode, String size, ProductPlace productPlace) {
+    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
         this.productPlace = productPlace;
+        this.count = count;
     }
 
     public String getName() {
@@ -77,5 +80,17 @@ public class Product {
 
     public void setBestBeforeDate(Date bestBeforeDate) {
         this.bestBeforeDate = bestBeforeDate;
+    }
+
+    public void increaseCount() { count++; }
+
+    public void decreaseCount() { if(count > 0) count--; }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

@@ -32,7 +32,7 @@ MERGED from com.embarkmobile:zxing-android-integration:2.0.0:4:5
 		ADDED from AndroidManifest.xml:7:9
 	android:theme
 		ADDED from AndroidManifest.xml:9:9
-activity#rhyme.a.is.nine.foodmanager.MainTabActivity
+activity#rhyme.a.is.nine.foodmanager.gui.MainTabActivity
 ADDED from AndroidManifest.xml:10:9
 	android:label
 		ADDED from AndroidManifest.xml:12:13

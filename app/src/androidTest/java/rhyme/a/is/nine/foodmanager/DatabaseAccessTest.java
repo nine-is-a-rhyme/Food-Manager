@@ -29,12 +29,6 @@ public class DatabaseAccessTest  extends ApplicationTestCase<Application> {
         assertEquals("category123", DatabaseAccess.getProductByName("name123", ProductPlace.FRIDGE).getCategory());
     }
 
-    public void testDeleteProduct() {
-        DatabaseAccess.addProduct(new Product("name321", "category123", "barcode", "size", ProductPlace.FRIDGE));
-        DatabaseAccess.deleteProductByName("name321", ProductPlace.FRIDGE);
-        assertNull(DatabaseAccess.getProductByName("name321", ProductPlace.FRIDGE));
-    }
-
     public void testModifyProduct() {
         DatabaseAccess.addProduct(new Product("name456", "category123", "barcode", "size", ProductPlace.FRIDGE));
         Product product = DatabaseAccess.getProductByName("name456", ProductPlace.FRIDGE);
