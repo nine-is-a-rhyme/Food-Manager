@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".recipe_external"
+            android:name=".RecipeExternal"
             android:label="@string/title_activity_recipe_external"
             android:parentActivityName=".MainActivity" >
             <meta-data

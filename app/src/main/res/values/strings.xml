@@ -11,6 +11,6 @@
     <string name="hello_recipe">R</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank
-    <string name="title_activity_recipe_external">recipe_external</string>
+    <string name="hello_blank_fragment">Hello blank</string>
+    <string name="title_activity_recipe_external">Recipe Website</string>
 </resources>
