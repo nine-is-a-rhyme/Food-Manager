@@ -83,41 +83,6 @@ public class MainTabActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        Context context = getApplicationContext();
-        CharSequence text;
-        int duration = Toast.LENGTH_SHORT;
-
-        int id = item.getItemId();
-
-
-        switch (id) {
-            case R.id.action_add:
-                new IntentIntegrator(this).initiateScan();
-                return true;
-            case R.id.action_edit:
-                text = "Edit clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
-            case R.id.action_delete:
-                text = "Delete clicked!";
-                Toast.makeText(context, text, duration).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private Fragment mFragment;
         private final Activity mActivity;
@@ -168,6 +133,7 @@ public class MainTabActivity extends ActionBarActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        Toast.makeText(getApplicationContext(), "Resultcode: " + requestCode, Toast.LENGTH_LONG).show();
         if(result != null)
         {
             if(result.getContents() == null)

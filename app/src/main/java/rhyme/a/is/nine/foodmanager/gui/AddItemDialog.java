@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.zxing.integration.android.IntentIntegrator;
 
 
 /**
@@ -19,18 +22,20 @@ public class AddItemDialog extends DialogFragment {
 
     private boolean startScanner;
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Barcodescanner starten?")
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startScanner = true;
+                        new IntentIntegrator(getActivity()).initiateScan();
                     }
                 })
                 .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startScanner = false;
+                        Intent intent = new Intent(getActivity(), ProductActivity.class);
+                        getActivity().startActivityForResult(intent, 0);
                     }
                 });
 

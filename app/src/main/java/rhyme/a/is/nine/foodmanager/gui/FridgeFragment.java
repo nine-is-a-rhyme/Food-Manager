@@ -3,6 +3,7 @@ package rhyme.a.is.nine.foodmanager.gui;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -115,8 +116,8 @@ public class FridgeFragment extends ListFragment {
 
         switch (id) {
             case R.id.action_add:
-                DialogFragment scannerDialog = new AddItemDialog();
-                scannerDialog.show(myContext.getFragmentManager(), "test");
+                Intent intent = new Intent(getActivity(), ProductActivity.class);
+                getActivity().startActivityForResult(intent, 0);
                 return true;
             case R.id.action_edit:
                 text = "Edit clicked!";
