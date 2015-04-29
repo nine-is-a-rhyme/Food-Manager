@@ -38,32 +38,10 @@ public class BarcodeToProductConverter {
         String category = getProductCategory(webContent);
         String size = getProductSize(webContent);
 
-        return new Product(name, category, barcode, size);
-    }
-
-    public static String getFoodApiResponse(String barcode) {
-        try {
-            URL website = new URL(REQUEST_URL + barcode);
-            URLConnection connection = website.openConnection();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                            connection.getInputStream()));
-
-            StringBuilder response = new StringBuilder();
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                response.append(inputLine);
-
-            in.close();
-
-            return response.toString();
-        } catch (MalformedURLException e) {
-            // normally impossible
+        if(name != null)
+            return new Product(name, category, barcode, size);
+        else
             return null;
-        } catch (IOException e) {
-            return null;
-        }
     }
 
     private static String getProductName(String content) {

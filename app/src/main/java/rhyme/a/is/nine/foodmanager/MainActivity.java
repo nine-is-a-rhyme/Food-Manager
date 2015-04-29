@@ -41,30 +41,9 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-            intentIntegrator.initiateScan();
-
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent)
-    {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-
-        if(result != null)
-        {
-            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
-            Toast toast = Toast.makeText(getApplicationContext(), product.getName(), Toast.LENGTH_LONG);
-            toast.show();
-        }
-        else
-        {
-            Toast toast = Toast.makeText(getApplicationContext(), "Invalid barcode", Toast.LENGTH_LONG);
-            toast.show();
-        }
-    }
-
 }
