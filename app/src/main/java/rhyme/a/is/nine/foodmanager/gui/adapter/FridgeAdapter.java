@@ -9,10 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.database.ShoppingListDatabase;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -64,7 +66,7 @@ public class FridgeAdapter extends BaseAdapter {
         TextView text2 = twoLineListItem.getText2();
 
         text1.setText(product.getName());
-        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": product.getBestBeforeDate().toGMTString()));
+        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate()).toString()));
 
         if(product.getBestBeforeDate() == null)
             twoLineListItem.setBackgroundColor(Color.LTGRAY);
@@ -79,6 +81,7 @@ public class FridgeAdapter extends BaseAdapter {
     }
 
     public void removeItem(int position) {
+        ShoppingListDatabase.addProduct(FridgeDatabase.getProductByPosition(position));
         FridgeDatabase.removeProductByPosition(position, false);
     }
 }

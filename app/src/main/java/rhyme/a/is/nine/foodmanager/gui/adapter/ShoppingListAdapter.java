@@ -57,13 +57,8 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
         View rowView = inflater.inflate(R.layout.shopping_list_element, null);
         TextView productName = (TextView) rowView.findViewById(R.id.shopping_list_product_name);
         TextView productCount = (TextView) rowView.findViewById(R.id.shopping_list_product_count);
-        Button minusButton = (Button) rowView.findViewById(R.id.shopping_list_minus_button);
-        Button plusButton = (Button) rowView.findViewById(R.id.shopping_list_plus_button);
 
-        minusButton.setOnClickListener(this);
-        minusButton.setTag("MINUS_BUTTON");
-        plusButton.setOnClickListener(this);
-        plusButton.setTag("PLUS_BUTTON");
+        rowView.setTag(position);
 
         productName.setText(product.getName());
         productCount.setText("Anzahl: " + product.getCount());
@@ -72,7 +67,15 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
     }
 
     public void removeItem(int position) {
+        ShoppingListDatabase.removeProductByPosition(position, true);
+    }
+
+    public void decreaseProductCount(int position) {
         ShoppingListDatabase.removeProductByPosition(position, false);
+    }
+
+    public void increaseProductCount(int position) {
+        ShoppingListDatabase.getProductByPosition(position).increaseCount();
     }
 
     @Override
@@ -81,7 +84,11 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
         switch((String)view.getTag()) {
             case "MINUS_BUTTON":
-                ShoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent()));
+                ShoppingListDatabase.removeProductByPosition(listView.getPositionForView((View) view.getParent()), false);
+            case "PLUS_BUTTON":
+                ShoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent())).increaseCount();
         }
+
+        this.notifyDataSetChanged();
     }
 }
