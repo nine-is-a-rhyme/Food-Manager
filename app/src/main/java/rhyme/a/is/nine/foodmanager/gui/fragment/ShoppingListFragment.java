@@ -10,16 +10,13 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.AddItemDialog;
 import rhyme.a.is.nine.foodmanager.gui.adapter.ShoppingListAdapter;
-import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
@@ -30,8 +27,11 @@ public class ShoppingListFragment extends ListFragment {
 
     private FragmentActivity myContext;
 
-    private ShoppingListAdapter shoppingListAdapter;
+    private static ShoppingListAdapter shoppingListAdapter;
 
+    public static ShoppingListAdapter getAdapter() {
+        return shoppingListAdapter;
+    }
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -46,7 +46,7 @@ public class ShoppingListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
 
         return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
@@ -99,43 +99,4 @@ public class ShoppingListFragment extends ListFragment {
         getListView().setOnTouchListener(swipeDismissListViewTouchListener);
         getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        CharSequence text;
-
-        int id = item.getItemId();
-
-
-        switch (id) {
-            case R.id.action_add:
-                DialogFragment scannerDialog = new AddItemDialog();
-                scannerDialog.show(myContext.getFragmentManager(), "test");
-                return true;
-            case R.id.action_edit:
-                text = "Edit clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_delete:
-                text = "Delete clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void onMinusButtonClicked(View v) {
-        shoppingListAdapter.decreaseProductCount((int)v.getTag());
-        shoppingListAdapter.notifyDataSetChanged();
-    }
-
-    public void onPlusButtonClicked(View v) {
-        shoppingListAdapter.increaseProductCount((int)v.getTag());
-        shoppingListAdapter.notifyDataSetChanged();
-    }
-
 }

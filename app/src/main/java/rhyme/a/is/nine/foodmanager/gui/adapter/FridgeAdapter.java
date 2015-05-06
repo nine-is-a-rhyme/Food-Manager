@@ -12,9 +12,8 @@ import android.widget.TwoLineListItem;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
-import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
-import rhyme.a.is.nine.foodmanager.database.ShoppingListDatabase;
+
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -30,7 +29,7 @@ public class FridgeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        List<Product> products = FridgeDatabase.getAllProducts();
+        List<Product> products = MainActivity.fridgeDatabase.getAllProducts();
         if(products != null)
             return products.size();
         return 0;
@@ -38,7 +37,7 @@ public class FridgeAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return FridgeDatabase.getProductByPosition(position);
+        return MainActivity.fridgeDatabase.getProductByPosition(position);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class FridgeAdapter extends BaseAdapter {
             twoLineListItem = (TwoLineListItem) convertView;
         }
 
-        Product product = FridgeDatabase.getProductByPosition(position);
+        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
 
         TextView text1 = twoLineListItem.getText1();
         TextView text2 = twoLineListItem.getText2();
@@ -81,7 +80,9 @@ public class FridgeAdapter extends BaseAdapter {
     }
 
     public void removeItem(int position) {
-        ShoppingListDatabase.addProduct(FridgeDatabase.getProductByPosition(position));
-        FridgeDatabase.removeProductByPosition(position, false);
+        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
+        product.setCount(1);
+        MainActivity.shoppingListDatabase.addProduct(product);
+        MainActivity.fridgeDatabase.removeProductByPosition(position, false);
     }
 }

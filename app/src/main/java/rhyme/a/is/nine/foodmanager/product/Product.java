@@ -14,6 +14,10 @@ public class Product implements Serializable {
     private Date bestBeforeDate = null;
     private int count = 0;
 
+    public Product() {
+
+    }
+
     public Product(String name, String category, String barcode, String size, int count, Date bestBeforeDate) {
         this.name = name;
         this.category = category;

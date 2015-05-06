@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.database.ShoppingListDatabase;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -31,7 +31,7 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public int getCount() {
-        List<Product> products = ShoppingListDatabase.getAllProducts();
+        List<Product> products = MainActivity.shoppingListDatabase.getAllProducts();
         if(products != null)
             return products.size();
         return 0;
@@ -39,7 +39,7 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public Object getItem(int position) {
-        return ShoppingListDatabase.getProductByPosition(position);
+        return MainActivity.shoppingListDatabase.getProductByPosition(position);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Product product = ShoppingListDatabase.getProductByPosition(position);
+        Product product = MainActivity.shoppingListDatabase.getProductByPosition(position);
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,15 +67,15 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
     }
 
     public void removeItem(int position) {
-        ShoppingListDatabase.removeProductByPosition(position, true);
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, true);
     }
 
     public void decreaseProductCount(int position) {
-        ShoppingListDatabase.removeProductByPosition(position, false);
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, false);
     }
 
     public void increaseProductCount(int position) {
-        ShoppingListDatabase.getProductByPosition(position).increaseCount();
+        MainActivity.shoppingListDatabase.getProductByPosition(position).increaseCount();
     }
 
     @Override
@@ -84,9 +84,9 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
         switch((String)view.getTag()) {
             case "MINUS_BUTTON":
-                ShoppingListDatabase.removeProductByPosition(listView.getPositionForView((View) view.getParent()), false);
+                MainActivity.shoppingListDatabase.removeProductByPosition(listView.getPositionForView((View) view.getParent()), false);
             case "PLUS_BUTTON":
-                ShoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent())).increaseCount();
+                MainActivity.shoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent())).increaseCount();
         }
 
         this.notifyDataSetChanged();
