@@ -81,8 +81,7 @@ public class FridgeAdapter extends BaseAdapter {
 
     public void removeItem(int position) {
         Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
-        product.setCount(1);
-        MainActivity.shoppingListDatabase.addProduct(product);
+        MainActivity.shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getBarcode(), product.getSize(), 1));
         MainActivity.fridgeDatabase.removeProductByPosition(position, false);
     }
 }

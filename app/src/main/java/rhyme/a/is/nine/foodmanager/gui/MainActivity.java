@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initilization
+        // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -74,6 +74,8 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+
+        super.onDestroy();
     }
 
     @Override

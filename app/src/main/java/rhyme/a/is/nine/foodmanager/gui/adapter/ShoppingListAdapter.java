@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import rhyme.a.is.nine.foodmanager.product.Product;
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class ShoppingListAdapter extends BaseAdapter implements View.OnClickListener{
+public class ShoppingListAdapter extends BaseAdapter {
 
     private Context context;
     private ListView listView;
@@ -56,11 +55,18 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.shopping_list_element, null);
         TextView productName = (TextView) rowView.findViewById(R.id.shopping_list_product_name);
+        TextView productCategory = (TextView) rowView.findViewById(R.id.shopping_list_product_category);
         TextView productCount = (TextView) rowView.findViewById(R.id.shopping_list_product_count);
+        Button minusButton = (Button) rowView.findViewById(R.id.shopping_list_minus_button);
+        Button plusButton = (Button) rowView.findViewById(R.id.shopping_list_plus_button);
+        minusButton.setTag(position);
+        plusButton.setTag(position);
 
-        rowView.setTag(position);
+        if(product.getCount() <= 1)
+            minusButton.setEnabled(false);
 
         productName.setText(product.getName());
+        productCategory.setText(product.getCategory());
         productCount.setText("Anzahl: " + product.getCount());
 
         return rowView;
@@ -76,19 +82,5 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
     public void increaseProductCount(int position) {
         MainActivity.shoppingListDatabase.getProductByPosition(position).increaseCount();
-    }
-
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(context, "You pushed a button!", Toast.LENGTH_SHORT).show();
-
-        switch((String)view.getTag()) {
-            case "MINUS_BUTTON":
-                MainActivity.shoppingListDatabase.removeProductByPosition(listView.getPositionForView((View) view.getParent()), false);
-            case "PLUS_BUTTON":
-                MainActivity.shoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent())).increaseCount();
-        }
-
-        this.notifyDataSetChanged();
     }
 }

@@ -97,6 +97,5 @@ public class ShoppingListFragment extends ListFragment {
                 );
         swipeDismissListViewTouchListener.setEnabled(true);
         getListView().setOnTouchListener(swipeDismissListViewTouchListener);
-        getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
     }
 }
