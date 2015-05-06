@@ -9,10 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
-import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -28,7 +29,7 @@ public class FridgeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        List<Product> products = FridgeDatabase.getAllProducts();
+        List<Product> products = MainActivity.fridgeDatabase.getAllProducts();
         if(products != null)
             return products.size();
         return 0;
@@ -36,7 +37,7 @@ public class FridgeAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return FridgeDatabase.getProductByPosition(position);
+        return MainActivity.fridgeDatabase.getProductByPosition(position);
     }
 
     @Override
@@ -58,19 +59,19 @@ public class FridgeAdapter extends BaseAdapter {
             twoLineListItem = (TwoLineListItem) convertView;
         }
 
-        Product product = FridgeDatabase.getProductByPosition(position);
+        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
 
         TextView text1 = twoLineListItem.getText1();
         TextView text2 = twoLineListItem.getText2();
 
         text1.setText(product.getName());
-        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": product.getBestBeforeDate().toGMTString()));
+        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate()).toString()));
 
         if(product.getBestBeforeDate() == null)
             twoLineListItem.setBackgroundColor(Color.LTGRAY);
         else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 0)
             twoLineListItem.setBackgroundColor(Color.RED);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 3600*24)
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
             twoLineListItem.setBackgroundColor(Color.YELLOW);
         else
             twoLineListItem.setBackgroundColor(Color.GREEN);
@@ -79,6 +80,8 @@ public class FridgeAdapter extends BaseAdapter {
     }
 
     public void removeItem(int position) {
-        FridgeDatabase.removeProductByPosition(position, false);
+        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
+        MainActivity.shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getBarcode(), product.getSize(), 1));
+        MainActivity.fridgeDatabase.removeProductByPosition(position, false);
     }
 }

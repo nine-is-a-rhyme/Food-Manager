@@ -4,8 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.database.HistoryDatabase;
-import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 
 /**
  * Created by martinmaritsch on 22/04/15.
@@ -19,7 +18,7 @@ public class BarcodeToProductConverter {
         if (barcode == null)
             return null;
 
-        Product product = HistoryDatabase.getProductByBarcode(barcode);
+        Product product = MainActivity.historyDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);
@@ -57,7 +56,11 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1);
+        {
+            String str = matcher.group(1);
+            return parseUnicode(str);
+        }
+
 
         return null;
     }
@@ -67,7 +70,11 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1).split("\", \"")[2];
+        {
+            String str =  matcher.group(1).split("\", \"")[2];
+            return parseUnicode(str);
+        }
+
 
         return null;
     }
@@ -77,8 +84,42 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1);
+        {
+            String str = matcher.group(1);
+            return parseUnicode(str);
+        }
 
         return null;
+    }
+
+    public static String parseUnicode(String str)
+    {
+        char[] chars = str.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '\\') {
+                if (chars.length > i + 5 && chars[i + 1] == 'u') {
+                    try{
+                        char x = (char) Integer.parseInt(str.substring(i+2, i+6), 16);
+                        sb.append(x);
+                        i = i + 5;
+                    } catch(NumberFormatException e){
+                        //not a hex encoding
+                        sb.append(chars[i]);
+                    }
+                } else if (chars.length > i + 1 && chars[i + 1] == 'n') {
+                    sb.append('\n');
+                    i++;
+                } else if (chars.length > i + 1 && chars[i + 1] == 'r') {
+                    sb.append('\r');
+                    i++;
+                }  else {
+                    sb.append(chars[i]);
+                }
+            } else {
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
     }
 }

@@ -8,18 +8,17 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.database.ShoppingListDatabase;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class ShoppingListAdapter extends BaseAdapter implements View.OnClickListener{
+public class ShoppingListAdapter extends BaseAdapter {
 
     private Context context;
     private ListView listView;
@@ -31,7 +30,7 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public int getCount() {
-        List<Product> products = ShoppingListDatabase.getAllProducts();
+        List<Product> products = MainActivity.shoppingListDatabase.getAllProducts();
         if(products != null)
             return products.size();
         return 0;
@@ -39,7 +38,7 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
 
     @Override
     public Object getItem(int position) {
-        return ShoppingListDatabase.getProductByPosition(position);
+        return MainActivity.shoppingListDatabase.getProductByPosition(position);
     }
 
     @Override
@@ -50,38 +49,38 @@ public class ShoppingListAdapter extends BaseAdapter implements View.OnClickList
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Product product = ShoppingListDatabase.getProductByPosition(position);
+        Product product = MainActivity.shoppingListDatabase.getProductByPosition(position);
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.shopping_list_element, null);
         TextView productName = (TextView) rowView.findViewById(R.id.shopping_list_product_name);
+        TextView productCategory = (TextView) rowView.findViewById(R.id.shopping_list_product_category);
         TextView productCount = (TextView) rowView.findViewById(R.id.shopping_list_product_count);
         Button minusButton = (Button) rowView.findViewById(R.id.shopping_list_minus_button);
         Button plusButton = (Button) rowView.findViewById(R.id.shopping_list_plus_button);
+        minusButton.setTag(position);
+        plusButton.setTag(position);
 
-        minusButton.setOnClickListener(this);
-        minusButton.setTag("MINUS_BUTTON");
-        plusButton.setOnClickListener(this);
-        plusButton.setTag("PLUS_BUTTON");
+        if(product.getCount() <= 1)
+            minusButton.setEnabled(false);
 
         productName.setText(product.getName());
+        productCategory.setText(product.getCategory());
         productCount.setText("Anzahl: " + product.getCount());
 
         return rowView;
     }
 
     public void removeItem(int position) {
-        ShoppingListDatabase.removeProductByPosition(position, false);
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, true);
     }
 
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(context, "You pushed a button!", Toast.LENGTH_SHORT).show();
+    public void decreaseProductCount(int position) {
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, false);
+    }
 
-        switch((String)view.getTag()) {
-            case "MINUS_BUTTON":
-                ShoppingListDatabase.getProductByPosition(listView.getPositionForView((View) view.getParent()));
-        }
+    public void increaseProductCount(int position) {
+        MainActivity.shoppingListDatabase.getProductByPosition(position).increaseCount();
     }
 }
