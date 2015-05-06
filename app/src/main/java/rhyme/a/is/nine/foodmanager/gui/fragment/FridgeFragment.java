@@ -3,6 +3,7 @@ package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.AddItemDialog;
+import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
@@ -63,7 +64,7 @@ public class FridgeFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_main_tab, menu);
+        inflater.inflate(R.menu.menu_fridge_tab, menu);
     }
 
     @Override
@@ -115,8 +116,8 @@ public class FridgeFragment extends ListFragment {
 
         switch (id) {
             case R.id.action_add:
-                DialogFragment scannerDialog = new AddItemDialog();
-                scannerDialog.show(myContext.getFragmentManager(), "test");
+                Intent intent = new Intent(getActivity(), ProductActivity.class);
+                getActivity().startActivityForResult(intent, 0);
                 return true;
             case R.id.action_edit:
                 text = "Edit clicked!";
