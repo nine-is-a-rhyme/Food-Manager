@@ -1,6 +1,7 @@
 package rhyme.a.is.nine.foodmanager;
 
 import android.app.Activity;
+import android.app.Application;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +29,7 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
-
+import android.widget.Toast;
 
 
 /**
@@ -41,62 +40,36 @@ import android.support.v4.app.FragmentTransaction;
  * Use the {@link RecipeWebView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecipeWebView extends android.support.v4.app.Fragment {
+public class RecipeWebView extends Fragment implements RecipeWebView.OnFragmentInteractionListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_URL = "param1";
 
-    private URL url;
+    private String url;
 
     private OnFragmentInteractionListener mListener;
 
-    public static RecipeWebView newInstance(URL url) {
-        RecipeWebView fragment = new RecipeWebView(url);
-        Bundle args = new Bundle();
-        args.putString(ARG_URL, url.toString());
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public RecipeWebView(URL url) {
+    public RecipeWebView() {
         // Required empty public constructor
-        RecipeWebView fragment = new RecipeWebView(this.url);
-        Bundle args = new Bundle();
-        args.putString(ARG_URL, url.toString());
-        fragment.setArguments(args);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            String url = new String(getArguments().getString(ARG_URL));
-            try {
-                this.url = new URL(url);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            return;
-        }
-        WebView myWebView = (WebView) getView().findViewById(R.id.webview);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+    public void setUrlString(String url) {
+        this.url = url;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_web_view, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_recipe_web_view, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        WebView myWebView = (WebView) view.findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        myWebView.loadUrl(url);
+
+        return view;
     }
 
     @Override

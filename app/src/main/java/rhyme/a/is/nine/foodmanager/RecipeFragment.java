@@ -1,7 +1,6 @@
 package rhyme.a.is.nine.foodmanager;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -13,15 +12,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import java.net.*;
-import java.io.*;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 
@@ -31,11 +29,12 @@ import static rhyme.a.is.nine.foodmanager.R.layout.fragment_recipe;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements OnClickListener, OnKeyListener {
+
+    private static final String RECIPE_URL = "http://www.chefkoch.de/rs/s0e1z1/*/Rezepte.html";
 
     private List<String> recipe_search_entries_;
     private URL url;
-    private View myFragmentView;
 
 
     public RecipeFragment() {
@@ -47,52 +46,35 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        myFragmentView = inflater.inflate(fragment_recipe, container, false);
+        View myFragmentView = inflater.inflate(fragment_recipe, container, false);
 
         EditText ingredients = (EditText) myFragmentView.findViewById(R.id.ingredients);
         Button goButton = (Button) myFragmentView.findViewById(R.id.create);
 
         // Setup event handlers
-        goButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    // TODO: parse input into recipe_search_entries_ list
-                    showWebsite();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        ingredients.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View view, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    try {
-                        // TODO: parse input into recipe_search_entries_ list
-                        showWebsite();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+        goButton.setOnClickListener(this);
+        ingredients.setOnKeyListener(this);
 
-        return inflater.inflate(fragment_recipe, container, false);
+        return myFragmentView;
     }
 
-    public URL createURL() throws MalformedURLException {
+    public String createUrlString(String[] ingredients) {
         /* creates something like http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html */
 
-        if(!recipe_search_entries_.isEmpty()) {
+        StringBuilder sb = new StringBuilder();
+        for (String i : ingredients) {
+
+        }
+
+        if (!recipe_search_entries_.isEmpty()) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.append("http://www.chefkoch.de/rs/s0e1z1/");
 
-            for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
+            for (Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
                 stringBuilder.append(entry);
-                if(entry.hasNext()) {
+                if (entry.hasNext()) {
                     stringBuilder.append("+");
                 }
             }
@@ -105,39 +87,39 @@ public class RecipeFragment extends Fragment {
                 e.printStackTrace();
             }
 
-        }
-        else {
+        } else {
             url = null;
         }
 
 
-        return url;
+        return null;
 
     }
 
-    public void showWebsite() throws MalformedURLException {
-
-        try {
-            this.createURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(this.url == null){
-            return;
-        }
-
-        FragmentManager fragmentManager = getFragmentManager();
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    public void showWebsite() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         RecipeWebView fragment;
-        //fragment = new RecipeWebView(this.url); // TDO: this should change some day
-        fragment = new RecipeWebView(new URL("http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html"));
+
+        fragment = new RecipeWebView();
+        fragment.setUrlString("http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html");
         fragmentTransaction.replace(R.id.webview, fragment, "RECIPE_FRAGMENT");
         fragmentTransaction.commit();
-
-
     }
 
 
+    @Override
+    public void onClick(View view) {
+        // TODO: parse input into recipe_search_entries_ list
+        showWebsite();
+    }
+
+    @Override
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i == KeyEvent.KEYCODE_ENTER) {
+            // TODO: parse input into recipe_search_entries_ list
+            showWebsite();
+            return true;
+        }
+        return false;
+    }
 }
