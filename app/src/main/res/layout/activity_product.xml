@@ -84,7 +84,8 @@
         android:ems="10"
         android:id="@+id/et_bestbefore"
         android:singleLine="true"
-        android:elegantTextHeight="false" />
+        android:elegantTextHeight="false"
+        android:hint="01.01.2015" />
 
     <Button
         android:layout_width="wrap_content"

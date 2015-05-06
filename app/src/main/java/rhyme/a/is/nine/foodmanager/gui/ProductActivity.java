@@ -1,8 +1,10 @@
 package rhyme.a.is.nine.foodmanager.gui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,20 +40,50 @@ public class ProductActivity extends ActionBarActivity {
         Button button = (Button) findViewById(R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                boolean fail = false;
                 EditText name = (EditText) findViewById(R.id.et_name);
-                product.setName(name.getText().toString());
+                if(name.getText().toString().length() > 0)
+                {
+                    product.setName(name.getText().toString());
+                    name.setBackgroundColor(Color.GREEN);
+                }
+                else
+                {
+                    fail = true;
+                    name.setBackgroundColor(Color.RED);
+                }
                 EditText category = (EditText) findViewById(R.id.et_category);
-                product.setCategory(category.getText().toString());
+                if(category.getText().toString().length() > 0)
+                {
+                    product.setCategory(category.getText().toString());
+                    category.setBackgroundColor(Color.GREEN);
+                }
+                else
+                {
+                    fail = true;
+                    category.setBackgroundColor(Color.RED);
+                }
                 EditText size = (EditText) findViewById(R.id.et_size);
-                product.setSize(size.getText().toString());
+                if(size.getText().toString().length() > 0)
+                {
+                    product.setSize(size.getText().toString());
+                    size.setBackgroundColor(Color.GREEN);
+                }
+                else
+                {
+                    fail = true;
+                    size.setBackgroundColor(Color.RED);
+                }
                 EditText count = (EditText) findViewById(R.id.et_count);
                 try
                 {
                     product.setCount(Integer.parseInt(count.getText().toString()));
+                    count.setBackgroundColor(Color.GREEN);
                 }
                 catch(Exception e)
                 {
                     product.setCount(1);
+                    count.setText("1");
                 }
 
                 EditText bestbefore = (EditText) findViewById(R.id.et_bestbefore);
@@ -59,9 +91,11 @@ public class ProductActivity extends ActionBarActivity {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     Date date = sdf.parse(bestbefore.getText().toString());
                     product.setBestBeforeDate(date);
+                    bestbefore.setBackgroundColor(Color.GREEN);
                 }
                 catch (Exception ex){
-                    System.out.println(ex);
+                    fail = true;
+                    bestbefore.setBackgroundColor(Color.RED);
                 }
 
                 product.setProductPlace(ProductPlace.FRIDGE);
@@ -69,8 +103,15 @@ public class ProductActivity extends ActionBarActivity {
                 {
                     product.setManual(true);
                 }
-                DatabaseAccess.addProduct(product);
-                finish();
+                if(!fail)
+                {
+                    DatabaseAccess.addProduct(product);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

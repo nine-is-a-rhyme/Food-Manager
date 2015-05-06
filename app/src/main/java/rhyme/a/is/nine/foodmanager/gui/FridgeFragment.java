@@ -64,7 +64,7 @@ public class FridgeFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_main_tab, menu);
+        inflater.inflate(R.menu.menu_fridge_tab, menu);
     }
 
     @Override
