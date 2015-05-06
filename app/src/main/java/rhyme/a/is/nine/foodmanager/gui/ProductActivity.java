@@ -142,7 +142,7 @@ public class ProductActivity extends ActionBarActivity {
         EditText size = (EditText) findViewById(R.id.et_size);
         size.setText(product.getSize());
         EditText count = (EditText) findViewById(R.id.et_count);
-        count.setText(product.getCount());
+        count.setText(String.valueOf(product.getCount()));
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
