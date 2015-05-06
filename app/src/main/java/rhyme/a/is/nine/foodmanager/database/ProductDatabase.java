@@ -15,15 +15,23 @@ import rhyme.a.is.nine.foodmanager.product.Product;
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public abstract class ProductDatabase implements Serializable {
+public class ProductDatabase implements Serializable {
 
-    protected static List<Product> products = new ArrayList<Product>();
+    private List<Product> products;
 
-    public static List<Product> getAllProducts() {
+    private String fileName;
+
+
+    public ProductDatabase(String fileName) {
+        this.fileName = fileName;
+        this.products = new ArrayList<Product>();
+    }
+
+    public List<Product> getAllProducts() {
         return products;
     }
 
-    public static Product getProductByPosition(int position)
+    public Product getProductByPosition(int position)
     {
         if (products.isEmpty())
             return null;
@@ -32,7 +40,7 @@ public abstract class ProductDatabase implements Serializable {
     }
 
 
-    public static Product getProductByName(String name)
+    public Product getProductByName(String name)
     {
         if (products.isEmpty())
             return null;
@@ -45,7 +53,20 @@ public abstract class ProductDatabase implements Serializable {
         return null;
     }
 
-    public static void addProduct(Product product)
+    public Product getProductByBarcode(String barcode)
+    {
+        if (products.isEmpty())
+            return null;
+
+        for(Product i : products)
+        {
+            if (i.getBarcode().equals(barcode))
+                return i;
+        }
+        return null;
+    }
+
+    public void addProduct(Product product)
     {
         boolean isNew = true;
 
@@ -61,7 +82,7 @@ public abstract class ProductDatabase implements Serializable {
             products.add(product);
     }
 
-    public static void removeProductByPosition(int position, boolean removeCompletely)
+    public void removeProductByPosition(int position, boolean removeCompletely)
     {
         if (products.isEmpty())
             return;
@@ -76,12 +97,12 @@ public abstract class ProductDatabase implements Serializable {
         }
     }
 
-    protected static void writeFile(String fileName, Context context, List<Product> products) {
+    public void writeToFile(Context context) {
         FileOutputStream outputStream;
         try {
-            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream = context.openFileOutput(this.fileName, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-            oos.writeObject(products);
+            oos.writeObject(this.products);
             outputStream.close();
             oos.close();
         } catch (Exception e) {
@@ -89,11 +110,11 @@ public abstract class ProductDatabase implements Serializable {
         }
     }
 
-    protected static Object readFile(String fileName, Context context) {
+    public void readFromFile(Context context) {
         Object object = null;
         FileInputStream outputStream;
         try {
-            outputStream = context.openFileInput(fileName);
+            outputStream = context.openFileInput(this.fileName);
             ObjectInputStream ois = new ObjectInputStream(outputStream);
             object = ois.readObject();
             outputStream.close();
@@ -102,6 +123,7 @@ public abstract class ProductDatabase implements Serializable {
             e.printStackTrace();
         }
 
-        return object;
+        if(object != null)
+            this.products = (List<Product>) object;
     }
 }

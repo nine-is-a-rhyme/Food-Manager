@@ -1,18 +1,21 @@
 package rhyme.a.is.nine.foodmanager.gui;
 
 import android.support.v7.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.view.View;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
+
+    public static ProductDatabase fridgeDatabase = null;
+    public static ProductDatabase shoppingListDatabase = null;
+    public static ProductDatabase historyDatabase = null;
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
@@ -25,7 +28,7 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initilization
+        // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -56,6 +59,23 @@ public class MainActivity extends ActionBarActivity implements
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
+        fridgeDatabase = new ProductDatabase("fridge.db");
+        shoppingListDatabase = new ProductDatabase("shopping_list.db");
+        historyDatabase = new ProductDatabase("history.db");
+
+        fridgeDatabase.readFromFile(getBaseContext());
+        shoppingListDatabase.readFromFile(getBaseContext());
+        historyDatabase.readFromFile(getBaseContext());
+    }
+
+    @Override
+    public void onDestroy() {
+        fridgeDatabase.writeToFile(getBaseContext());
+        shoppingListDatabase.writeToFile(getBaseContext());
+        historyDatabase.writeToFile(getBaseContext());
+
+        super.onDestroy();
     }
 
     @Override
@@ -71,5 +91,15 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
 
+    }
+
+    public void onMinusButtonClicked(View v) {
+        ShoppingListFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        ShoppingListFragment.getAdapter().notifyDataSetChanged();
+    }
+
+    public void onPlusButtonClicked(View v) {
+        ShoppingListFragment.getAdapter().increaseProductCount((int)v.getTag());
+        ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 }

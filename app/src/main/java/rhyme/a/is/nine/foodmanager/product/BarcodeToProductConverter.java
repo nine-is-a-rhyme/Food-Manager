@@ -4,8 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.database.HistoryDatabase;
-import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 
 /**
  * Created by martinmaritsch on 22/04/15.
@@ -19,7 +18,7 @@ public class BarcodeToProductConverter {
         if (barcode == null)
             return null;
 
-        Product product = HistoryDatabase.getProductByBarcode(barcode);
+        Product product = MainActivity.historyDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);

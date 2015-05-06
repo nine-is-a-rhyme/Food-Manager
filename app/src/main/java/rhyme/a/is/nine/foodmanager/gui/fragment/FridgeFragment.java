@@ -2,11 +2,9 @@ package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +26,7 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
  */
 public class FridgeFragment extends ListFragment {
 
-    private FragmentActivity myContext;
-
-    private FridgeAdapter productAdapter;
+    private FridgeAdapter fridgeAdapter;
 
 
     public FridgeFragment() {
@@ -39,7 +35,6 @@ public class FridgeFragment extends ListFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
         super.onAttach(activity);
     }
 
@@ -48,16 +43,12 @@ public class FridgeFragment extends ListFragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        // Setting the array adapter to the listview
-        productAdapter = new FridgeAdapter(getActivity().getBaseContext());
-        setListAdapter(productAdapter);
-
         return inflater.inflate(R.layout.fragment_fridge, container, false);
     }
 
     @Override
     public void onResume() {
-        productAdapter.notifyDataSetChanged();
+        fridgeAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
@@ -76,8 +67,9 @@ public class FridgeFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
-        /** Setting the multiselect choice mode for the listview */
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        // Setting the array adapter to the listview
+        fridgeAdapter = new FridgeAdapter(getActivity().getBaseContext());
+        setListAdapter(fridgeAdapter);
 
         // enable swipe to delete
         SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
@@ -93,9 +85,10 @@ public class FridgeFragment extends ListFragment {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    productAdapter.removeItem(position);
+                                    fridgeAdapter.removeItem(position);
                                 }
-                                productAdapter.notifyDataSetChanged();
+                                fridgeAdapter.notifyDataSetChanged();
+                                ShoppingListFragment.getAdapter().notifyDataSetChanged();
                             }
                         }
                 );

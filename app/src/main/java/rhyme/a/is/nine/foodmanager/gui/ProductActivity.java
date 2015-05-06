@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,15 +14,12 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
-import rhyme.a.is.nine.foodmanager.product.ProductPlace;
 
 public class ProductActivity extends ActionBarActivity {
 
@@ -100,7 +95,7 @@ public class ProductActivity extends ActionBarActivity {
 
                 if(!fail)
                 {
-                    FridgeDatabase.addProduct(product);
+                    MainActivity.fridgeDatabase.addProduct(product);
                     finish();
                 }
                 else

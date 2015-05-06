@@ -1,21 +1,23 @@
 package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.adapter.ShoppingListAdapter;
+import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
 /**
@@ -23,36 +25,41 @@ import rhyme.a.is.nine.foodmanager.R;
  */
 public class ShoppingListFragment extends ListFragment {
 
-    private String items[];
+    private FragmentActivity myContext;
+
+    private static ShoppingListAdapter shoppingListAdapter;
+
+    public static ShoppingListAdapter getAdapter() {
+        return shoppingListAdapter;
+    }
 
     public ShoppingListFragment() {
         // Required empty public constructor
-        items = new String[] {
-                "Milch",
-                "Salami",
-                "Käse",
-                "Eier"
-        };
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        myContext=(FragmentActivity) activity;
+        super.onAttach(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_multiple_choice, items);
-
-        /** Setting the array adapter to the listview */
-        setListAdapter(adapter);
         return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        shoppingListAdapter.notifyDataSetChanged();
+        super.onResume();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_main_tab, menu);
     }
 
     @Override
@@ -64,35 +71,31 @@ public class ShoppingListFragment extends ListFragment {
     public void onStart() {
         super.onStart();
 
-        /** Setting the multiselect choice mode for the listview */
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-    }
+        // Setting the array adapter to the listview
+        shoppingListAdapter = new ShoppingListAdapter(getActivity().getBaseContext(), getListView());
+        setListAdapter(shoppingListAdapter);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        CharSequence text;
+        // enable swipe to delete
+        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
+                new SwipeDismissListViewTouchListener(
+                        getListView(),
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
 
-        int id = item.getItemId();
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
 
-
-        switch (id) {
-            case R.id.action_add:
-                text = "Add clicked!";
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_edit:
-                text = "Edit clicked!";
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_delete:
-                text = "Delete clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    shoppingListAdapter.removeItem(position);
+                                }
+                                shoppingListAdapter.notifyDataSetChanged();
+                            }
+                        }
+                );
+        swipeDismissListViewTouchListener.setEnabled(true);
+        getListView().setOnTouchListener(swipeDismissListViewTouchListener);
     }
 }
