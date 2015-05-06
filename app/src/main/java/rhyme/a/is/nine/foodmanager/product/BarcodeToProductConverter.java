@@ -1,19 +1,11 @@
 package rhyme.a.is.nine.foodmanager.product;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
+import rhyme.a.is.nine.foodmanager.database.HistoryDatabase;
+import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 
 /**
  * Created by martinmaritsch on 22/04/15.
@@ -27,7 +19,7 @@ public class BarcodeToProductConverter {
         if (barcode == null)
             return null;
 
-        Product product = DatabaseAccess.getDatabaseProductByBarcode(barcode);
+        Product product = HistoryDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);
@@ -55,7 +47,7 @@ public class BarcodeToProductConverter {
         String size = getProductSize(webContent);
 
         if(name != null)
-            return new Product(name, category, barcode, size, 1, ProductPlace.FRIDGE);
+            return new Product(name, category, barcode, size, 1);
         else
             return null;
     }

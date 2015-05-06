@@ -13,32 +13,21 @@ public class Product implements Serializable {
     private String size = null;
     private Date bestBeforeDate = null;
     private int count = 0;
-    private ProductPlace productPlace = null;
 
-    public ProductPlace getProductPlace() {
-        return productPlace;
-    }
-
-    public void setProductPlace(ProductPlace productPlace) {
-        this.productPlace = productPlace;
-    }
-
-    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace, Date bestBeforeDate) {
+    public Product(String name, String category, String barcode, String size, int count, Date bestBeforeDate) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
         this.bestBeforeDate = bestBeforeDate;
-        this.productPlace = productPlace;
         this.count = count;
     }
 
-    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace) {
+    public Product(String name, String category, String barcode, String size, int count) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
-        this.productPlace = productPlace;
         this.count = count;
     }
 
