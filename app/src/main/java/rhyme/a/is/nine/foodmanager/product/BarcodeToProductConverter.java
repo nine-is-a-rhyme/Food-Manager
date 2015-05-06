@@ -57,7 +57,11 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1);
+        {
+            String str = matcher.group(1);
+            return parseUnicode(str);
+        }
+
 
         return null;
     }
@@ -67,7 +71,11 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1).split("\", \"")[2];
+        {
+            String str =  matcher.group(1).split("\", \"")[2];
+            return parseUnicode(str);
+        }
+
 
         return null;
     }
@@ -77,8 +85,42 @@ public class BarcodeToProductConverter {
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
-            return matcher.group(1);
+        {
+            String str = matcher.group(1);
+            return parseUnicode(str);
+        }
 
         return null;
+    }
+
+    public static String parseUnicode(String str)
+    {
+        char[] chars = str.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '\\') {
+                if (chars.length > i + 5 && chars[i + 1] == 'u') {
+                    try{
+                        char x = (char) Integer.parseInt(str.substring(i+2, i+6), 16);
+                        sb.append(x);
+                        i = i + 5;
+                    } catch(NumberFormatException e){
+                        //not a hex encoding
+                        sb.append(chars[i]);
+                    }
+                } else if (chars.length > i + 1 && chars[i + 1] == 'n') {
+                    sb.append('\n');
+                    i++;
+                } else if (chars.length > i + 1 && chars[i + 1] == 'r') {
+                    sb.append('\r');
+                    i++;
+                }  else {
+                    sb.append(chars[i]);
+                }
+            } else {
+                sb.append(chars[i]);
+            }
+        }
+        return sb.toString();
     }
 }

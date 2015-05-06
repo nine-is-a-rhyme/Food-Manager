@@ -127,6 +127,10 @@ public class ProductActivity extends ActionBarActivity {
         switch (id) {
             case R.id.action_barcode:
                 new IntentIntegrator(this).initiateScan();
+                /*
+                product = BarcodeToProductConverter.getProductForBarcode("54491472");
+                addProduct(product);
+                */
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
