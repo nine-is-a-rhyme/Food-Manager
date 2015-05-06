@@ -71,7 +71,7 @@ public class FridgeAdapter extends BaseAdapter {
             twoLineListItem.setBackgroundColor(Color.LTGRAY);
         else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 0)
             twoLineListItem.setBackgroundColor(Color.RED);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 3600*24)
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
             twoLineListItem.setBackgroundColor(Color.YELLOW);
         else
             twoLineListItem.setBackgroundColor(Color.GREEN);
