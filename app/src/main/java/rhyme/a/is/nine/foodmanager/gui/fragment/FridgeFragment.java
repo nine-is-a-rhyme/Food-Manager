@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.AddItemDialog;
+import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 

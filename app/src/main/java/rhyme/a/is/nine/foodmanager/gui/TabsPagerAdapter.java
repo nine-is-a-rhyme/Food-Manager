@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
+
 /**
  * Created by Fabio on 5/6/2015.
  */

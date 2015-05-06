@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
+import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.product.ProductPlace;
@@ -98,14 +98,9 @@ public class ProductActivity extends ActionBarActivity {
                     bestbefore.setBackgroundColor(Color.RED);
                 }
 
-                product.setProductPlace(ProductPlace.FRIDGE);
-                if(product.getBarcode() == null)
-                {
-                    product.setManual(true);
-                }
                 if(!fail)
                 {
-                    DatabaseAccess.addProduct(product);
+                    FridgeDatabase.addProduct(product);
                     finish();
                 }
                 else
