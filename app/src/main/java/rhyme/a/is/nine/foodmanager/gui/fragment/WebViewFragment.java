@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import rhyme.a.is.nine.foodmanager.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment {
+public class WebViewFragment extends Fragment {
 
 
-    public BlankFragment() {
+    public WebViewFragment() {
         // Required empty public constructor
     }
 

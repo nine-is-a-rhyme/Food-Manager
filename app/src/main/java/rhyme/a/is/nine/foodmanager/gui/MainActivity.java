@@ -8,8 +8,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.View;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.WebViewFragment;
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
@@ -71,5 +74,19 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.button_web:
+
+                final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_web_view, new WebViewFragment(), "WebViewFragment");
+                ft.addToBackStack(null);
+                ft.commit();
+
+                break;
+        }
     }
 }
