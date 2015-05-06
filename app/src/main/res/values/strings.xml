@@ -4,4 +4,7 @@
     <string name="hello_recipe">R</string>
     <string name="title_activity_product">Produkt</string>
     <string name="title_activity_main">Food Manager</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
