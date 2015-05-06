@@ -1,49 +1,33 @@
 package rhyme.a.is.nine.foodmanager.product;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by martinmaritsch on 22/04/15.
  */
-public class Product {
+public class Product implements Serializable {
     private String name = null;
     private String category = null;
     private String barcode = null;
     private String size = null;
     private Date bestBeforeDate = null;
     private int count = 0;
-    private boolean manual = true;
 
-    public ProductPlace getProductPlace() {
-        return productPlace;
-    }
-
-    public void setProductPlace(ProductPlace productPlace) {
-        this.productPlace = productPlace;
-    }
-
-    private ProductPlace productPlace = null;
-
-    public Product() {
-
-    }
-
-    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace, Date bestBeforeDate) {
+    public Product(String name, String category, String barcode, String size, int count, Date bestBeforeDate) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
         this.bestBeforeDate = bestBeforeDate;
-        this.productPlace = productPlace;
         this.count = count;
     }
 
-    public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace) {
+    public Product(String name, String category, String barcode, String size, int count) {
         this.name = name;
         this.category = category;
         this.barcode = barcode;
         this.size = size;
-        this.productPlace = productPlace;
         this.count = count;
     }
 
@@ -97,13 +81,5 @@ public class Product {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public boolean isManual() {
-        return manual;
-    }
-
-    public void setManual(boolean manual) {
-        this.manual = manual;
     }
 }
