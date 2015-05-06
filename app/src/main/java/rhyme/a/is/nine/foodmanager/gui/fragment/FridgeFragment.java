@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
 import android.app.Activity;
@@ -17,8 +17,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.product.ProductAdapter;
-import rhyme.a.is.nine.foodmanager.product.ProductPlace;
+import rhyme.a.is.nine.foodmanager.gui.AddItemDialog;
+import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
@@ -29,7 +29,7 @@ public class FridgeFragment extends ListFragment {
 
     private FragmentActivity myContext;
 
-    private ProductAdapter productAdapter;
+    private FridgeAdapter productAdapter;
 
 
     public FridgeFragment() {
@@ -48,7 +48,7 @@ public class FridgeFragment extends ListFragment {
         setHasOptionsMenu(true);
 
         // Setting the array adapter to the listview
-        productAdapter = new ProductAdapter(getActivity().getBaseContext(), ProductPlace.FRIDGE);
+        productAdapter = new FridgeAdapter(getActivity().getBaseContext());
         setListAdapter(productAdapter);
 
         return inflater.inflate(R.layout.fragment_fridge, container, false);

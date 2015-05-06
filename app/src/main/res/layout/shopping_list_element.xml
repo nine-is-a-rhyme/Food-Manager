@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip">
+
+    <TextView
+        android:id="@+id/shopping_list_product_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/shopping_list_product_count"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"
+        android:text="Puntigamer 0.5L"
+        android:textSize="16sp"
+        android:layout_toLeftOf="@+id/shopping_list_minus_button"
+        android:layout_toStartOf="@+id/shopping_list_minus_button" />
+
+    <TextView
+        android:id="@+id/shopping_list_product_count"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:singleLine="true"
+        android:text="Anzahl: 5"
+        android:textSize="12sp"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/shopping_list_plus_button"
+        android:layout_alignRight="@+id/shopping_list_product_count"
+        android:layout_alignEnd="@+id/shopping_list_product_count"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:id="@+id/shopping_list_minus_button"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/shopping_list_plus_button"
+        android:layout_toStartOf="@+id/shopping_list_plus_button" />
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.product;
+package rhyme.a.is.nine.foodmanager.gui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,27 +9,26 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
+import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
+import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class ProductAdapter extends BaseAdapter {
+public class FridgeAdapter extends BaseAdapter {
 
     private Context context;
-    private ProductPlace productPlace;
 
-    public ProductAdapter(Context context, ProductPlace productPlace) {
+    public FridgeAdapter(Context context) {
         this.context = context;
-        this.productPlace = productPlace;
     }
 
     @Override
     public int getCount() {
-        List<Product> products = DatabaseAccess.getProducts(productPlace);
+        List<Product> products = FridgeDatabase.getAllProducts();
         if(products != null)
             return products.size();
         return 0;
@@ -37,7 +36,7 @@ public class ProductAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return DatabaseAccess.getProducts(productPlace).get(position);
+        return FridgeDatabase.getProductByPosition(position);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class ProductAdapter extends BaseAdapter {
             twoLineListItem = (TwoLineListItem) convertView;
         }
 
-        Product product = DatabaseAccess.getProducts(productPlace).get(position);
+        Product product = FridgeDatabase.getProductByPosition(position);
 
         TextView text1 = twoLineListItem.getText1();
         TextView text2 = twoLineListItem.getText2();
@@ -80,6 +79,6 @@ public class ProductAdapter extends BaseAdapter {
     }
 
     public void removeItem(int position) {
-        DatabaseAccess.removeProductByPosition(position);
+        FridgeDatabase.removeProductByPosition(position, false);
     }
 }
