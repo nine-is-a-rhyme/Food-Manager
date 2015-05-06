@@ -14,22 +14,62 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
+import rhyme.a.is.nine.foodmanager.product.ProductPlace;
 
 public class ProductActivity extends ActionBarActivity {
+
+    private Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        product = new Product();
+
         Button button = (Button) findViewById(R.id.button_save);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                EditText name = (EditText) findViewById(R.id.et_name);
+                product.setName(name.getText().toString());
+                EditText category = (EditText) findViewById(R.id.et_category);
+                product.setCategory(category.getText().toString());
+                EditText size = (EditText) findViewById(R.id.et_size);
+                product.setSize(size.getText().toString());
+                EditText count = (EditText) findViewById(R.id.et_count);
+                try
+                {
+                    product.setCount(Integer.parseInt(count.getText().toString()));
+                }
+                catch(Exception e)
+                {
+                    product.setCount(1);
+                }
 
+                EditText bestbefore = (EditText) findViewById(R.id.et_bestbefore);
+                try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                    Date date = sdf.parse(bestbefore.getText().toString());
+                    product.setBestBeforeDate(date);
+                }
+                catch (Exception ex){
+                    System.out.println(ex);
+                }
+
+                product.setProductPlace(ProductPlace.FRIDGE);
+                if(product.getBarcode() == null)
+                {
+                    product.setManual(true);
+                }
+                DatabaseAccess.addProduct(product);
                 finish();
             }
         });
@@ -61,6 +101,12 @@ public class ProductActivity extends ActionBarActivity {
     {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
+        EditText category = (EditText) findViewById(R.id.et_category);
+        category.setText(product.getCategory());
+        EditText size = (EditText) findViewById(R.id.et_size);
+        size.setText(product.getSize());
+        EditText count = (EditText) findViewById(R.id.et_count);
+        count.setText(product.getCount());
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
@@ -72,7 +118,7 @@ public class ProductActivity extends ActionBarActivity {
             if(result.getContents() == null)
                 return;
 
-            Product product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
+            product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
             if(product == null)
                 return;
 

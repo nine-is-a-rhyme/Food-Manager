@@ -12,6 +12,7 @@ public class Product {
     private String size = null;
     private Date bestBeforeDate = null;
     private int count = 0;
+    private boolean manual = true;
 
     public ProductPlace getProductPlace() {
         return productPlace;
@@ -22,6 +23,10 @@ public class Product {
     }
 
     private ProductPlace productPlace = null;
+
+    public Product() {
+
+    }
 
     public Product(String name, String category, String barcode, String size, int count, ProductPlace productPlace, Date bestBeforeDate) {
         this.name = name;
@@ -92,5 +97,13 @@ public class Product {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isManual() {
+        return manual;
+    }
+
+    public void setManual(boolean manual) {
+        this.manual = manual;
     }
 }

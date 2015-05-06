@@ -52,7 +52,7 @@ public class DatabaseAccess {
         // check if exists
         for(Product i : products)
         {
-            if (i.getBarcode().equals(product.getBarcode())) {
+            if (i.getName().equals(product.getName())) {
                 i.increaseCount();
                 isNew = false;
             }
@@ -63,7 +63,7 @@ public class DatabaseAccess {
         // construct db
         for(Product i : products_db)
         {
-            if (i.getBarcode().equals(product.getBarcode()))
+            if (i.getName().equals(product.getName()))
                 return;
         }
         product.setCount(1);
