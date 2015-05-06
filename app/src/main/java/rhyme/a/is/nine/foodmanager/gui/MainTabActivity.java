@@ -1,7 +1,6 @@
 package rhyme.a.is.nine.foodmanager.gui;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -19,7 +17,12 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.database.DatabaseAccess;
+import rhyme.a.is.nine.foodmanager.database.FridgeDatabase;
+import rhyme.a.is.nine.foodmanager.database.HistoryDatabase;
+import rhyme.a.is.nine.foodmanager.database.ShoppingListDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
@@ -59,12 +62,16 @@ public class MainTabActivity extends ActionBarActivity {
                         this, "recipe", RecipeFragment.class));
         actionBar.addTab(tab);
 
-        DatabaseAccess.readFromFile(this);
+        FridgeDatabase.readFromFile(this);
+        ShoppingListDatabase.readFromFile(this);
+        HistoryDatabase.readFromFile(this);
     }
 
     @Override
     public void onStop() {
-        DatabaseAccess.writeToFile(this);
+        FridgeDatabase.writeToFile(this);
+        ShoppingListDatabase.writeToFile(this);
+        HistoryDatabase.writeToFile(this);
 
         super.onStop();
     }
@@ -185,7 +192,7 @@ public class MainTabActivity extends ActionBarActivity {
             if(product == null)
                 return;
 
-            DatabaseAccess.addProduct(product);
+            FridgeDatabase.addProduct(product);
 
             Toast.makeText(getApplicationContext(), "Product found", Toast.LENGTH_LONG).show();
         }
