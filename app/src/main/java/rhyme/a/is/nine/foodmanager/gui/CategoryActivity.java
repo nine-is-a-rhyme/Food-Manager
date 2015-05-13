@@ -29,6 +29,7 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class CategoryActivity extends ActionBarActivity  {
@@ -60,6 +61,7 @@ public class CategoryActivity extends ActionBarActivity  {
                     name.setText((String) sp.getSelectedItem());
 
                 }
+
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -74,32 +76,38 @@ public class CategoryActivity extends ActionBarActivity  {
             @Override
             public void onClick(View view) {
                 String desc_name = ((EditText) findViewById(R.id.et_name)).getText().toString();
+                String string_date = ((EditText) findViewById(R.id.et_bestbefore)).getText().toString();
+                if (string_date.length() == 0)
+                    string_date = "0";
+                int bbf_date = Integer.parseInt(string_date);
                 if (desc_name.length() == 0)
                 {
                     Toast.makeText(getApplicationContext(), "Kein Kategoriename gewählt", Toast.LENGTH_LONG).show();
                     return;
                 }
-                ArrayAdapter<String> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
+                ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
                 if (isInList(desc_name))
                 {
                     Toast.makeText(getApplicationContext(), "Kategorie schon vorhanden", Toast.LENGTH_LONG).show();
                     finish();
                     return;
                 }
-
-                adapter.add(desc_name);
+                Category cat = new Category(desc_name, bbf_date);
+                adapter.add(cat);
+                ProductActivity.cat_db.addCategory(cat);
                 ProductActivity.category.setSelection(adapter.getCount());
                 finish();
             }});
 
 
     }
+
     public boolean isInList(String category)
     {
-        ArrayAdapter<String> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
+        ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
         for (int i = 0; i < adapter.getCount(); i++)
         {
-            if (adapter.getItem(i).equals(category)) {
+            if (adapter.getItem(i).toString().equals(category)) {
                 return true;
             }
         }

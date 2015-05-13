@@ -28,9 +28,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.CategoryDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter.ScannedProduct;
+import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
@@ -40,6 +42,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private TextView bestBeforeView;
     public static Spinner category;
     public static String[] suggestedCategories;
+    public static CategoryDatabase cat_db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +53,11 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
+        cat_db = new CategoryDatabase("categories.db");
+        cat_db.readFromFile(getBaseContext());
+        List<Category> cat_list = cat_db.getAllCategories();
 
-        List<String> cat_list = new ArrayList<String>();
-        cat_list.add("Lebensmittel");
-        cat_list.add("Getränke");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cat_list);
+        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, cat_list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         category.setAdapter(adapter);
 
@@ -133,6 +136,15 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         if (getIntent().getBooleanExtra("SCAN", false))
             new IntentIntegrator(this).initiateScan();
+    }
+
+    @Override
+    public void onStop()
+    {
+        //ArrayAdapter<Category> adapter = (ArrayAdapter) category.getAdapter();
+        //cat_db.setList(adapter);
+        cat_db.writeToFile(getBaseContext());
+        super.onStop();
     }
 
     @Override
