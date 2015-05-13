@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +21,11 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
@@ -33,6 +37,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private Product product;
 
     private TextView bestBeforeView;
+    private Spinner category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,24 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         product = new Product();
 
         Button button = (Button) findViewById(R.id.button_save);
+        category = (Spinner) findViewById(R.id.et_category);
+
+        List<String> cat_list = new ArrayList<String>();
+        cat_list.add("Lebensmittel");
+        cat_list.add("Getränke");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cat_list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(adapter);
+
+        Button add_button = (Button) findViewById(R.id.button_add);
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 boolean fail = false;
@@ -56,10 +79,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     fail = true;
                     name.setBackgroundColor(Color.RED);
                 }
-                EditText category = (EditText) findViewById(R.id.et_category);
-                if(category.getText().toString().length() > 0)
+                if(category.getSelectedItem().toString().length() > 0)
                 {
-                    product.setCategory(category.getText().toString());
+                    product.setCategory(category.getSelectedItem().toString());
                     category.setBackgroundColor(Color.GREEN);
                 }
                 else
@@ -67,7 +89,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     fail = true;
                     category.setBackgroundColor(Color.RED);
                 }
-                EditText size = (EditText) findViewById(R.id.et_size);
+                /*EditText size = (EditText) findViewById(R.id.et_size);
                 if(size.getText().toString().length() > 0)
                 {
                     product.setSize(size.getText().toString());
@@ -77,7 +99,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 {
                     fail = true;
                     size.setBackgroundColor(Color.RED);
-                }
+                }*/
                 EditText count = (EditText) findViewById(R.id.et_count);
                 try
                 {
@@ -150,10 +172,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
-        EditText category = (EditText) findViewById(R.id.et_category);
-        category.setText(product.getCategory());
-        EditText size = (EditText) findViewById(R.id.et_size);
-        size.setText(product.getSize());
+        category.setSelection(/*product.getCategory()*/ 0);
+        /*EditText size = (EditText) findViewById(R.id.et_size);
+        size.setText(product.getSize());*/
         EditText count = (EditText) findViewById(R.id.et_count);
         count.setText(String.valueOf(product.getCount()));
     }
