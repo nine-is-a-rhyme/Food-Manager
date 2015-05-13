@@ -204,6 +204,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         }
         else
         {
+
             Toast.makeText(getApplicationContext(), "Kein Produkt gefunden", Toast.LENGTH_LONG).show();
         }
     }
