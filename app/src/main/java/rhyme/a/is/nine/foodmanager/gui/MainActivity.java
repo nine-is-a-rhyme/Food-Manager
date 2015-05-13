@@ -2,13 +2,16 @@ package rhyme.a.is.nine.foodmanager.gui;
 
 import android.support.v7.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
@@ -76,17 +79,26 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.button_web:
+    //Global On click listener for all views
+    final View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
+        public void onClick(final View v) {
+            switch(v.getId()) {
+                case R.id.button_web:
+                    //Inform the user the button1 has been clicked
+                    Toast.makeText(getApplicationContext(), "create recipe button clicked",
+                            Toast.LENGTH_SHORT).show();
+                    /*final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    WebViewFragment fragment = new WebViewFragment();
+                    ft.replace(R.id.webView2, fragment , "WebViewFragment");
+                    ft.addToBackStack(null);
+                    ft.commit();*/
+                    break;
 
-                final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_web_view, new WebViewFragment(), "WebViewFragment");
-                ft.addToBackStack(null);
-                ft.commit();
+                //http://martin.cubeactive.com/android-onclicklitener-tutorial/
 
-                break;
+            }
         }
-    }
+    };
+
+
 }
