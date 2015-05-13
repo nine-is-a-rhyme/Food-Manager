@@ -23,8 +23,11 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
         // nothing to see here, move along
     }
 
-    public DatePickerDialogFragment(Activity activity, TextView view) {
+    public void setBestBeforeDateTextView(TextView view) {
         this.bestBeforeDate = view;
+    }
+
+    public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
