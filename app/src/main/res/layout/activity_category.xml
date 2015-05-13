@@ -7,10 +7,26 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        tools:context="rhyme.a.is.nine.foodmanager.gui.ProductActivity"
+        tools:context="rhyme.a.is.nine.foodmanager.gui.CategoryActivity"
     android:padding="6dp"
     android:id="@+id/et_layout"
     android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Vorschläge"
+        android:id="@+id/categoryVorschläge" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_vorschläge"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="false"
+        android:selectAllOnFocus="false"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,38 +43,6 @@
         android:singleLine="true"
         android:selectAllOnFocus="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Kategorie"
-        android:id="@+id/textView4" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_dropdown">
-
-
-        <Spinner
-        android:layout_width="fill_parent"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:id="@+id/et_category"
-        android:layout_gravity="center_horizontal|left"
-        android:singleLine="true"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Neu"
-        android:id="@+id/button_add"
-        android:layout_gravity="right"
-        android:layout_weight="0" />
-
-    </LinearLayout>
 <!--
     <TextView
         android:layout_width="wrap_content"
@@ -76,39 +60,26 @@
         android:singleLine="true" />
         -->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Menge"
-        android:id="@+id/textView2" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/et_count"
-        android:layout_gravity="center_horizontal"
-        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Ablaufdatum"
+        android:text="Haltbarkeitsdauer"
         android:id="@+id/textView3"
         android:singleLine="true" />
 
-    <TextView
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16dp"
         android:inputType="date"
         android:id="@+id/et_bestbefore"
         android:singleLine="true"
-        android:hint="01.01.2015"
-        style="@android:style/Widget.Holo.Spinner" />
+        android:hint="Tage"
+       />
+
 
     <Button
         android:layout_width="match_parent"

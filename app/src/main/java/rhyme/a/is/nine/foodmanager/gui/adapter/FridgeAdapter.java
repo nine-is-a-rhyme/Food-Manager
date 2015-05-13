@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 
+import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
@@ -48,40 +50,49 @@ public class FridgeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TwoLineListItem twoLineListItem;
-
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            twoLineListItem = (TwoLineListItem) inflater.inflate(
-                    android.R.layout.simple_list_item_2, null);
-        } else {
-            twoLineListItem = (TwoLineListItem) convertView;
-        }
-
         Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
 
-        TextView text1 = twoLineListItem.getText1();
-        TextView text2 = twoLineListItem.getText2();
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.fridge_element, null);
+        TextView productName = (TextView) rowView.findViewById(R.id.fridge_product_name);
+        TextView productBestBefore = (TextView) rowView.findViewById(R.id.fridge_product_bestbefore);
+        TextView productCount = (TextView) rowView.findViewById(R.id.fridge_product_count);
+        Button minusButton = (Button) rowView.findViewById(R.id.fridge_minus_button);
+        Button plusButton = (Button) rowView.findViewById(R.id.fridge_plus_button);
+        minusButton.setTag(position);
+        plusButton.setTag(position);
 
-        text1.setText(product.getName());
-        text2.setText("Menge: " + product.getCount() + " | Kategorie: " + product.getCategory() + " | Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate()).toString()));
+        if(product.getCount() <= 1)
+            minusButton.setEnabled(false);
+
+        productName.setText(product.getName());
+        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate())));
+        productCount.setText("Anzahl: " + product.getCount());
 
         if(product.getBestBeforeDate() == null)
-            twoLineListItem.setBackgroundColor(Color.LTGRAY);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 0)
-            twoLineListItem.setBackgroundColor(Color.RED);
+            rowView.setBackgroundColor(Color.LTGRAY);
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+            rowView.setBackgroundColor(Color.parseColor("#F7977A"));
         else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
-            twoLineListItem.setBackgroundColor(Color.YELLOW);
+            rowView.setBackgroundColor(Color.parseColor("#FFF79A"));
         else
-            twoLineListItem.setBackgroundColor(Color.GREEN);
+            rowView.setBackgroundColor(Color.parseColor("#82CA9D"));
 
-        return twoLineListItem;
+        return rowView;
     }
 
-    public void removeItem(int position) {
+    public void removeItem(int position, boolean completely) {
         Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
         MainActivity.shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getBarcode(), product.getSize(), 1));
+        MainActivity.fridgeDatabase.removeProductByPosition(position, completely);
+    }
+
+    public void decreaseProductCount(int position) {
         MainActivity.fridgeDatabase.removeProductByPosition(position, false);
+    }
+
+    public void increaseProductCount(int position) {
+        MainActivity.fridgeDatabase.getProductByPosition(position).increaseCount();
     }
 }
