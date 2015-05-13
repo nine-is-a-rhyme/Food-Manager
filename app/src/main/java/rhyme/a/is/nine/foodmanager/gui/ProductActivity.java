@@ -192,7 +192,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        DialogFragment newFragment = new DatePickerDialogFragment(this, bestBeforeView);
+        DialogFragment newFragment = new DatePickerDialogFragment();
+        ((DatePickerDialogFragment)newFragment).setBestBeforeDateTextView(bestBeforeView);
+        ((DatePickerDialogFragment)newFragment).setActivity(this);
         newFragment.show(ft, "date_dialog");
     }
 }
