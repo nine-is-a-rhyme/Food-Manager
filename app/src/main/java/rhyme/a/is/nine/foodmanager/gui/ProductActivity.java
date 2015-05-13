@@ -148,17 +148,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_barcode:
-                new IntentIntegrator(this).initiateScan();
-                /*
-                product = BarcodeToProductConverter.getProductForBarcode("54491472");
-                addProduct(product);
-                */
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 
     private void addProduct(Product product) {

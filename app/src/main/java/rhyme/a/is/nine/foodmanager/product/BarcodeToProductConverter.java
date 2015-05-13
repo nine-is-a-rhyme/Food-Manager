@@ -18,7 +18,7 @@ public class BarcodeToProductConverter {
         String[] categories;
 
         public ScannedProduct(String name, String[] categories, String barcode, String size, int count) {
-            super(name, categories[2], barcode, size, count);
+            super(name, null, barcode, size, count);
             this.categories = categories;
         }
 

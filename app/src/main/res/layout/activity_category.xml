@@ -19,14 +19,14 @@
         android:text="Vorschläge"
         android:id="@+id/categoryVorschläge" />
 
-    <EditText
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_vorschläge"
         android:layout_gravity="center_horizontal"
         android:singleLine="false"
         android:selectAllOnFocus="false"
-        android:focusable="false"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"

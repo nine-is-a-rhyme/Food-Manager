@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -43,17 +45,26 @@ public class CategoryActivity extends ActionBarActivity  {
 
         String[] suggestedCategories = ProductActivity.suggestedCategories;
         if(suggestedCategories != null) {
-            EditText name = (EditText) findViewById(R.id.et_vorschläge);
+            final Spinner sp = (Spinner) findViewById(R.id.et_vorschläge);
 
-            String suggestedText="";
-            String prefix = "";
-            for(String suggested : suggestedCategories) {
-                if (isInList(suggested))
-                    continue;
-                suggestedText += prefix + suggested;
-                prefix = ", ";
-            }
-            name.setHint(suggestedText);
+
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(suggestedCategories));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp.setAdapter(adapter);
+
+            sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    EditText name = (EditText) findViewById(R.id.et_name);
+                    name.setText((String) sp.getSelectedItem());
+
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
 
         }
 
