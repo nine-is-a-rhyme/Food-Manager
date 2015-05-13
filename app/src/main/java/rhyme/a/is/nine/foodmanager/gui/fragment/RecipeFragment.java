@@ -55,29 +55,27 @@ public class RecipeFragment extends Fragment {
     public String createURL(){
               /* creates something like http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html */
 
+      if(!recipe_search_entries_.isEmpty()) {
 
+       StringBuilder stringBuilder = new StringBuilder();
 
-                              if(!recipe_search_entries_.isEmpty()) {
+      stringBuilder.append("http://www.chefkoch.de/rs/s0e1z1/");
 
-                               StringBuilder stringBuilder = new StringBuilder();
+      for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
+          stringBuilder.append(entry);
+          if(entry.hasNext()) {
+              stringBuilder.append("+");
+           }
+         }
 
-                              stringBuilder.append("http://www.chefkoch.de/rs/s0e1z1/");
+         stringBuilder.append("/Rezepte.html");
 
-                              for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
-                              stringBuilder.append(entry);
-                               if(entry.hasNext()) {
-                                     stringBuilder.append("+");
-                                   }
-                           }
+         url = stringBuilder.toString();
 
-                             stringBuilder.append("/Rezepte.html");
-
-                               url = stringBuilder.toString();
-
-                           }
-              else {
-                       url = null;
-                   }
+       }
+      else {
+               url = null;
+      }
 
        return url;
    }

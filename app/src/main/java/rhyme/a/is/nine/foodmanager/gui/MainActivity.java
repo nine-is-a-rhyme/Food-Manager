@@ -1,21 +1,20 @@
 package rhyme.a.is.nine.foodmanager.gui;
 
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.WebViewFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeWebViewFragment;
+
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
@@ -31,8 +30,6 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //findViewById(R.id.button_web).setOnClickListener(mGlobal_OnClickListener);
 
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -82,18 +79,22 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-    //Global On click listener for all views
+
     public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
         public void onClick(final View v) {
             switch(v.getId()) {
                 case R.id.button_web:
-                    //Inform the user the button1 has been clicked
-                    Toast.makeText(getApplicationContext(), "create recipe button clicked",
-                            Toast.LENGTH_SHORT).show();
-                    final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    /*WebViewFragment fragment = new WebViewFragment();
-                    //ft.replace(R.id.pager, fragment, "WebViewFragment");
-                    ft.add(fragment, "WebViewFragment");
+
+                    Intent myIntent = new Intent(MainActivity.this, Recipe.class);
+                    //myIntent.putExtra("key", value); //Optional parameters
+                    MainActivity.this.startActivity(myIntent);
+
+                    /*Toast.makeText(getApplicationContext(), "create recipe button clicked",
+                            Toast.LENGTH_SHORT).show();*/
+                    /*final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    RecipeWebViewFragment fragment = new RecipeWebViewFragment();
+                    ft.replace(R.id.pager, fragment, "WebViewFragment");
+                    //ft.add(fragment, "WebViewFragment");
                     ft.addToBackStack(null);
                     ft.commit();*/
                     break;

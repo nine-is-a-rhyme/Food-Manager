@@ -30,6 +30,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="rhyme.a.is.nine.foodmanager.MainActivity" />
         </activity>
+        <activity
+            android:name=".gui.Recipe"
+            android:label="@string/title_activity_recipe" >
+        </activity>
     </application>
 
 </manifest>
