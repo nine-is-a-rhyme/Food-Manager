@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +21,16 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter.ScannedProduct;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
@@ -33,6 +38,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private Product product;
 
     private TextView bestBeforeView;
+    public static Spinner category;
+    public static String[] suggestedCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,73 +49,79 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         product = new Product();
 
         Button button = (Button) findViewById(R.id.button_save);
+        category = (Spinner) findViewById(R.id.et_category);
+
+        List<String> cat_list = new ArrayList<String>();
+        cat_list.add("Lebensmittel");
+        cat_list.add("Getränke");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cat_list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(adapter);
+
+        Button add_button = (Button) findViewById(R.id.button_add);
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductActivity.this, CategoryActivity.class);
+                ProductActivity.this.startActivityForResult(intent, 0);
+            }
+        });
+
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 boolean fail = false;
                 EditText name = (EditText) findViewById(R.id.et_name);
-                if(name.getText().toString().length() > 0)
-                {
+                if (name.getText().toString().length() > 0) {
                     product.setName(name.getText().toString());
                     name.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     name.setBackgroundColor(Color.RED);
                 }
-                EditText category = (EditText) findViewById(R.id.et_category);
-                if(category.getText().toString().length() > 0)
+
+                if(category.getSelectedItem().toString().length() > 0)
                 {
-                    product.setCategory(category.getText().toString());
+                    product.setCategory(category.getSelectedItem().toString());
                     category.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     category.setBackgroundColor(Color.RED);
                 }
-                EditText size = (EditText) findViewById(R.id.et_size);
+
+                /*EditText size = (EditText) findViewById(R.id.et_size);
                 if(size.getText().toString().length() > 0)
                 {
                     product.setSize(size.getText().toString());
                     size.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     size.setBackgroundColor(Color.RED);
-                }
+                }*/
                 EditText count = (EditText) findViewById(R.id.et_count);
-                try
-                {
+                try {
                     product.setCount(Integer.parseInt(count.getText().toString()));
                     count.setBackgroundColor(Color.GREEN);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     product.setCount(1);
                     count.setText("1");
                 }
 
                 TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
-                try{
+                try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     Date date = sdf.parse(bestbefore.getText().toString());
                     product.setBestBeforeDate(date);
                     bestbefore.setBackgroundColor(Color.GREEN);
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     fail = true;
                     bestbefore.setBackgroundColor(Color.RED);
                 }
 
-                if(!fail)
-                {
+                if (!fail) {
                     MainActivity.fridgeDatabase.addProduct(product);
                     finish();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -118,6 +131,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
         bestBeforeView.setOnClickListener(this);
 
+        if (getIntent().getBooleanExtra("SCAN", false))
+            new IntentIntegrator(this).initiateScan();
     }
 
     @Override
@@ -133,42 +148,34 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_barcode:
-                new IntentIntegrator(this).initiateScan();
-                /*
-                product = BarcodeToProductConverter.getProductForBarcode("54491472");
-                addProduct(product);
-                */
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 
-    private void addProduct(Product product)
-    {
+    private void addProduct(Product product) {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
-        EditText category = (EditText) findViewById(R.id.et_category);
-        category.setText(product.getCategory());
-        EditText size = (EditText) findViewById(R.id.et_size);
-        size.setText(product.getSize());
+        category.setSelection(/*product.getCategory()*/ 0);
+        /*EditText size = (EditText) findViewById(R.id.et_size);
+        size.setText(product.getSize());*/
         EditText count = (EditText) findViewById(R.id.et_count);
         count.setText(String.valueOf(product.getCount()));
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if(result != null)
-        {
-            if(result.getContents() == null)
+        if (result != null) {
+            if (result.getContents() == null)
                 return;
 
             product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
-            if(product == null)
+            if (product == null)
                 return;
+
+            suggestedCategories = null;
+            if(product instanceof ScannedProduct)
+                suggestedCategories = ((ScannedProduct) product).getCategories();
 
             addProduct(product);
 
@@ -176,6 +183,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         }
         else
         {
+
             Toast.makeText(getApplicationContext(), "Kein Produkt gefunden", Toast.LENGTH_LONG).show();
         }
     }

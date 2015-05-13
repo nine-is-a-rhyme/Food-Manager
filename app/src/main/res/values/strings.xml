@@ -10,6 +10,7 @@
     <string name="hello_list">L</string>
     <string name="hello_recipe">R</string>
     <string name="title_activity_product">Produkt</string>
+    <string name="title_activity_category">Kategorie</string>
     <string name="title_activity_main">Food Manager</string>
 
 <!-- TODO: Remove or change this placeholder text -->

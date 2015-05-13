@@ -17,6 +17,7 @@ import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
@@ -41,8 +42,7 @@ public static ProductDatabase fridgeDatabase = null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // Initilization
+        // Initialization
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -93,6 +93,14 @@ public static ProductDatabase fridgeDatabase = null;
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        fridgeDatabase.writeToFile(getBaseContext());
+        shoppingListDatabase.writeToFile(getBaseContext());
+        historyDatabase.writeToFile(getBaseContext());
+    }
+
+    @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
         viewPager.setCurrentItem(tab.getPosition());
     }
@@ -107,13 +115,24 @@ public static ProductDatabase fridgeDatabase = null;
 
     }
 
-    public void onMinusButtonClicked(View v) {
+    public void onMinusButtonFridgeClicked(View v) {
+        FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        FridgeFragment.getAdapter().notifyDataSetChanged();
+    }
+
+    public void onPlusButtonFridgeClicked(View v) {
+        FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        FridgeFragment.getAdapter().notifyDataSetChanged();
+    }
+
+    public void onMinusButtonShoppingListClicked(View v) {
+
         ShoppingListFragment.getAdapter().decreaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
-    public void onPlusButtonClicked(View v) {
-        ShoppingListFragment.getAdapter().increaseProductCount((int)v.getTag());
+    public void onPlusButtonShoppingListClicked(View v) {
+        ShoppingListFragment.getAdapter().increaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
  public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {

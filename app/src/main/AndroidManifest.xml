@@ -13,6 +13,12 @@
             android:name=".gui.ProductActivity"
             android:label="@string/title_activity_product" >
         </activity>
+
+        <activity
+            android:name=".gui.CategoryActivity"
+            android:label="@string/title_activity_category" >
+        </activity>
+
         <activity
             android:name=".gui.MainActivity"
             android:label="@string/title_activity_main" >
