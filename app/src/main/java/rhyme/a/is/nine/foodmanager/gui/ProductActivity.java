@@ -1,5 +1,7 @@
 package rhyme.a.is.nine.foodmanager.gui;
 
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
@@ -8,22 +10,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
-public class ProductActivity extends ActionBarActivity {
+public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Product product;
+
+    private TextView bestBeforeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +90,7 @@ public class ProductActivity extends ActionBarActivity {
                     count.setText("1");
                 }
 
-                EditText bestbefore = (EditText) findViewById(R.id.et_bestbefore);
+                TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
                 try{
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     Date date = sdf.parse(bestbefore.getText().toString());
@@ -104,6 +113,11 @@ public class ProductActivity extends ActionBarActivity {
                 }
             }
         });
+
+        bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
+        bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+        bestBeforeView.setOnClickListener(this);
+
     }
 
     @Override
@@ -147,7 +161,6 @@ public class ProductActivity extends ActionBarActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        Toast.makeText(getApplicationContext(), "Resultcode: " + requestCode, Toast.LENGTH_LONG).show();
         if(result != null)
         {
             if(result.getContents() == null)
@@ -159,13 +172,19 @@ public class ProductActivity extends ActionBarActivity {
 
             addProduct(product);
 
-            Toast.makeText(getApplicationContext(), "Product found", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Produkt gefunden", Toast.LENGTH_LONG).show();
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "no product found", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Kein Produkt gefunden", Toast.LENGTH_LONG).show();
         }
     }
 
 
+    @Override
+    public void onClick(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogFragment newFragment = new DatePickerDialogFragment(this, bestBeforeView);
+        newFragment.show(ft, "date_dialog");
+    }
 }

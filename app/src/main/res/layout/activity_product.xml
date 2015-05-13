@@ -7,7 +7,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        tools:context="rhyme.a.is.nine.foodmanager.gui.ProductActivity">
+        tools:context="rhyme.a.is.nine.foodmanager.gui.ProductActivity"
+    android:padding="6dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -77,20 +78,21 @@
         android:id="@+id/textView3"
         android:singleLine="true" />
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16dp"
         android:inputType="date"
-        android:ems="10"
         android:id="@+id/et_bestbefore"
         android:singleLine="true"
-        android:elegantTextHeight="false"
-        android:hint="01.01.2015" />
+        android:hint="01.01.2015"
+        style="@android:style/Widget.Holo.Spinner" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Speichern"
         android:id="@+id/button_save" />
+
 </LinearLayout>
 

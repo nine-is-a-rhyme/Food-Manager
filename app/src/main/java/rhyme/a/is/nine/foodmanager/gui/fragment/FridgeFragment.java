@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
@@ -24,7 +26,7 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FridgeFragment extends ListFragment {
+public class FridgeFragment extends ListFragment implements View.OnClickListener {
 
     private FridgeAdapter fridgeAdapter;
 
@@ -41,9 +43,15 @@ public class FridgeFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
 
-        return inflater.inflate(R.layout.fragment_fridge, container, false);
+        View view = inflater.inflate(R.layout.fragment_fridge, container, false);
+
+        FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.floating_action_button);
+        floatingActionButton.setSize(FloatingActionButton.SIZE_NORMAL);
+        floatingActionButton.setOnClickListener(this);
+
+        return view;
     }
 
     @Override
@@ -98,31 +106,8 @@ public class FridgeFragment extends ListFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        CharSequence text;
-
-        int id = item.getItemId();
-
-
-        switch (id) {
-            case R.id.action_add:
-                Intent intent = new Intent(getActivity(), ProductActivity.class);
-                getActivity().startActivityForResult(intent, 0);
-                return true;
-            case R.id.action_edit:
-                text = "Edit clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_delete:
-                text = "Delete clicked!";
-                Toast.makeText(getActivity(),text,Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    public void onClick(View view) {
+        Intent intent = new Intent(getActivity(), ProductActivity.class);
+        getActivity().startActivityForResult(intent, 0);
     }
-
 }
