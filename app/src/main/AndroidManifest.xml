@@ -22,6 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".RecipeExternal"
+            android:label="@string/title_activity_recipe_external"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="rhyme.a.is.nine.foodmanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".gui.Recipe"
+            android:label="@string/title_activity_recipe" >
+        </activity>
     </application>
 
 </manifest>
