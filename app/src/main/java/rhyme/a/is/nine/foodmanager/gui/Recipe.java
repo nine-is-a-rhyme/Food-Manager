@@ -67,7 +67,7 @@ public class Recipe extends ActionBarActivity {
             WebView myWebView = (WebView) inflater.inflate(R.layout.fragment_recipe_view, container, false);
             WebSettings webSettings = myWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
-            myWebView.loadUrl("http://www.chefkoch.de/rezept-reste.php");
+            myWebView.loadUrl("http://mobile.chefkoch.de");
 
             return myWebView;
         }

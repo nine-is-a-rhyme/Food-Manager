@@ -11,14 +11,19 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Iterator;
+import java.util.List;
+
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeWebViewFragment;
+
 
 
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
 
+    private List<String> recipe_search_entries_;
+    private String url;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -88,15 +93,6 @@ public class MainActivity extends ActionBarActivity implements
                     Intent myIntent = new Intent(MainActivity.this, Recipe.class);
                     //myIntent.putExtra("key", value); //Optional parameters
                     MainActivity.this.startActivity(myIntent);
-
-                    /*Toast.makeText(getApplicationContext(), "create recipe button clicked",
-                            Toast.LENGTH_SHORT).show();*/
-                    /*final android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    RecipeWebViewFragment fragment = new RecipeWebViewFragment();
-                    ft.replace(R.id.pager, fragment, "WebViewFragment");
-                    //ft.add(fragment, "WebViewFragment");
-                    ft.addToBackStack(null);
-                    ft.commit();*/
                     break;
 
 
@@ -104,5 +100,33 @@ public class MainActivity extends ActionBarActivity implements
         }
     };
 
+
+    public String createURL(){
+              /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
+
+        if(!recipe_search_entries_.isEmpty()) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
+
+            for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
+                stringBuilder.append(entry);
+                if(entry.hasNext()) {
+                    stringBuilder.append("+");
+                }
+            }
+
+            stringBuilder.append("/Rezepte.html");
+
+            url = stringBuilder.toString();
+
+        }
+        else {
+            url = null;
+        }
+
+        return url;
+    }
 
 }

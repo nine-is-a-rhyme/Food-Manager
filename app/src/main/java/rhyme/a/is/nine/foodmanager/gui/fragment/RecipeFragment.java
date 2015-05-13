@@ -27,8 +27,7 @@ import rhyme.a.is.nine.foodmanager.product.Product;
  */
 public class RecipeFragment extends Fragment {
 
-    private List<String> recipe_search_entries_;
-    private String url;
+
 
 
     public RecipeFragment() {
@@ -48,37 +47,6 @@ public class RecipeFragment extends Fragment {
 
         return fragmentView;
     }
-
-
-
-
-    public String createURL(){
-              /* creates something like http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html */
-
-      if(!recipe_search_entries_.isEmpty()) {
-
-       StringBuilder stringBuilder = new StringBuilder();
-
-      stringBuilder.append("http://www.chefkoch.de/rs/s0e1z1/");
-
-      for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
-          stringBuilder.append(entry);
-          if(entry.hasNext()) {
-              stringBuilder.append("+");
-           }
-         }
-
-         stringBuilder.append("/Rezepte.html");
-
-         url = stringBuilder.toString();
-
-       }
-      else {
-               url = null;
-      }
-
-       return url;
-   }
 
 
 }
