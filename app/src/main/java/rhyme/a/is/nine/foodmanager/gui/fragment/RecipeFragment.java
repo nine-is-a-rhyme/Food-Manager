@@ -1,6 +1,7 @@
 package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
+import android.app.Activity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.content.DialogInterface;
@@ -17,13 +18,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecipeFragment extends Fragment implements View.OnClickListener {
+public class RecipeFragment extends Fragment {
 
     private List<String> recipe_search_entries_;
     private String url;
@@ -41,7 +43,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         View fragmentView = inflater.inflate(R.layout.fragment_recipe, container, false);
 
         Button button = (Button) fragmentView.findViewById(R.id.button_web);
-        button.setOnClickListener(this);
+
+        button.setOnClickListener(((MainActivity)getActivity()).mGlobal_OnClickListener);
 
         return fragmentView;
     }
@@ -49,20 +52,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
 
 
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(this.getActivity(),
-                "Button is clicked!", Toast.LENGTH_LONG).show();
-
-
-        switch (v.getId()) {
-            case R.id.button_web:
-
-
-                break;
-        }
-
-    }
     public String createURL(){
               /* creates something like http://www.chefkoch.de/rs/s0e1z1/karotte+kartoffel/Rezepte.html */
 

@@ -24,6 +24,10 @@ public class WebViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        /*WebView myWebView = (WebView) findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.loadUrl("www.google.at");*/
         return inflater.inflate(R.layout.fragment_recipe, container, false);
     }
 
