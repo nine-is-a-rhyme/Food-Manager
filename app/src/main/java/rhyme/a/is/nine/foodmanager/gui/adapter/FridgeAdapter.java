@@ -72,7 +72,7 @@ public class FridgeAdapter extends BaseAdapter {
 
         if(product.getBestBeforeDate() == null)
             rowView.setBackgroundColor(Color.LTGRAY);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 0)
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
             rowView.setBackgroundColor(Color.parseColor("#F7977A"));
         else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
             rowView.setBackgroundColor(Color.parseColor("#FFF79A"));
