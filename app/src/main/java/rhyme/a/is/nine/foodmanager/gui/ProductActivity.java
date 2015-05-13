@@ -30,6 +30,7 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
+import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter.ScannedProduct;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
@@ -37,7 +38,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private Product product;
 
     private TextView bestBeforeView;
-    private Spinner category;
+    public static Spinner category;
+    public static String[] suggestedCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                Intent intent = new Intent(ProductActivity.this, CategoryActivity.class);
+                ProductActivity.this.startActivityForResult(intent, 0);
             }
         });
 
@@ -190,6 +193,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
             if(product == null)
                 return;
+
+            suggestedCategories = null;
+            if(product instanceof ScannedProduct)
+                suggestedCategories = ((ScannedProduct) product).getCategories();
 
             addProduct(product);
 
