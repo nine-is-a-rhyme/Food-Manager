@@ -8,7 +8,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         tools:context="rhyme.a.is.nine.foodmanager.gui.ProductActivity"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:id="@+id/"
+    android:weightSum="1">
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,12 +34,30 @@
         android:text="Kategorie"
         android:id="@+id/textView4" />
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:id="@+id/et_category"
-        android:layout_gravity="center_horizontal"
-        android:singleLine="true" />
+        android:layout_gravity="center_horizontal|left"
+        android:singleLine="true"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Neu"
+        android:id="@+id/button"
+        android:layout_gravity="right"
+        android:layout_weight="0" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,11 +67,11 @@
         android:id="@+id/textView5"
         android:hint="250 ml" />
 
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_size"
-        android:layout_gravity="center_horizontal"
         android:singleLine="true" />
 
     <TextView
