@@ -79,10 +79,12 @@ public class ProductDatabase implements Serializable {
             }
         }
         if(isNew) {
-            for (int i = 0; i < products.size(); i++) {
-                if (product.getBestBeforeDate().before(products.get(i).getBestBeforeDate())) {
-                    products.add(i, product);
-                    return;
+            if(product.getBestBeforeDate() != null) {
+                for (int i = 0; i < products.size(); i++) {
+                    if (products.get(i).getBestBeforeDate() != null && product.getBestBeforeDate().before(products.get(i).getBestBeforeDate())) {
+                        products.add(i, product);
+                        return;
+                    }
                 }
             }
             products.add(product);

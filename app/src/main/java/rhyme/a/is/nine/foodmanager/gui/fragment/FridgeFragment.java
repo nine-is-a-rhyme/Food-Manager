@@ -118,7 +118,7 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
         setListAdapter(fridgeAdapter);
 
         // enable swipe to delete
-        SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
+        final SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
                 new SwipeDismissListViewTouchListener(
                         getListView(),
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -141,14 +141,15 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
                         }
                 );
         swipeDismissListViewTouchListener.setEnabled(true);
-        getListView().setOnTouchListener(swipeDismissListViewTouchListener);
-        getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
+        //getListView().setOnTouchListener(swipeDismissListViewTouchListener);
+        //getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
 
         getListView().setOnTouchListener(new View.OnTouchListener() {
             private float initialY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                swipeDismissListViewTouchListener.onTouch(v, event);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         initialY = event.getY();
