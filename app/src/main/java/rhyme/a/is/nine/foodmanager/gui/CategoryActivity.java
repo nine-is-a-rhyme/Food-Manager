@@ -48,6 +48,8 @@ public class CategoryActivity extends ActionBarActivity  {
             String suggestedText="";
             String prefix = "";
             for(String suggested : suggestedCategories) {
+                if (isInList(suggested))
+                    continue;
                 suggestedText += prefix + suggested;
                 prefix = ", ";
             }
@@ -60,12 +62,37 @@ public class CategoryActivity extends ActionBarActivity  {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String desc_name = ((EditText) findViewById(R.id.et_name)).getText().toString();
+                if (desc_name.length() == 0)
+                {
+                    Toast.makeText(getApplicationContext(), "Kein Kategoriename gewählt", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 ArrayAdapter<String> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
-                adapter.add(((EditText) findViewById(R.id.et_name)).getText().toString());
+                if (isInList(desc_name))
+                {
+                    Toast.makeText(getApplicationContext(), "Kategorie schon vorhanden", Toast.LENGTH_LONG).show();
+                    finish();
+                    return;
+                }
+
+                adapter.add(desc_name);
                 ProductActivity.category.setSelection(adapter.getCount());
                 finish();
             }});
 
 
-    }}
+    }
+    public boolean isInList(String category)
+    {
+        ArrayAdapter<String> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++)
+        {
+            if (adapter.getItem(i).equals(category)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
 
