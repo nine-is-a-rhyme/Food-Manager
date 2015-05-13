@@ -8,6 +8,7 @@ import android.view.View;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 
 public class MainActivity extends ActionBarActivity implements
@@ -93,13 +94,24 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-    public void onMinusButtonClicked(View v) {
+    public void onMinusButtonFridgeClicked(View v) {
+        FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        FridgeFragment.getAdapter().notifyDataSetChanged();
+    }
+
+    public void onPlusButtonFridgeClicked(View v) {
+        FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        FridgeFragment.getAdapter().notifyDataSetChanged();
+    }
+
+    public void onMinusButtonShoppingListClicked(View v) {
+
         ShoppingListFragment.getAdapter().decreaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
-    public void onPlusButtonClicked(View v) {
-        ShoppingListFragment.getAdapter().increaseProductCount((int)v.getTag());
+    public void onPlusButtonShoppingListClicked(View v) {
+        ShoppingListFragment.getAdapter().increaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 }

@@ -7,6 +7,9 @@ import java.util.Date;
  * Created by martinmaritsch on 22/04/15.
  */
 public class Product implements Serializable {
+
+    static final long serialVersionUID = 2338835583583773842L;
+
     private String name = null;
     private String category = null;
     private String barcode = null;
@@ -33,6 +36,19 @@ public class Product implements Serializable {
         this.barcode = barcode;
         this.size = size;
         this.count = count;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Product) || this == null)
+            return false;
+        if (obj == this)
+            return true;
+
+        Product product = (Product) obj;
+        return product.getName().equals(this.name)
+                && ((product.getBestBeforeDate() == null && this.bestBeforeDate == null)
+                    || product.getBestBeforeDate().equals(this.bestBeforeDate));
     }
 
     public String getName() {
@@ -75,9 +91,13 @@ public class Product implements Serializable {
         this.bestBeforeDate = bestBeforeDate;
     }
 
-    public void increaseCount() { count++; }
+    public void increaseCount() {
+        count++;
+    }
 
-    public void decreaseCount() { if(count > 0) count--; }
+    public void decreaseCount() {
+        if (count > 0) count--;
+    }
 
     public int getCount() {
         return count;

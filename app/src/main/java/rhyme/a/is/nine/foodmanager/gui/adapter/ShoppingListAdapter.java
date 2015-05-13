@@ -72,8 +72,8 @@ public class ShoppingListAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void removeItem(int position) {
-        MainActivity.shoppingListDatabase.removeProductByPosition(position, true);
+    public void removeItem(int position, boolean completely) {
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, completely);
     }
 
     public void decreaseProductCount(int position) {

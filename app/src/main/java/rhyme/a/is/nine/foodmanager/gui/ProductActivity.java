@@ -46,69 +46,53 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             public void onClick(View v) {
                 boolean fail = false;
                 EditText name = (EditText) findViewById(R.id.et_name);
-                if(name.getText().toString().length() > 0)
-                {
+                if (name.getText().toString().length() > 0) {
                     product.setName(name.getText().toString());
                     name.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     name.setBackgroundColor(Color.RED);
                 }
                 EditText category = (EditText) findViewById(R.id.et_category);
-                if(category.getText().toString().length() > 0)
-                {
+                if (category.getText().toString().length() > 0) {
                     product.setCategory(category.getText().toString());
                     category.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     category.setBackgroundColor(Color.RED);
                 }
                 EditText size = (EditText) findViewById(R.id.et_size);
-                if(size.getText().toString().length() > 0)
-                {
+                if (size.getText().toString().length() > 0) {
                     product.setSize(size.getText().toString());
                     size.setBackgroundColor(Color.GREEN);
-                }
-                else
-                {
+                } else {
                     fail = true;
                     size.setBackgroundColor(Color.RED);
                 }
                 EditText count = (EditText) findViewById(R.id.et_count);
-                try
-                {
+                try {
                     product.setCount(Integer.parseInt(count.getText().toString()));
                     count.setBackgroundColor(Color.GREEN);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     product.setCount(1);
                     count.setText("1");
                 }
 
                 TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
-                try{
+                try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     Date date = sdf.parse(bestbefore.getText().toString());
                     product.setBestBeforeDate(date);
                     bestbefore.setBackgroundColor(Color.GREEN);
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
                     fail = true;
                     bestbefore.setBackgroundColor(Color.RED);
                 }
 
-                if(!fail)
-                {
+                if (!fail) {
                     MainActivity.fridgeDatabase.addProduct(product);
                     finish();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -118,6 +102,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
         bestBeforeView.setOnClickListener(this);
 
+        if (getIntent().getBooleanExtra("SCAN", false))
+            new IntentIntegrator(this).initiateScan();
     }
 
     @Override
@@ -146,8 +132,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         }
     }
 
-    private void addProduct(Product product)
-    {
+    private void addProduct(Product product) {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
         EditText category = (EditText) findViewById(R.id.et_category);
@@ -158,24 +143,20 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         count.setText(String.valueOf(product.getCount()));
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if(result != null)
-        {
-            if(result.getContents() == null)
+        if (result != null) {
+            if (result.getContents() == null)
                 return;
 
             product = BarcodeToProductConverter.getProductForBarcode(result.getContents());
-            if(product == null)
+            if (product == null)
                 return;
 
             addProduct(product);
 
             Toast.makeText(getApplicationContext(), "Produkt gefunden", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             Toast.makeText(getApplicationContext(), "Kein Produkt gefunden", Toast.LENGTH_LONG).show();
         }
     }

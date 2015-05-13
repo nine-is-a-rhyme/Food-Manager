@@ -73,13 +73,20 @@ public class ProductDatabase implements Serializable {
         // check if exists
         for(Product i : products)
         {
-            if (i.getName().equals(product.getName())) {
+            if (i.equals(product)) {
                 i.increaseCount();
                 isNew = false;
             }
         }
-        if(isNew)
+        if(isNew) {
+            for (int i = 0; i < products.size(); i++) {
+                if (product.getBestBeforeDate().before(products.get(i).getBestBeforeDate())) {
+                    products.add(i, product);
+                    return;
+                }
+            }
             products.add(product);
+        }
     }
 
     public void removeProductByPosition(int position, boolean removeCompletely)
