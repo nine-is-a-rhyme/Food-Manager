@@ -35,7 +35,6 @@ import rhyme.a.is.nine.foodmanager.product.Product;
 public class CategoryActivity extends ActionBarActivity  {
 
     private Product product;
-
     private TextView bestBeforeView;
     private Spinner category;
 
@@ -48,8 +47,6 @@ public class CategoryActivity extends ActionBarActivity  {
         if(suggestedCategories != null) {
             final Spinner sp = (Spinner) findViewById(R.id.et_vorschläge);
 
-
-
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(suggestedCategories));
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp.setAdapter(adapter);
@@ -59,7 +56,6 @@ public class CategoryActivity extends ActionBarActivity  {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     EditText name = (EditText) findViewById(R.id.et_name);
                     name.setText((String) sp.getSelectedItem());
-
                 }
 
                 @Override
@@ -69,7 +65,6 @@ public class CategoryActivity extends ActionBarActivity  {
             });
 
         }
-
 
         Button add_button = (Button) findViewById(R.id.button_save);
         add_button.setOnClickListener(new View.OnClickListener() {
@@ -94,12 +89,10 @@ public class CategoryActivity extends ActionBarActivity  {
                 }
                 Category cat = new Category(desc_name, bbf_date);
                 adapter.add(cat);
-                ProductActivity.cat_db.addCategory(cat);
+                //ProductActivity.cat_db.addCategory(cat);
                 ProductActivity.category.setSelection(adapter.getCount());
                 finish();
             }});
-
-
     }
 
     public boolean isInList(String category)
@@ -114,4 +107,3 @@ public class CategoryActivity extends ActionBarActivity  {
         return false;
     }
 }
-

@@ -1,9 +1,11 @@
 package rhyme.a.is.nine.foodmanager.product;
 
+import java.io.Serializable;
+
 /**
  * Created by Matthias on 13.05.2015.
  */
-public class Category {
+public class Category implements Serializable{
     private String name;
     private int best_before_days;
 

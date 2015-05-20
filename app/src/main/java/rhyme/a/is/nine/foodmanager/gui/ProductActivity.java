@@ -53,7 +53,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
-        cat_db = new CategoryDatabase("categories.db");
+        cat_db = new CategoryDatabase("category.db");
         cat_db.readFromFile(getBaseContext());
         List<Category> cat_list = cat_db.getAllCategories();
 
