@@ -11,6 +11,10 @@ public class PriceEntity {
     private float price = -1;
     private Date buyDate = null;
 
+    public PriceEntity() {
+
+    }
+
     public PriceEntity(String name, float price, Date buyDate) {
         this.name = name;
         this.price = price;

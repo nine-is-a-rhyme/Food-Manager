@@ -78,20 +78,22 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 if (name.getText().toString().length() > 0) {
                     product.setName(name.getText().toString());
                     pos.setName(name.getText().toString());
-                    name.setBackgroundColor(Color.GREEN);
 
                 } else {
                     fail = true;
-                    name.setBackgroundColor(Color.RED);
+                    //name.setBackgroundColor(Color.RED);
+                    name.setError("Bitte Bezeichnung eingeben!");
                 }
 
                 if(category.getSelectedItem().toString().length() > 0)
                 {
                     product.setCategory(category.getSelectedItem().toString());
-                    category.setBackgroundColor(Color.GREEN);
+
                 } else {
                     fail = true;
-                    category.setBackgroundColor(Color.RED);
+                    //category.setBackgroundColor(Color.RED);
+                    TextView category_view = (TextView) category.getSelectedView();
+                    category_view.setError("Bitte Kategorie eingeben!");
                 }
 
                 /*EditText size = (EditText) findViewById(R.id.et_size);
@@ -106,7 +108,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 EditText count = (EditText) findViewById(R.id.et_count);
                 try {
                     product.setCount(Integer.parseInt(count.getText().toString()));
-                    count.setBackgroundColor(Color.GREEN);
+
                 } catch (Exception e) {
                     product.setCount(1);
                     count.setText("1");
@@ -114,8 +116,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
                 EditText price = (EditText) findViewById(R.id.et_price);
                 try {
-                    pos.setPrice(Double.parseDouble(count.getText().toString()));
-                    price.setBackgroundColor(Color.GREEN);
+                    pos.setPrice(Float.parseFloat(count.getText().toString()));
+
                 } catch (Exception e) {
                     pos.setPrice(0);
                     price.setText("0.00");
@@ -126,16 +128,16 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                     Date date = sdf.parse(bestbefore.getText().toString());
                     product.setBestBeforeDate(date);
-                    bestbefore.setBackgroundColor(Color.GREEN);
+
                 } catch (Exception ex) {
                     fail = true;
-                    bestbefore.setBackgroundColor(Color.RED);
+                    bestbefore.setError("Bitte Ablaufdatum eingeben!");
                 }
 
                 if (!fail) {
                     MainActivity.fridgeDatabase.addProduct(product);
                     pos.setBuyDate(new Date());
-
+                    MainActivity.priceDatabase.addPriceEntity(pos);
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
