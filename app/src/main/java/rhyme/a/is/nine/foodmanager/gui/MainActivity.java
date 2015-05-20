@@ -12,14 +12,18 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 
@@ -31,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements
     public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
     public static ProductDatabase historyDatabase = null;
+    public static PriceDatabase priceDatabase = null;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
@@ -77,10 +82,18 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase = new ProductDatabase("fridge.db");
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
         historyDatabase = new ProductDatabase("history.db");
+        priceDatabase = new PriceDatabase("prices.db");
 
         fridgeDatabase.readFromFile(getBaseContext());
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
+        priceDatabase.readFromFile(getBaseContext());
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -8);
+        priceDatabase.addPriceEntity(new PriceEntity("ad", 1.23f, new Date()));
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
+
     }
 
     @Override
@@ -88,6 +101,7 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+        priceDatabase.readFromFile(getBaseContext());
 
         super.onDestroy();
     }
