@@ -1,13 +1,7 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,18 +11,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
-import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class CategoryActivity extends ActionBarActivity  {

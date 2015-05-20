@@ -1,17 +1,13 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,9 +17,9 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.TabsPagerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
@@ -139,7 +135,8 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void onMinusButtonFridgeClicked(View v) {
-        shoppingListDatabase.addProduct((Product) FridgeFragment.getAdapter().getItem((int) v.getTag()));
+        Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
+        shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
         FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
@@ -165,7 +162,7 @@ public class MainActivity extends ActionBarActivity implements
             switch (v.getId()) {
                 case R.id.button_web:
 
-                    Intent myIntent = new Intent(MainActivity.this, Recipe.class);
+                    Intent myIntent = new Intent(MainActivity.this, RecipeActivity.class);
                     //myIntent.putExtra("key", value); //Optional parameters
                     MainActivity.this.startActivity(myIntent);
                     break;

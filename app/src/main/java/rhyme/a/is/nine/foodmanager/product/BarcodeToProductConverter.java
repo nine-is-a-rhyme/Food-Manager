@@ -1,11 +1,10 @@
 package rhyme.a.is.nine.foodmanager.product;
 
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 /**
  * Created by martinmaritsch on 22/04/15.

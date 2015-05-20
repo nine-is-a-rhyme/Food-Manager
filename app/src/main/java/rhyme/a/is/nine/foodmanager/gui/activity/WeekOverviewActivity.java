@@ -1,22 +1,18 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
 import android.app.ListActivity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 
 
