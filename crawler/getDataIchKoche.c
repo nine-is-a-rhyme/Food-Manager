@@ -2,11 +2,11 @@
 //------------------------------------------------------------------------------
 // getData.c
 //
-// Program to extract ingreidients out of html files. 
+// Program to extract ingreidients out of html files.
 // Files must be named as "x" where x is a number.
 //
-// Authors: Matthias Eder 1331015, 
-// 
+// Authors: Matthias Eder 1331015,
+//
 // Latest Changes: 06.05.2014
 //------------------------------------------------------------------------------
 //
@@ -86,7 +86,7 @@ void getString(char* string, int number);
 //------------------------------------------------------------------------------
 ///
 /// The main function.
-/// calls the function of the programs. Reads the file and saves it into a new 
+/// calls the function of the programs. Reads the file and saves it into a new
 /// file
 //
 /// @param argc the number of arguments
@@ -100,11 +100,11 @@ int main(int argc, char *argv[])
   {
     return printError(PARAM_ERROR, argv[0]);
   }
-  
+
 
 
   error check = editDoc(argv[1], argv[2]);
-  
+
   return printError(check, argv[0]);
 }
 
@@ -125,15 +125,15 @@ error printError(error error_code, char* filename)
     case PARAM_ERROR:
     printf("usage: %s <output-file> <num-of-files>\n", filename);
     return PARAM_ERROR;
-    
+
     case MEM_ERROR:
     printf("error: out of memory\n");
     return MEM_ERROR;
-    
+
     case NOT_FOUND:
     printf("error: file not found\n");
     return NOT_FOUND;
-    
+
     case FILE_ERROR:
     printf("error: could not read file\n");
     return FILE_ERROR;
@@ -146,7 +146,7 @@ error printError(error error_code, char* filename)
     printf("error: no directory named '%s' ", directory);
     printf("or wrong filetype '%s'\n", file_type);
     return DIR_ERROR;
-    
+
   }
   printf("Ingredients stored\n");
   return NO_ERROR;
@@ -170,7 +170,7 @@ error editDoc(char* save_file, char* num_of_files)
   {
     return NOT_FOUND;
   }
-  
+
   // write the first line
   char* save_line_1 = "{\"Rezepte\":[";
   char* save_line_2 = "\"Zutaten\":[";
@@ -215,7 +215,7 @@ for (; actual_file <= num_files; actual_file++)
 
   char reciepe_no[100];
   sprintf(reciepe_no, "%d", actual_file);
-  
+
 
   // checks if we are writing the description
   int running_description = FALSE;
@@ -234,12 +234,12 @@ for (; actual_file <= num_files; actual_file++)
       fclose(save);
       return FILE_ERROR;
     }
-    
+
     // check if the EOF or the End of line is reached
     if (character == EOF || character == '\n')
     {
       line[counter] = '\0';
-      
+
 // search the ingredients
       if (checkLine(line, IMAGE) && checkLine(line, IMAGE_END) && first_img == TRUE)
       {
@@ -280,7 +280,7 @@ for (; actual_file <= num_files; actual_file++)
       }
 
       if (checkLine(line, AMOUNT) && check == TRUE)
-      { 
+      {
         if (first_ing)
         {
           first_ing = FALSE;
@@ -307,7 +307,7 @@ for (; actual_file <= num_files; actual_file++)
       }
 
       // search the ingredients
-      if ((checkLine(line, DESCRIPTION)  && check == TRUE) 
+      if ((checkLine(line, DESCRIPTION)  && check == TRUE)
         || (running_description == TRUE  && check == TRUE))
       {
         if (checkLine(line, DESCRIPTION))
@@ -340,13 +340,13 @@ for (; actual_file <= num_files; actual_file++)
       }
 
       counter = 0;
-      continue;      
-    
+      continue;
+
     }
-    
+
     line[counter] = character;
     counter++;
-    
+
     //check if there is enough memory for the sring
     if (counter == string_size)
     {
@@ -359,7 +359,7 @@ for (; actual_file <= num_files; actual_file++)
         fclose(save);
         return MEM_ERROR;
       }
-      
+
       line = tmp;
     }
   }
@@ -412,7 +412,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
     start += strlen(search);
 
     for (; counter < (strlen(start) - strlen(until)); counter++ )
-    { 
+    {
       if (start[counter] == '<' || bracket == TRUE)
       {
         bracket = TRUE;
@@ -431,6 +431,8 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
+      //if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
+      // if the above is commented in, the JSON file has umlauts, but does not validate anymore
       if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
       {
           continue;
@@ -475,7 +477,9 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((line[counter] < 33 || line[counter] > 126) && line[counter] != ' ')
+      //if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
+      // if the above is commented in, the JSON file has umlauts, but does not validate anymore
+      if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
       {
           continue;
       }
@@ -496,7 +500,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
   else if (start == NULL && until != NULL)
   {
     for (; counter < (strlen(line) - strlen(until)); counter++ )
-    { 
+    {
       if (line[counter] == '<' || bracket == TRUE)
       {
         bracket = TRUE;
@@ -515,7 +519,9 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((line[counter] < 33 || line[counter] > 126) && line[counter] != ' ')
+      //if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
+      // if the above is commented in, the JSON file has umlauts, but does not validate anymore
+      if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
       {
           continue;
       }
@@ -539,7 +545,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
     start += strlen(search);
 
     for (; counter < strlen(start); counter++)
-    { 
+    {
       if (start[counter] == '<' || bracket == TRUE)
       {
         bracket = TRUE;
@@ -558,6 +564,8 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
+      //if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
+      // if the above is commented in, the JSON file has umlauts, but does not validate anymore
       if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
       {
           continue;
@@ -576,7 +584,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       }    }
   }
 
-  
+
   return NO_ERROR;
 }
 
@@ -616,11 +624,11 @@ int checkLine(char* line, char* search)
 int getInteger(char* substring)
 {
   int length = strlen(substring);
-  
+
   int counter = 0;
   int integer = 0;
-  
-  
+
+
   for (; counter < length; counter++)
   {
     if (substring[counter] < '0' || substring[counter] > '9')
@@ -633,9 +641,8 @@ int getInteger(char* substring)
       integer *= 10;
     }
   }
-  
-  
+
+
   return integer;
 }
-
 
