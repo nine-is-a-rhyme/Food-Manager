@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.MainActivity;
 import rhyme.a.is.nine.foodmanager.gui.graph.BarGraph;
 import rhyme.a.is.nine.foodmanager.gui.graph.Bar;
 
@@ -75,27 +77,21 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-        ArrayList<Bar> points = new ArrayList<Bar>();
-        Bar d = new Bar();
-        d.setColor(Color.parseColor("#99CC00"));
-        d.setName("Test1");
-        d.setValue(10);
-        Bar d2 = new Bar();
-        d2.setColor(Color.parseColor("#FFBB33"));
-        d2.setName("Test2");
-        d2.setValue(20);
-        points.add(d);
-        points.add(d2);
+        ArrayList<Bar> bars = MainActivity.priceDatabase.getBars();
 
-        BarGraph g = (BarGraph)view.findViewById(R.id.price_graph);
-        g.setBars(points);
-        //g.setUnit("$");
-        g.setOnBarClickedListener(new BarGraph.OnBarClickedListener() {
-            @Override
-            public void onClick(int index) {
-                Toast.makeText(getActivity().getBaseContext(), "Clicked "+ index, Toast.LENGTH_LONG).show();
-            }
-        });
+        if(bars != null) {
+            BarGraph g = (BarGraph)view.findViewById(R.id.price_graph);
+            g.setBars(MainActivity.priceDatabase.getBars());
+
+            g.setOnBarClickedListener(new BarGraph.OnBarClickedListener() {
+                @Override
+                public void onClick(int index) {
+                    Toast.makeText(getActivity().getBaseContext(), "Clicked "+ index, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        TextView sum = (TextView) view.findViewById(R.id.price_value);
+        sum.setText(String.format("%.02f", MainActivity.priceDatabase.getLastMonthValue()) + "€");
 
         return view;
     }

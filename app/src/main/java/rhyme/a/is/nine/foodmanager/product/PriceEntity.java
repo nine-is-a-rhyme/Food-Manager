@@ -8,24 +8,13 @@ import java.util.Date;
 public class PriceEntity {
 
     private String name = null;
-    private double price = -1;
+    private float price = -1;
     private Date buyDate = null;
 
-    public PriceEntity()
-    {
-
-    }
-
-    public PriceEntity(String name, double price, Date buyDate) {
+    public PriceEntity(String name, float price, Date buyDate) {
         this.name = name;
         this.price = price;
         this.buyDate = buyDate;
-    }
-
-    public PriceEntity(String name, double price) {
-        this.name = name;
-        this.price = price;
-        this.buyDate = new Date();
     }
 
     public String getName() {
@@ -36,11 +25,11 @@ public class PriceEntity {
         this.name = name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 

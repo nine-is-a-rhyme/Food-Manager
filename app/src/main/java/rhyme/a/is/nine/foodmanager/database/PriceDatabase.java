@@ -8,8 +8,11 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -37,13 +40,17 @@ public class PriceDatabase implements Serializable {
     }
 
     public ArrayList<Bar> getBars() {
+
+        if(priceEntities == null || priceEntities.size() == 0)
+            return null;
+
         ArrayList<Bar> points = new ArrayList<>();
 
         Calendar cal = Calendar.getInstance();
 
-        System.out.println("Date = "+ cal.getTime());
+        System.out.println("Date = " + cal.getTime());
 
-        for(int i = 0; i <= 3; i++) {
+        for (int i = 0; i < 4; i++) {
             Bar bar = new Bar();
             Date max = cal.getTime();
             cal.add(Calendar.DATE, -7);
@@ -55,25 +62,29 @@ public class PriceDatabase implements Serializable {
             }
 
             bar.setValue(sum);
+            bar.setName(new SimpleDateFormat("dd MMM").format(min).toString() + " - " + new SimpleDateFormat("dd MMM").format(max).toString());
+            bar.setColor((i % 2 == 0) ? Color.parseColor("#99CC00") : Color.parseColor("#FFBB33"));
 
             points.add(bar);
         }
-
-
-
-
-        Bar d = new Bar();
-        d.setColor(Color.parseColor("#99CC00"));
-        d.setName("Test1");
-        d.setValue(10);
-        Bar d2 = new Bar();
-        d2.setColor(Color.parseColor("#FFBB33"));
-        d2.setName("Test2");
-        d2.setValue(20);
-        points.add(d);
-        points.add(d2);
-
+        Collections.reverse(points);
         return points;
+    }
+
+    public float getLastMonthValue() {
+
+        if(priceEntities == null || priceEntities.size() == 0)
+            return 0f;
+
+        float sum = 0f;
+        Calendar cal = Calendar.getInstance();
+        Date max = cal.getTime();
+        cal.add(Calendar.MONTH, -1);
+        Date min = cal.getTime();
+        for (PriceEntity p : getPriceEntitiesByDateInterval(min, max)) {
+            sum += p.getPrice();
+        }
+        return sum;
     }
 
     public PriceEntity getPriceEntityByPosition(int position) {
