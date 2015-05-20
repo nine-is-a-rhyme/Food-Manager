@@ -20,7 +20,7 @@ import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
-
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -28,14 +28,14 @@ public class MainActivity extends ActionBarActivity implements
 
     private List<String> recipe_search_entries_;
     private String url;
-public static ProductDatabase fridgeDatabase = null;
+    public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
     public static ProductDatabase historyDatabase = null;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = {"Kühlschrank", "Einkaufsliste", "Rezepte"};
+    private String[] tabs = {"Kühlschrank", "Einkaufsliste", "Rezepte", "Preise"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +116,10 @@ public static ProductDatabase fridgeDatabase = null;
     }
 
     public void onMinusButtonFridgeClicked(View v) {
+        shoppingListDatabase.addProduct((Product) FridgeFragment.getAdapter().getItem((int) v.getTag()));
         FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
+        ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
     public void onPlusButtonFridgeClicked(View v) {
@@ -126,7 +128,6 @@ public static ProductDatabase fridgeDatabase = null;
     }
 
     public void onMinusButtonShoppingListClicked(View v) {
-
         ShoppingListFragment.getAdapter().decreaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
@@ -135,34 +136,33 @@ public static ProductDatabase fridgeDatabase = null;
         ShoppingListFragment.getAdapter().increaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
- public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
+
+    public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
         public void onClick(final View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.button_web:
 
                     Intent myIntent = new Intent(MainActivity.this, Recipe.class);
                     //myIntent.putExtra("key", value); //Optional parameters
                     MainActivity.this.startActivity(myIntent);
                     break;
-
-
             }
         }
     };
 
 
-    public String createURL(){
+    public String createURL() {
               /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
 
-        if(!recipe_search_entries_.isEmpty()) {
+        if (!recipe_search_entries_.isEmpty()) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
 
-            for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
+            for (Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
                 stringBuilder.append(entry);
-                if(entry.hasNext()) {
+                if (entry.hasNext()) {
                     stringBuilder.append("+");
                 }
             }
@@ -171,8 +171,7 @@ public static ProductDatabase fridgeDatabase = null;
 
             url = stringBuilder.toString();
 
-        }
-        else {
+        } else {
             url = null;
         }
 
