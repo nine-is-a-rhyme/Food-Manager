@@ -71,6 +71,15 @@ public class PriceDatabase implements Serializable {
         return points;
     }
 
+    public List<PriceEntity> getPriceEntitiesForWeek(int weeks_ago) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7 * weeks_ago);
+        Date max = cal.getTime();
+        cal.add(Calendar.DATE, -7 * (weeks_ago+1));
+        Date min = cal.getTime();
+        return getPriceEntitiesByDateInterval(min, max);
+    }
+
     public float getLastMonthValue() {
 
         if(priceEntities == null || priceEntities.size() == 0)
