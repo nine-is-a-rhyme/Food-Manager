@@ -11,10 +11,21 @@ public class PriceEntity {
     private double price = -1;
     private Date buyDate = null;
 
+    public PriceEntity()
+    {
+
+    }
+
     public PriceEntity(String name, double price, Date buyDate) {
         this.name = name;
         this.price = price;
         this.buyDate = buyDate;
+    }
+
+    public PriceEntity(String name, double price) {
+        this.name = name;
+        this.price = price;
+        this.buyDate = new Date();
     }
 
     public String getName() {

@@ -31,11 +31,13 @@ import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.fragment.DatePickerDialogFragment;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter;
 import rhyme.a.is.nine.foodmanager.product.BarcodeToProductConverter.ScannedProduct;
+import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 public class ProductActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Product product;
+    private PriceEntity pos;
 
     private TextView bestBeforeView;
     public static Spinner category;
@@ -47,6 +49,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         setContentView(R.layout.activity_product);
 
         product = new Product();
+        pos = new PriceEntity();
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
@@ -63,7 +66,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProductActivity.this, CategoryActivity.class);
-                ProductActivity.this.startActivityForResult(intent, 0);
+                ProductActivity.this.startActivity(intent);
             }
         });
 
@@ -74,7 +77,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 EditText name = (EditText) findViewById(R.id.et_name);
                 if (name.getText().toString().length() > 0) {
                     product.setName(name.getText().toString());
+                    pos.setName(name.getText().toString());
                     name.setBackgroundColor(Color.GREEN);
+
                 } else {
                     fail = true;
                     name.setBackgroundColor(Color.RED);
@@ -107,6 +112,15 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     count.setText("1");
                 }
 
+                EditText price = (EditText) findViewById(R.id.et_price);
+                try {
+                    pos.setPrice(Double.parseDouble(count.getText().toString()));
+                    price.setBackgroundColor(Color.GREEN);
+                } catch (Exception e) {
+                    pos.setPrice(0);
+                    price.setText("0.00");
+                }
+
                 TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -120,6 +134,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
                 if (!fail) {
                     MainActivity.fridgeDatabase.addProduct(product);
+                    pos.setBuyDate(new Date());
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();

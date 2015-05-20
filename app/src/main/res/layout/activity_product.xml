@@ -110,6 +110,43 @@
         android:hint="01.01.2015"
         style="@android:style/Widget.Holo.Spinner" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Preis"
+        android:id="@+id/textView5" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_price">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/et_price"
+            android:layout_gravity="center_horizontal|left"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_gravity="center_vertical|right"
+            android:text="€"
+            android:layout_weight="0"
+            android:id="@+id/textView6" />
+
+    </LinearLayout>
+
+
+
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
