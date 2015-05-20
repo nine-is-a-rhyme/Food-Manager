@@ -51,10 +51,11 @@ public class MainActivity extends ActionBarActivity implements
         viewPager.setAdapter(mAdapter);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Adding Tabs
+        int tabId = 0;
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
+                    .setTabListener(this).setTag(tabId));
+            tabId++;
         }
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

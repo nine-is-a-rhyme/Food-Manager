@@ -25,7 +25,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     }
 
     public void testActionBar() {
-        mySolo.clickOnActionBarItem(R.id.action_edit);
-        mySolo.clickOnActionBarItem(R.id.action_add);
+        mySolo.clickOnActionBarItem(R.id.floating_action_button_menu);
     }
 }

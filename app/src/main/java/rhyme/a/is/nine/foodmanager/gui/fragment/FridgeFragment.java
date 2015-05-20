@@ -99,12 +99,6 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_fridge_tab, menu);
-    }
-
-    @Override
     public void onListItemClick(ListView list, View v, int position, long id) {
         Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
     }
