@@ -4,6 +4,6 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rhyme.a.is.nine.foodmanager.gui.MainActivity"
+    tools:context="rhyme.a.is.nine.foodmanager.gui.activity.MainActivity"
 
     />

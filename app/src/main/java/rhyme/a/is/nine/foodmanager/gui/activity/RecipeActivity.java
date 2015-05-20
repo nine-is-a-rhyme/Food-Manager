@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -15,7 +15,7 @@ import android.webkit.WebView;
 
 import rhyme.a.is.nine.foodmanager.R;
 
-public class Recipe extends ActionBarActivity {
+public class RecipeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
