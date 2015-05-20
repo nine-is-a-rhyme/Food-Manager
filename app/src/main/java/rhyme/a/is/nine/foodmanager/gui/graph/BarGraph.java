@@ -310,7 +310,9 @@ public class BarGraph extends View implements HoloGraphAnimate {
 
             // Draw x-axis label text
             if (mShowAxisLabel) {
-                mPaint.setColor(bar.getLabelColor());
+
+                // WE CHANGED THE COLOR HERE
+                mPaint.setColor(Color.BLACK);
                 mPaint.setTextSize(labelTextSize);
                 if (isAnimating()) mPaint.setAlpha(alpha);
                 float textWidth = mPaint.measureText(bar.getName());

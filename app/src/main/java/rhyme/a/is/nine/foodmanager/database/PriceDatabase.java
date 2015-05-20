@@ -62,7 +62,7 @@ public class PriceDatabase implements Serializable {
             }
 
             bar.setValue(sum);
-            bar.setName(new SimpleDateFormat("dd MMM").format(min).toString() + " - " + new SimpleDateFormat("dd MMM").format(max).toString());
+            bar.setName(new SimpleDateFormat("dd.MM.").format(min).toString() + " - " + new SimpleDateFormat("dd.MM.").format(max).toString());
             bar.setColor((i % 2 == 0) ? Color.parseColor("#99CC00") : Color.parseColor("#FFBB33"));
 
             points.add(bar);

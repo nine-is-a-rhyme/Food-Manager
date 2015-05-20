@@ -31,7 +31,10 @@ public class BarcodeToProductConverter {
         if (barcode == null)
             return null;
 
-        Product product = MainActivity.historyDatabase.getProductByBarcode(barcode);
+        Product product = null;
+
+        if(MainActivity.historyDatabase != null)
+            product = MainActivity.historyDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);

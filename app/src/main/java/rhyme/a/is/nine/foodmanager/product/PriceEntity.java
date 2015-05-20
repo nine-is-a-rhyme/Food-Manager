@@ -1,11 +1,15 @@
 package rhyme.a.is.nine.foodmanager.product;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by martinmaritsch on 20/05/15.
  */
-public class PriceEntity {
+public class PriceEntity implements Serializable {
+
+    static final long serialVersionUID = 2338835581233773842L;
+
 
     private String name = null;
     private float price = -1;
