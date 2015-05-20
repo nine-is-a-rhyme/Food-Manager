@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
+import android.view.MotionEvent;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private List<String> recipe_search_entries_;
     private String url;
-public static ProductDatabase fridgeDatabase = null;
+    public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
     public static ProductDatabase historyDatabase = null;
     private ViewPager viewPager;
@@ -103,6 +104,7 @@ public static ProductDatabase fridgeDatabase = null;
     @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
         viewPager.setCurrentItem(tab.getPosition());
+
     }
 
     @Override
