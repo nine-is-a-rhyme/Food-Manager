@@ -1,25 +1,15 @@
 package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
-import android.app.Activity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentManager;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
-import rhyme.a.is.nine.foodmanager.product.Product;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 
 /**

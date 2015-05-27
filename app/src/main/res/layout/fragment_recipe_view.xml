@@ -5,5 +5,5 @@
         android:layout_height="match_parent"
         android:id="@+id/webView"
         android:layout_gravity="center_vertical"
-        tools:context="rhyme.a.is.nine.foodmanager.gui.Recipe$PlaceholderFragment"/>
+        tools:context="rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity$PlaceholderFragment"/>
 

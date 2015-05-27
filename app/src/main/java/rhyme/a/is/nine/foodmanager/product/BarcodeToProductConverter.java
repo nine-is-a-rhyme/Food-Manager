@@ -1,11 +1,10 @@
 package rhyme.a.is.nine.foodmanager.product;
 
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 /**
  * Created by martinmaritsch on 22/04/15.
@@ -32,7 +31,10 @@ public class BarcodeToProductConverter {
         if (barcode == null)
             return null;
 
-        Product product = MainActivity.historyDatabase.getProductByBarcode(barcode);
+        Product product = null;
+
+        if(MainActivity.historyDatabase != null)
+            product = MainActivity.historyDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);

@@ -1,27 +1,28 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
-import android.widget.Toast;
 import android.view.MotionEvent;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.TabsPagerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
-
+import rhyme.a.is.nine.foodmanager.product.PriceEntity;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -32,11 +33,12 @@ public class MainActivity extends ActionBarActivity implements
     public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
     public static ProductDatabase historyDatabase = null;
+    public static PriceDatabase priceDatabase = null;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = {"Kühlschrank", "Einkaufsliste", "Rezepte"};
+    private String[] tabs = {"Kühlschrank", "Einkaufsliste", "Rezepte", "Preise"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +81,18 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase = new ProductDatabase("fridge.db");
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
         historyDatabase = new ProductDatabase("history.db");
+        priceDatabase = new PriceDatabase("prices.db");
 
         fridgeDatabase.readFromFile(getBaseContext());
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
+        priceDatabase.readFromFile(getBaseContext());
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -8);
+        priceDatabase.addPriceEntity(new PriceEntity("ad", 1.23f, new Date()));
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
+
     }
 
     @Override
@@ -90,6 +100,7 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+        priceDatabase.readFromFile(getBaseContext());
 
         super.onDestroy();
     }
@@ -100,6 +111,14 @@ public class MainActivity extends ActionBarActivity implements
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main_tab, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -119,8 +138,11 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void onMinusButtonFridgeClicked(View v) {
+        Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
+        shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
         FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
+        ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
     public void onPlusButtonFridgeClicked(View v) {
@@ -129,7 +151,6 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void onMinusButtonShoppingListClicked(View v) {
-
         ShoppingListFragment.getAdapter().decreaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
@@ -138,34 +159,33 @@ public class MainActivity extends ActionBarActivity implements
         ShoppingListFragment.getAdapter().increaseProductCount((int) v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
- public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
+
+    public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
         public void onClick(final View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.button_web:
 
-                    Intent myIntent = new Intent(MainActivity.this, Recipe.class);
+                    Intent myIntent = new Intent(MainActivity.this, RecipeActivity.class);
                     //myIntent.putExtra("key", value); //Optional parameters
                     MainActivity.this.startActivity(myIntent);
                     break;
-
-
             }
         }
     };
 
 
-    public String createURL(){
+    public String createURL() {
               /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
 
-        if(!recipe_search_entries_.isEmpty()) {
+        if (!recipe_search_entries_.isEmpty()) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
             stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
 
-            for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
+            for (Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
                 stringBuilder.append(entry);
-                if(entry.hasNext()) {
+                if (entry.hasNext()) {
                     stringBuilder.append("+");
                 }
             }
@@ -174,8 +194,7 @@ public class MainActivity extends ActionBarActivity implements
 
             url = stringBuilder.toString();
 
-        }
-        else {
+        } else {
             url = null;
         }
 
