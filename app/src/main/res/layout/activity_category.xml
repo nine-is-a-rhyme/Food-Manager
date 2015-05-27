@@ -41,7 +41,8 @@
         android:id="@+id/et_name"
         android:layout_gravity="center_horizontal"
         android:singleLine="true"
-        android:selectAllOnFocus="false" />
+        android:selectAllOnFocus="false"
+        android:inputType="text" />
 
 <!--
     <TextView

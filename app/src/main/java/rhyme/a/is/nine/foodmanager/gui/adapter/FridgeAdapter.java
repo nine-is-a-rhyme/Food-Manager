@@ -87,6 +87,11 @@ public class FridgeAdapter extends BaseAdapter {
         MainActivity.fridgeDatabase.removeProductByPosition(position, completely);
     }
 
+    public void deleteAll()
+    {
+        MainActivity.fridgeDatabase.deleteAll();
+    }
+
     public void decreaseProductCount(int position) {
         MainActivity.fridgeDatabase.removeProductByPosition(position, false);
     }
