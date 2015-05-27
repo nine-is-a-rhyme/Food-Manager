@@ -1,14 +1,22 @@
 package rhyme.a.is.nine.foodmanager.gui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.MotionEvent;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,15 +26,24 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
-import rhyme.a.is.nine.foodmanager.gui.TabsPagerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
+/**
+ * Created by Fabio on 5/27/2015.
+ */
+public class MainActivity extends ActionBarActivity {
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
-public class MainActivity extends ActionBarActivity implements
-        ActionBar.TabListener {
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
+    private String[] NavigationItems;
 
     private List<String> recipe_search_entries_;
     private String url;
@@ -34,49 +51,54 @@ public class MainActivity extends ActionBarActivity implements
     public static ProductDatabase shoppingListDatabase = null;
     public static ProductDatabase historyDatabase = null;
     public static PriceDatabase priceDatabase = null;
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-    // Tab titles
-    private String[] tabs = {"Kühlschrank", "Einkaufsliste", "Rezepte", "Preise"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_navigation);
 
-        // Initialization
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        mTitle = mDrawerTitle = getTitle();
+        NavigationItems = getResources().getStringArray(R.array.navigation_items);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
         actionBar = getSupportActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        viewPager.setAdapter(mAdapter);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.activity_navigation_list_item, NavigationItems));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        int tabId = 0;
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this).setTag(tabId));
-            tabId++;
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) {
+            selectItem(0);
         }
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
 
         fridgeDatabase = new ProductDatabase("fridge.db");
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
@@ -92,7 +114,6 @@ public class MainActivity extends ActionBarActivity implements
         cal.add(Calendar.DATE, -8);
         priceDatabase.addPriceEntity(new PriceEntity("ad", 1.23f, new Date()));
         priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
-
     }
 
     @Override
@@ -121,28 +142,17 @@ public class MainActivity extends ActionBarActivity implements
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-        viewPager.setCurrentItem(tab.getPosition());
-
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-
-    }
-
     public void onMinusButtonFridgeClicked(View v) {
         Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
         shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
         FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
-        ShoppingListFragment.getAdapter().notifyDataSetChanged();
+        try {
+            ShoppingListFragment.getAdapter().notifyDataSetChanged();
+        }
+        catch (Exception ex) {
+            //do nothing
+        }
     }
 
     public void onPlusButtonFridgeClicked(View v) {
@@ -173,7 +183,6 @@ public class MainActivity extends ActionBarActivity implements
         }
     };
 
-
     public String createURL() {
               /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
 
@@ -200,4 +209,88 @@ public class MainActivity extends ActionBarActivity implements
 
         return url;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle action buttons
+        switch(item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                // Top Rated fragment activity
+                fragment = new FridgeFragment();
+                break;
+            case 1:
+                // Games fragment activity
+                fragment = new ShoppingListFragment();
+                break;
+            case 2:
+                // Movies fragment activity
+                fragment = new RecipeFragment();
+                break;
+            case 3:
+                // Movies fragment activity
+                fragment = new PricesFragment();
+                break;
+        }
+        Bundle args = new Bundle();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(NavigationItems[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        actionBar.setTitle(mTitle);
+    }
+
+    /**
+     * When using the ActionBarDrawerToggle, you must call it during
+     * onPostCreate() and onConfigurationChanged()...
+     */
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
 }
+
+
