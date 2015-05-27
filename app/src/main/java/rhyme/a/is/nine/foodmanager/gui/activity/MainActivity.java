@@ -27,6 +27,7 @@ import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
+import rhyme.a.is.nine.foodmanager.gui.fragment.AboutFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
@@ -63,7 +64,10 @@ public class MainActivity extends ActionBarActivity {
                 R.drawable.ic_action_fridge,
                 R.drawable.ic_action_list,
                 R.drawable.ic_action_recipe,
-                R.drawable.ic_action_graph
+                R.drawable.ic_action_graph,
+                R.drawable.ic_action_settings,
+                R.drawable.ic_action_help,
+                R.drawable.ic_action_about
         };
 
         mTitle = mDrawerTitle = getTitle();
@@ -260,6 +264,13 @@ public class MainActivity extends ActionBarActivity {
             case 3:
                 // Movies fragment activity
                 fragment = new PricesFragment();
+                break;
+            case 6:
+                // Movies fragment activity
+                fragment = new AboutFragment();
+                break;
+            default:
+                fragment = new FridgeFragment();
                 break;
         }
         Bundle args = new Bundle();
