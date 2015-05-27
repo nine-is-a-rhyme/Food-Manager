@@ -431,7 +431,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
+      if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
       {
           continue;
       }
@@ -475,7 +475,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((line[counter] < 33 || line[counter] > 126) && line[counter] != ' ')
+      if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
       {
           continue;
       }
@@ -515,7 +515,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((line[counter] < 33 || line[counter] > 126) && line[counter] != ' ')
+      if ((line[counter] < -126 || line[counter] > 126) && line[counter] != ' ')
       {
           continue;
       }
@@ -558,7 +558,7 @@ error writeComment(FILE* save, char* line, char* search, char* end)
       {
           continue;
       }
-      if ((start[counter] < 33 || start[counter] > 126) && start[counter] != ' ')
+      if ((start[counter] < -126 || start[counter] > 126) && start[counter] != ' ')
       {
           continue;
       }
