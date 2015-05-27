@@ -72,11 +72,12 @@ public class PricesFragment extends Fragment {
         
         monthBarChart.setData(MainActivity.priceDatabase.getMonthBars());
 
-        monthBarChart.setVisibleXRange(6);
+        monthBarChart.setVisibleXRange(5);
+        //monthBarChart.moveViewToX(monthBarChart.getBarData().getXValCount() - 5);
         monthBarChart.invalidate();
-        monthBarChart.moveViewToX(monthBarChart.getBarData().getXValCount() - 5);
 
-        generateWeekChart(monthBarChart.getBarData().getXValCount() - 1);
+        if(monthBarChart.getBarData() != null)
+            generateWeekChart(monthBarChart.getBarData().getXValCount() - 1);
 
         return view;
     }
