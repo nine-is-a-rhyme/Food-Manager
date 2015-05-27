@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -17,6 +17,10 @@ import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 public class PricesFragment extends Fragment {
+
+    private BarChart monthBarChart;
+    private BarChart weekBarChart;
+    private TextView weekBarChartTitle;
 
     public PricesFragment() {
         // Required empty public constructor
@@ -32,37 +36,16 @@ public class PricesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
-        final BarChart barChart = (BarChart) view.findViewById(R.id.price_graph_month);
+        monthBarChart = (BarChart) view.findViewById(R.id.price_graph_month);
+        weekBarChart = (BarChart) view.findViewById(R.id.price_graph_week);
+        weekBarChartTitle = (TextView) view.findViewById(R.id.week_bar_chart_title);
 
-        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+        monthBarChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                barChart.setHighlightIndicatorEnabled(false);
+                monthBarChart.setHighlightIndicatorEnabled(false);
 
-                BarChart weekBarChart = (BarChart) view.findViewById(R.id.price_graph_week);
-
-                weekBarChart.setDrawBarShadow(false);
-                weekBarChart.setDrawValueAboveBar(true);
-                weekBarChart.setDescription("");
-                weekBarChart.setDrawGridBackground(false);
-                weekBarChart.getAxisLeft().setStartAtZero(true);
-                weekBarChart.getAxisLeft().setDrawGridLines(false);
-                weekBarChart.getAxisLeft().setEnabled(false);
-                weekBarChart.getAxisRight().setStartAtZero(true);
-                weekBarChart.getAxisRight().setDrawGridLines(false);
-                weekBarChart.getAxisRight().setEnabled(false);
-                weekBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-                weekBarChart.getXAxis().setDrawGridLines(false);
-                weekBarChart.getLegend().setEnabled(false);
-                weekBarChart.setPinchZoom(false);
-                weekBarChart.setDoubleTapToZoomEnabled(false);
-                weekBarChart.setHighlightEnabled(false);
-
-                weekBarChart.setData(MainActivity.priceDatabase.getWeekBarsForMonth(e.getXIndex()));
-
-                weekBarChart.setVisibleXRange(6);
-                weekBarChart.moveViewToX(weekBarChart.getBarData().getXValCount());
-                weekBarChart.invalidate();
+                generateWeekChart(e.getXIndex());
             }
 
             @Override
@@ -71,61 +54,57 @@ public class PricesFragment extends Fragment {
             }
         });
 
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setDescription("");
-        barChart.setDrawGridBackground(false);
-        barChart.getAxisLeft().setStartAtZero(true);
-        barChart.getAxisLeft().setDrawGridLines(false);
-        barChart.getAxisLeft().setEnabled(false);
-        barChart.getAxisRight().setStartAtZero(true);
-        barChart.getAxisRight().setDrawGridLines(false);
-        barChart.getAxisRight().setEnabled(false);
-        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        barChart.getXAxis().setDrawGridLines(false);
-        barChart.getLegend().setEnabled(false);
-        barChart.setPinchZoom(false);
-        barChart.setDoubleTapToZoomEnabled(false);
+        monthBarChart.setDrawBarShadow(false);
+        monthBarChart.setDrawValueAboveBar(true);
+        monthBarChart.setDescription("");
+        monthBarChart.setDrawGridBackground(false);
+        monthBarChart.getAxisLeft().setStartAtZero(true);
+        monthBarChart.getAxisLeft().setDrawGridLines(false);
+        monthBarChart.getAxisLeft().setEnabled(false);
+        monthBarChart.getAxisRight().setStartAtZero(true);
+        monthBarChart.getAxisRight().setDrawGridLines(false);
+        monthBarChart.getAxisRight().setEnabled(false);
+        monthBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        monthBarChart.getXAxis().setDrawGridLines(false);
+        monthBarChart.getLegend().setEnabled(false);
+        monthBarChart.setPinchZoom(false);
+        monthBarChart.setDoubleTapToZoomEnabled(false);
+        
+        monthBarChart.setData(MainActivity.priceDatabase.getMonthBars());
 
-        barChart.setData(MainActivity.priceDatabase.getMonthBars());
+        monthBarChart.setVisibleXRange(6);
+        monthBarChart.invalidate();
+        monthBarChart.moveViewToX(monthBarChart.getBarData().getXValCount() - 5);
 
-        barChart.setVisibleXRange(6);
-        barChart.moveViewToX(barChart.getBarData().getXValCount() - 1);
-        barChart.invalidate();
+        generateWeekChart(monthBarChart.getBarData().getXValCount() - 1);
 
         return view;
     }
 
-   /* @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    private void generateWeekChart(int month) {
+
+        weekBarChartTitle.setText("Wochenübersicht für " + monthBarChart.getBarData().getXVals().get(month));
+
+        weekBarChart.setDrawBarShadow(false);
+        weekBarChart.setDrawValueAboveBar(true);
+        weekBarChart.setDescription("");
+        weekBarChart.setDrawGridBackground(false);
+        weekBarChart.getAxisLeft().setStartAtZero(true);
+        weekBarChart.getAxisLeft().setDrawGridLines(false);
+        weekBarChart.getAxisLeft().setEnabled(false);
+        weekBarChart.getAxisRight().setStartAtZero(true);
+        weekBarChart.getAxisRight().setDrawGridLines(false);
+        weekBarChart.getAxisRight().setEnabled(false);
+        weekBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        weekBarChart.getXAxis().setDrawGridLines(false);
+        weekBarChart.getLegend().setEnabled(false);
+        weekBarChart.setPinchZoom(false);
+        weekBarChart.setDoubleTapToZoomEnabled(false);
+        weekBarChart.setHighlightEnabled(false);
+
+        weekBarChart.setData(MainActivity.priceDatabase.getWeekBarsForMonth(month));
+
+        weekBarChart.setVisibleXRange(6);
+        weekBarChart.invalidate();
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }*/
-
 }

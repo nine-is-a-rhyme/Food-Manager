@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ValueFormatter;
 
 import java.io.FileInputStream;
@@ -85,7 +86,7 @@ public class PriceDatabase implements Serializable {
         BarDataSet set1 = new BarDataSet(yVals, "");
         set1.setBarSpacePercent(40f);
 
-        set1.setColors(new int[] {Color.parseColor("#99CC00"), Color.parseColor("#FFBB33")});
+        set1.setColor(Color.rgb(148, 212, 212)/*Color.parseColor("#FFBB33")*/);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -135,7 +136,7 @@ public class PriceDatabase implements Serializable {
         BarDataSet set1 = new BarDataSet(yVals, "");
         set1.setBarSpacePercent(40f);
 
-        set1.setColors(new int[] {Color.parseColor("#99CC00"), Color.parseColor("#FFBB33")});
+        set1.setColor(Color.rgb(179, 48, 80)/*Color.parseColor("#99CC00")*/);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);

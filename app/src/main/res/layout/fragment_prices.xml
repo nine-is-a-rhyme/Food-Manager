@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Wochenübersicht"
-        android:id="@+id/textView7"
+        android:id="@+id/week_bar_chart_title"
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp" />
