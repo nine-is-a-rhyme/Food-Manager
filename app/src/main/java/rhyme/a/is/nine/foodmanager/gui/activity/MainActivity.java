@@ -26,6 +26,7 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
@@ -58,6 +59,13 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        Integer[] NavigationItemsPictures = {
+                R.drawable.ic_action_fridge,
+                R.drawable.ic_action_list,
+                R.drawable.ic_action_recipe,
+                R.drawable.ic_action_graph
+        };
+
         mTitle = mDrawerTitle = getTitle();
         NavigationItems = getResources().getStringArray(R.array.navigation_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -67,8 +75,8 @@ public class MainActivity extends ActionBarActivity {
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.activity_navigation_list_item, NavigationItems));
+
+        mDrawerList.setAdapter(new DrawerAdapter(MainActivity.this, NavigationItems, NavigationItemsPictures));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
