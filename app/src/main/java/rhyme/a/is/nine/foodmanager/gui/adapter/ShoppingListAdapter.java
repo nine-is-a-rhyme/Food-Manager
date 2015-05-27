@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -55,7 +55,6 @@ public class ShoppingListAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.shopping_list_element, null);
         TextView productName = (TextView) rowView.findViewById(R.id.shopping_list_product_name);
-        TextView productCategory = (TextView) rowView.findViewById(R.id.shopping_list_product_category);
         TextView productCount = (TextView) rowView.findViewById(R.id.shopping_list_product_count);
         Button minusButton = (Button) rowView.findViewById(R.id.shopping_list_minus_button);
         Button plusButton = (Button) rowView.findViewById(R.id.shopping_list_plus_button);
@@ -66,7 +65,6 @@ public class ShoppingListAdapter extends BaseAdapter {
             minusButton.setEnabled(false);
 
         productName.setText(product.getName());
-        productCategory.setText(product.getCategory());
         productCount.setText("Anzahl: " + product.getCount());
 
         return rowView;
@@ -82,5 +80,10 @@ public class ShoppingListAdapter extends BaseAdapter {
 
     public void increaseProductCount(int position) {
         MainActivity.shoppingListDatabase.getProductByPosition(position).increaseCount();
+    }
+
+    public void deleteAll()
+    {
+        MainActivity.shoppingListDatabase.deleteAll();
     }
 }

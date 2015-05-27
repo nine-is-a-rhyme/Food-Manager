@@ -15,37 +15,32 @@ import rhyme.a.is.nine.foodmanager.product.Product;
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class ProductDatabase implements Serializable {
-
-    private List<Product> products;
-
-    private String fileName;
-
+public class ProductDatabase extends Database<Product> {
 
     public ProductDatabase(String fileName) {
-        this.fileName = fileName;
-        this.products = new ArrayList<Product>();
+        super(fileName);
+        this.list = new ArrayList<Product>();
     }
 
     public List<Product> getAllProducts() {
-        return products;
+        return list;
     }
 
     public Product getProductByPosition(int position)
     {
-        if (products.isEmpty())
+        if (list.isEmpty())
             return null;
 
-        return products.get(position);
+        return list.get(position);
     }
 
 
     public Product getProductByName(String name)
     {
-        if (products.isEmpty())
+        if (list.isEmpty())
             return null;
 
-        for(Product i : products)
+        for(Product i : list)
         {
             if (i.getName().equals(name))
                 return i;
@@ -55,10 +50,10 @@ public class ProductDatabase implements Serializable {
 
     public Product getProductByBarcode(String barcode)
     {
-        if (products.isEmpty())
+        if (list.isEmpty())
             return null;
 
-        for(Product i : products)
+        for(Product i : list)
         {
             if (i.getBarcode().equals(barcode))
                 return i;
@@ -71,7 +66,7 @@ public class ProductDatabase implements Serializable {
         boolean isNew = true;
 
         // check if exists
-        for(Product i : products)
+        for(Product i : list)
         {
             if (i.equals(product)) {
                 i.increaseCount();
@@ -80,59 +75,35 @@ public class ProductDatabase implements Serializable {
         }
         if(isNew) {
             if(product.getBestBeforeDate() != null) {
-                for (int i = 0; i < products.size(); i++) {
-                    if (products.get(i).getBestBeforeDate() != null && product.getBestBeforeDate().before(products.get(i).getBestBeforeDate())) {
-                        products.add(i, product);
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getBestBeforeDate() != null && product.getBestBeforeDate().before(list.get(i).getBestBeforeDate())) {
+                        list.add(i, product);
                         return;
                     }
                 }
             }
-            products.add(product);
+            list.add(product);
         }
     }
 
     public void removeProductByPosition(int position, boolean removeCompletely)
     {
-        if (products.isEmpty())
+        if (list.isEmpty())
             return;
 
         if(removeCompletely)
-            products.remove(position);
+            list.remove(position);
         else {
-            products.get(position).decreaseCount();
+            list.get(position).decreaseCount();
 
-            if(products.get(position).getCount() <= 0)
-                products.remove(position);
+            if(list.get(position).getCount() <= 0)
+                list.remove(position);
         }
     }
 
-    public void writeToFile(Context context) {
-        FileOutputStream outputStream;
-        try {
-            outputStream = context.openFileOutput(this.fileName, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-            oos.writeObject(this.products);
-            outputStream.close();
-            oos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void deleteAll()
+    {
+        list.clear();
     }
 
-    public void readFromFile(Context context) {
-        Object object = null;
-        FileInputStream outputStream;
-        try {
-            outputStream = context.openFileInput(this.fileName);
-            ObjectInputStream ois = new ObjectInputStream(outputStream);
-            object = ois.readObject();
-            outputStream.close();
-            ois.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if(object != null)
-            this.products = (List<Product>) object;
-    }
 }

@@ -2,16 +2,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="rhyme.a.is.nine.foodmanager.gui.MainTabActivity">
-    <item android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_new"
-        android:title="Add"
-        app:showAsAction="always"  />
-    <item android:id="@+id/action_edit"
-        android:icon="@drawable/ic_action_edit"
-        android:title="Edit"
-        app:showAsAction="always"  />
-    <item android:id="@+id/action_delete"
-        android:icon="@drawable/ic_action_discard"
-        android:title="Delete"
-        app:showAsAction="always"  />
 </menu>

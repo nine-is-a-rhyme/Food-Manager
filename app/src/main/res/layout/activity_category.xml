@@ -7,7 +7,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        tools:context="rhyme.a.is.nine.foodmanager.gui.CategoryActivity"
+        tools:context="rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity"
     android:padding="6dp"
     android:id="@+id/et_layout"
     android:weightSum="1">
@@ -41,7 +41,8 @@
         android:id="@+id/et_name"
         android:layout_gravity="center_horizontal"
         android:singleLine="true"
-        android:selectAllOnFocus="false" />
+        android:selectAllOnFocus="false"
+        android:inputType="text" />
 
 <!--
     <TextView

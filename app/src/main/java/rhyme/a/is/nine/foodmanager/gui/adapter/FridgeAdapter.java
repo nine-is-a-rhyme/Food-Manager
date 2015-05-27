@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.TwoLineListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -86,6 +85,11 @@ public class FridgeAdapter extends BaseAdapter {
         Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
         MainActivity.shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getBarcode(), product.getSize(), 1));
         MainActivity.fridgeDatabase.removeProductByPosition(position, completely);
+    }
+
+    public void deleteAll()
+    {
+        MainActivity.fridgeDatabase.deleteAll();
     }
 
     public void decreaseProductCount(int position) {
