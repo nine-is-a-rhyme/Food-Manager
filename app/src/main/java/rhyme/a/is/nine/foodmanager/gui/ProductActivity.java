@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +44,20 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     public static Spinner category;
     public static String[] suggestedCategories;
     public static CategoryDatabase cat_db;
+    private String startedBy = "Fridge";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+
+
+
+        Intent myIntent = getIntent(); // gets the previously created intent
+        startedBy = myIntent.getStringExtra("startedBy");
+        if(startedBy == null) {
+            startedBy = "Fridge";
+        }
 
         product = new Product();
 
@@ -110,19 +120,26 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     count.setText("1");
                 }
 
-                TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                    Date date = sdf.parse(bestbefore.getText().toString());
-                    product.setBestBeforeDate(date);
-                    bestbefore.setBackgroundColor(Color.GREEN);
-                } catch (Exception ex) {
-                    fail = true;
-                    bestbefore.setBackgroundColor(Color.RED);
+                if(!startedBy.equals("List")) {
+                    TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                        Date date = sdf.parse(bestbefore.getText().toString());
+                        product.setBestBeforeDate(date);
+                        bestbefore.setBackgroundColor(Color.GREEN);
+                    } catch (Exception ex) {
+                        fail = true;
+                        bestbefore.setBackgroundColor(Color.RED);
+                    }
                 }
 
                 if (!fail) {
-                    MainActivity.fridgeDatabase.addProduct(product);
+                    if(startedBy.equals("List")) {
+                        MainActivity.shoppingListDatabase.addProduct(product);
+                    } else
+                    {
+                        MainActivity.fridgeDatabase.addProduct(product);
+                    }
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
@@ -133,6 +150,16 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
         bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
         bestBeforeView.setOnClickListener(this);
+
+        if(startedBy.equals("List")) {
+            bestBeforeView.setVisibility(View.GONE);
+            TextView tw_bestbefore = (TextView) findViewById(R.id.textView3);
+            tw_bestbefore.setVisibility(View.GONE);
+            TextView tw_category = (TextView) findViewById(R.id.textView4);
+            tw_category.setVisibility(View.GONE);
+            LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
+            et_dropdown.setVisibility(View.GONE);
+        }
 
         if (getIntent().getBooleanExtra("SCAN", false))
             new IntentIntegrator(this).initiateScan();

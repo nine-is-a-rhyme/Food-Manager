@@ -3,6 +3,7 @@ package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,7 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.ShoppingListAdapter;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
@@ -23,8 +29,11 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShoppingListFragment extends ListFragment {
+public class ShoppingListFragment extends ListFragment implements View.OnClickListener {
+
     private static ShoppingListAdapter shoppingListAdapter;
+
+    private AddFloatingActionButton fabAdd;
 
     public static ShoppingListAdapter getAdapter() {
         return shoppingListAdapter;
@@ -44,7 +53,16 @@ public class ShoppingListFragment extends ListFragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(false);
 
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        //return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
+        fabAdd = (AddFloatingActionButton) view.findViewById(R.id.floating_action_button_add);
+        fabAdd.setOnClickListener(this);
+        fabAdd.setTag("ADD");
+        fabAdd.setStrokeVisible(true);
+
+        return view;
     }
 
     @Override
@@ -93,5 +111,16 @@ public class ShoppingListFragment extends ListFragment {
                 );
         swipeDismissListViewTouchListener.setEnabled(true);
         getListView().setOnTouchListener(swipeDismissListViewTouchListener);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch ((String) view.getTag()) {
+            case "ADD":
+                Intent intent = new Intent(getActivity(), ProductActivity.class);
+                intent.putExtra("startedBy","List");
+                getActivity().startActivityForResult(intent, 0);
+                break;
+        }
     }
 }
