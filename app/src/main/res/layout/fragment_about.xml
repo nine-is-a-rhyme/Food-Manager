@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Diese App wurde im Laufe eines Semesters von Studenten der Technischen Universität Graz entwickelt."
+            android:text="Diese App wurde im Laufe eines Semesters von Studierenden der Technischen Universität Graz entwickelt."
             android:id="@+id/textView8"
             android:layout_margin="5dp" />
 

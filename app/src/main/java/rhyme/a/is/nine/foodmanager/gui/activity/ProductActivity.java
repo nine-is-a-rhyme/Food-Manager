@@ -175,6 +175,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             tw_category.setVisibility(View.GONE);
             LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
             et_dropdown.setVisibility(View.GONE);
+            TextView tw_price = (TextView) findViewById(R.id.textView5);
+            tw_price.setVisibility(View.GONE);
+            LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
+            ll_price.setVisibility(View.GONE);
         }
 
         if (getIntent().getBooleanExtra("SCAN", false))
