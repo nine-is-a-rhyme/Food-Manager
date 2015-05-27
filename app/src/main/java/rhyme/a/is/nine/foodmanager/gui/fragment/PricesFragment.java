@@ -32,11 +32,13 @@ public class PricesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
-        BarChart barChart = (BarChart) view.findViewById(R.id.price_graph_month);
+        final BarChart barChart = (BarChart) view.findViewById(R.id.price_graph_month);
 
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                barChart.setHighlightIndicatorEnabled(false);
+
                 BarChart weekBarChart = (BarChart) view.findViewById(R.id.price_graph_week);
 
                 weekBarChart.setDrawBarShadow(false);
@@ -52,10 +54,13 @@ public class PricesFragment extends Fragment {
                 weekBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
                 weekBarChart.getXAxis().setDrawGridLines(false);
                 weekBarChart.getLegend().setEnabled(false);
+                weekBarChart.setPinchZoom(false);
+                weekBarChart.setDoubleTapToZoomEnabled(false);
+                weekBarChart.setHighlightEnabled(false);
 
                 weekBarChart.setData(MainActivity.priceDatabase.getWeekBarsForMonth(e.getXIndex()));
 
-                weekBarChart.setVisibleXRange(5);
+                weekBarChart.setVisibleXRange(6);
                 weekBarChart.moveViewToX(weekBarChart.getBarData().getXValCount());
                 weekBarChart.invalidate();
             }
@@ -79,11 +84,13 @@ public class PricesFragment extends Fragment {
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getLegend().setEnabled(false);
+        barChart.setPinchZoom(false);
+        barChart.setDoubleTapToZoomEnabled(false);
 
         barChart.setData(MainActivity.priceDatabase.getMonthBars());
 
-        barChart.setVisibleXRange(5);
-        barChart.moveViewToX(barChart.getBarData().getXValCount());
+        barChart.setVisibleXRange(6);
+        barChart.moveViewToX(barChart.getBarData().getXValCount() - 1);
         barChart.invalidate();
 
         return view;

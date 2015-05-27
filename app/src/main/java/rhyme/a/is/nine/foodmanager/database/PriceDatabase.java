@@ -173,6 +173,8 @@ public class PriceDatabase implements Serializable {
         Calendar firstDay = Calendar.getInstance();
         firstDay.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0);
 
+        cal.add(Calendar.WEEK_OF_YEAR, 1); // add one week
+
         List<Date> sundays = new ArrayList<>();
         sundays.add(cal.getTime());
         while(cal.getTime().after(firstDay.getTime())) {
