@@ -21,7 +21,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.ShoppingListAdapter;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 

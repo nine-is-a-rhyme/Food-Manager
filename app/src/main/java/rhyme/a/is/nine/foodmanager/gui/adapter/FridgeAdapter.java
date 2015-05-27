@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.TwoLineListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
