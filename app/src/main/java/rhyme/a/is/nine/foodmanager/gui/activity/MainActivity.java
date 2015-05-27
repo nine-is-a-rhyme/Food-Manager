@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -125,9 +126,20 @@ public class MainActivity extends ActionBarActivity {
         priceDatabase.readFromFile(getBaseContext());
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -8);
-        priceDatabase.addPriceEntity(new PriceEntity("ad", 1.23f, new Date()));
+        priceDatabase.addPriceEntity(new PriceEntity("ad", 10.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -1);
         priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -1);
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 15.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -2);
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 11.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -1);
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 8.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -1);
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 10.23f, cal.getTime()));
+        cal.add(Calendar.MONTH, -1);
+        priceDatabase.addPriceEntity(new PriceEntity("asfd", 14.23f, cal.getTime()));
+
     }
 
     @Override
