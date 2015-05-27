@@ -31,7 +31,7 @@
                 android:value="rhyme.a.is.nine.foodmanager.MainActivity" />
         </activity>
         <activity
-            android:name=".gui.Recipe"
+            android:name=".gui.RecipeActivity"
             android:label="@string/title_activity_recipe" >
         </activity>
     </application>

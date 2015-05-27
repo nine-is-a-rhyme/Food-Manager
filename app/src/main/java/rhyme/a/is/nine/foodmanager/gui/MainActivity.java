@@ -119,20 +119,5 @@ public static ProductDatabase fridgeDatabase = null;
         ShoppingListFragment.getAdapter().increaseProductCount((int)v.getTag());
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
- public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
-        public void onClick(final View v) {
-            /*switch(v.getId()) {
-                case R.id.button_web:
-
-                    Intent myIntent = new Intent(MainActivity.this, Recipe.class);
-                    //myIntent.putExtra("key", value); //Optional parameters
-                    MainActivity.this.startActivity(myIntent);
-                    break;
-
-
-            }*/
-        }
-    };
-
 
 }

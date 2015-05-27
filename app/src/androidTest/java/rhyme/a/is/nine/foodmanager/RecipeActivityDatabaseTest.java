@@ -11,8 +11,8 @@ import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
 /**
  * Created by lalinda on 5/27/15.
  */
-public class RecipeDatabaseTest extends ApplicationTestCase<Application> {
-    public RecipeDatabaseTest() { super(Application.class); }
+public class RecipeActivityDatabaseTest extends ApplicationTestCase<Application> {
+    public RecipeActivityDatabaseTest() { super(Application.class); }
 
 
     public void testLoadJSON(){
