@@ -27,9 +27,13 @@ import java.util.List;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
+import rhyme.a.is.nine.foodmanager.gui.fragment.AboutFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.HelpFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
@@ -59,6 +63,16 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        Integer[] NavigationItemsPictures = {
+                R.drawable.ic_action_fridge,
+                R.drawable.ic_action_list,
+                R.drawable.ic_action_recipe,
+                R.drawable.ic_action_graph,
+                R.drawable.ic_action_settings,
+                R.drawable.ic_action_help,
+                R.drawable.ic_action_about
+        };
+
         mTitle = mDrawerTitle = getTitle();
         NavigationItems = getResources().getStringArray(R.array.navigation_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -68,8 +82,8 @@ public class MainActivity extends ActionBarActivity {
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.activity_navigation_list_item, NavigationItems));
+
+        mDrawerList.setAdapter(new DrawerAdapter(MainActivity.this, NavigationItems, NavigationItemsPictures));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -264,6 +278,21 @@ public class MainActivity extends ActionBarActivity {
             case 3:
                 // Movies fragment activity
                 fragment = new PricesFragment();
+                break;
+            case 4:
+                // Movies fragment activity
+                fragment = new SettingsFragment();
+                break;
+            case 5:
+                // Movies fragment activity
+                fragment = new HelpFragment();
+                break;
+            case 6:
+                // Movies fragment activity
+                fragment = new AboutFragment();
+                break;
+            default:
+                fragment = new FridgeFragment();
                 break;
         }
         Bundle args = new Bundle();

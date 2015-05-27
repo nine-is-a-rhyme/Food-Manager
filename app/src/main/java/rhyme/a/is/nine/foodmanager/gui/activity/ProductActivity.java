@@ -86,7 +86,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 EditText name = (EditText) findViewById(R.id.et_name);
                 if (name.getText().toString().length() > 0) {
                     product.setName(name.getText().toString());
-                    pos.setName(name.getText().toString());
+                    if(!startedBy.equals("List")) {
+                        pos.setName(name.getText().toString());
+                    }
 
                 } else {
                     fail = true;
@@ -151,9 +153,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     } else
                     {
                         MainActivity.fridgeDatabase.addProduct(product);
-                    pos.setBuyDate(new Date());
+                        pos.setBuyDate(new Date());
+                        MainActivity.priceDatabase.addPriceEntity(pos);
                     }
-                    MainActivity.priceDatabase.addPriceEntity(pos);
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
@@ -173,6 +175,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             tw_category.setVisibility(View.GONE);
             LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
             et_dropdown.setVisibility(View.GONE);
+            TextView tw_price = (TextView) findViewById(R.id.textView5);
+            tw_price.setVisibility(View.GONE);
+            LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
+            ll_price.setVisibility(View.GONE);
         }
 
         if (getIntent().getBooleanExtra("SCAN", false))

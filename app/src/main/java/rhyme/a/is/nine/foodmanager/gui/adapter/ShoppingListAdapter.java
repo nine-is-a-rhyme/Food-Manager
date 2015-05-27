@@ -81,4 +81,9 @@ public class ShoppingListAdapter extends BaseAdapter {
     public void increaseProductCount(int position) {
         MainActivity.shoppingListDatabase.getProductByPosition(position).increaseCount();
     }
+
+    public void deleteAll()
+    {
+        MainActivity.shoppingListDatabase.deleteAll();
+    }
 }

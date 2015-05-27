@@ -24,8 +24,16 @@
         <item>Kühlschrank</item>
         <item>Einkaufsliste</item>
         <item>Rezepte</item>
-        <item>Preise</item>
+        <item>Ausgaben</item>
+        <item>Einstellungen</item>
+        <item>Hilfe</item>
+        <item>Über</item>
     </string-array>
+
+    <string name="attr1"><a href="https://thenounproject.com/term/refrigerator/3022/">"Refridgerator"</a> by <a href="https://thenounproject.com/Kari%20Gaynor">Kari Gaynor</a>, used under <a href="http://creativecommons.org/licenses/by/3.0/legalcode">CC BY 3.0</a> / Edited from original</string>
+    <string name="attr2"><a href="https://thenounproject.com/term/graph/37874/">"Graph"</a> by <a href="https://thenounproject.com/Deadtype">DEADTYPE</a>, used under <a href="http://creativecommons.org/licenses/by/3.0/legalcode">CC BY 3.0</a> / Edited from original</string>
+    <string name="attr3"><a href="https://thenounproject.com/term/chef-hat/47228/">"Chef Hat"</a> by <a href="https://thenounproject.com/sapi">Stefan Parnarov</a>, used under <a href="http://creativecommons.org/licenses/by/3.0/legalcode">CC BY 3.0</a> / Edited from original</string>
+    <string name="attr4"><a href="https://thenounproject.com/term/check-list/21787/">"Check-List"</a> by <a href="https://thenounproject.com/Michzen">Michael Zenaty</a>, used under <a href="http://creativecommons.org/licenses/by/3.0/legalcode">CC BY 3.0</a> / Edited from original</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 </resources>

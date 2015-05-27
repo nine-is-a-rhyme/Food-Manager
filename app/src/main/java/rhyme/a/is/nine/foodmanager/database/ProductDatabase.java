@@ -101,4 +101,9 @@ public class ProductDatabase extends Database<Product> {
         }
     }
 
+    public void deleteAll()
+    {
+        list.clear();
+    }
+
 }

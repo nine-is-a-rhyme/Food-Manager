@@ -225,6 +225,11 @@ public class PriceDatabase implements Serializable {
         return values;
     }
 
+    public void deleteAll()
+    {
+        priceEntities.clear();
+    }
+
     public void addPriceEntity(PriceEntity priceEntity) {
         priceEntities.add(priceEntity);
     }
