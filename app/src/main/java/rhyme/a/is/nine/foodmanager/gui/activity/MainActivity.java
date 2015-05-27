@@ -124,22 +124,6 @@ public class MainActivity extends ActionBarActivity {
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
         priceDatabase.readFromFile(getBaseContext());
-
-        Calendar cal = Calendar.getInstance();
-        priceDatabase.addPriceEntity(new PriceEntity("ad", 10.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -1);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -1);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 15.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -2);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 11.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -1);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 8.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -1);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 10.23f, cal.getTime()));
-        cal.add(Calendar.MONTH, -1);
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 14.23f, cal.getTime()));
-
     }
 
     @Override

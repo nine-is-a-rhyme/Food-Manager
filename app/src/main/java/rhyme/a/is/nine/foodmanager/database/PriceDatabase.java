@@ -7,7 +7,6 @@ import android.util.Pair;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ValueFormatter;
 
 import java.io.FileInputStream;
@@ -24,7 +23,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import rhyme.a.is.nine.foodmanager.gui.graph.Bar;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 
 /**
