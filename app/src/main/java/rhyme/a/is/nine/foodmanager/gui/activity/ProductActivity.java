@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,11 +42,20 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     public static Spinner category;
     public static String[] suggestedCategories;
     public static CategoryDatabase cat_db;
+    private String startedBy = "Fridge";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+
+
+
+        Intent myIntent = getIntent(); // gets the previously created intent
+        startedBy = myIntent.getStringExtra("startedBy");
+        if(startedBy == null) {
+            startedBy = "Fridge";
+        }
 
         product = new Product();
         pos = new PriceEntity();
@@ -113,6 +123,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     count.setText("1");
                 }
 
+                if(!startedBy.equals("List")) {
                 EditText price = (EditText) findViewById(R.id.et_price);
                 try {
                     pos.setPrice(Float.parseFloat(count.getText().toString()));
@@ -122,20 +133,26 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     price.setText("0.00");
                 }
 
-                TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                    Date date = sdf.parse(bestbefore.getText().toString());
-                    product.setBestBeforeDate(date);
+                    TextView bestbefore = (TextView) findViewById(R.id.et_bestbefore);
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                        Date date = sdf.parse(bestbefore.getText().toString());
+                        product.setBestBeforeDate(date);
 
-                } catch (Exception ex) {
-                    fail = true;
+                    } catch (Exception ex) {
+                        fail = true;
                     bestbefore.setError("Bitte Ablaufdatum eingeben!");
+                    }
                 }
 
                 if (!fail) {
-                    MainActivity.fridgeDatabase.addProduct(product);
+                    if(startedBy.equals("List")) {
+                        MainActivity.shoppingListDatabase.addProduct(product);
+                    } else
+                    {
+                        MainActivity.fridgeDatabase.addProduct(product);
                     pos.setBuyDate(new Date());
+                    }
                     MainActivity.priceDatabase.addPriceEntity(pos);
                     finish();
                 } else {
@@ -147,6 +164,16 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
         bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
         bestBeforeView.setOnClickListener(this);
+
+        if(startedBy.equals("List")) {
+            bestBeforeView.setVisibility(View.GONE);
+            TextView tw_bestbefore = (TextView) findViewById(R.id.textView3);
+            tw_bestbefore.setVisibility(View.GONE);
+            TextView tw_category = (TextView) findViewById(R.id.textView4);
+            tw_category.setVisibility(View.GONE);
+            LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
+            et_dropdown.setVisibility(View.GONE);
+        }
 
         if (getIntent().getBooleanExtra("SCAN", false))
             new IntentIntegrator(this).initiateScan();
