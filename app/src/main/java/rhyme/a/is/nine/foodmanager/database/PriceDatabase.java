@@ -2,6 +2,12 @@ package rhyme.a.is.nine.foodmanager.database;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Pair;
+
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ValueFormatter;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,10 +17,11 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import rhyme.a.is.nine.foodmanager.gui.graph.Bar;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
@@ -32,69 +39,157 @@ public class PriceDatabase implements Serializable {
 
     public PriceDatabase(String fileName) {
         this.fileName = fileName;
-        this.priceEntities = new ArrayList<PriceEntity>();
+        this.priceEntities = new ArrayList<>();
     }
 
     public List<PriceEntity> getAllPriceEntities() {
         return priceEntities;
     }
 
-    public ArrayList<Bar> getBars() {
+
+    private int numberOfMonthsInDatabase() {
+        Calendar startCalendar = new GregorianCalendar();
+        startCalendar.setTime(priceEntities.get(0).getBuyDate());
+        for (PriceEntity p : priceEntities) {
+            if(startCalendar.getTime().after(p.getBuyDate()))
+                startCalendar.setTime(p.getBuyDate());
+        }
+
+        Calendar endCalendar = new GregorianCalendar();
+        endCalendar.setTime(new Date());
+
+        return (endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR)) * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+    }
+
+    public BarData getMonthBars() {
 
         if(priceEntities == null || priceEntities.size() == 0)
             return null;
 
-        ArrayList<Bar> points = new ArrayList<>();
+        int months = numberOfMonthsInDatabase();
 
-        Calendar cal = Calendar.getInstance();
+        ArrayList<String> xVals = new ArrayList<>();
+        ArrayList<BarEntry> yVals = new ArrayList<>();
 
-        System.out.println("Date = " + cal.getTime());
-
-        for (int i = 0; i < 4; i++) {
-            Bar bar = new Bar();
-            Date max = cal.getTime();
-            cal.add(Calendar.DATE, -7);
-            Date min = cal.getTime();
-
-            float sum = 0;
-            for (PriceEntity p : getPriceEntitiesByDateInterval(min, max)) {
+        for (int i = months; i >= 0; i--) {
+            float sum = 0f;
+            for(PriceEntity p : getPriceEntitiesForMonth(i)) {
                 sum += p.getPrice();
             }
-
-            bar.setValue(sum);
-            bar.setName(new SimpleDateFormat("dd.MM.").format(min).toString() + " - " + new SimpleDateFormat("dd.MM.").format(max).toString());
-            bar.setColor((i % 2 == 0) ? Color.parseColor("#99CC00") : Color.parseColor("#FFBB33"));
-
-            points.add(bar);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, -i);
+            xVals.add(new SimpleDateFormat("MMM yy", Locale.GERMAN).format(cal.getTime()));
+            yVals.add(new BarEntry(sum, months - i));
         }
-        Collections.reverse(points);
-        return points;
+
+        BarDataSet set1 = new BarDataSet(yVals, "");
+        set1.setBarSpacePercent(40f);
+
+        set1.setColors(new int[] {Color.parseColor("#99CC00"), Color.parseColor("#FFBB33")});
+
+        ArrayList<BarDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(xVals, dataSets);
+
+        // data.setValueFormatter(new MyValueFormatter());
+        data.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.02f", value) + "€";
+            }
+        });
+        data.setValueTextSize(10f);
+        return data;
     }
 
-    public List<PriceEntity> getPriceEntitiesForWeek(int weeks_ago) {
+    public BarData getWeekBarsForMonth(int monthIndex) {
+
+        if(priceEntities == null || priceEntities.size() == 0)
+            return null;
+
+        List<Pair<Date, List<PriceEntity>>> entities = getPriceEntitiesForMonthWeeks(numberOfMonthsInDatabase()- monthIndex);
+
+        ArrayList<String> xVals = new ArrayList<>();
+        ArrayList<BarEntry> yVals = new ArrayList<>();
+
+        int i = 0;
+        for(Pair<Date, List<PriceEntity>> priceEntityPair : entities) {
+            float sum = 0;
+            for(PriceEntity p : priceEntityPair.second) {
+                sum += p.getPrice();
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(priceEntityPair.first);
+            cal.add(Calendar.DAY_OF_MONTH, 1); // now it's monday
+            Date begin = cal.getTime();
+            cal.add(Calendar.DAY_OF_MONTH, 6); // now it's sunday again
+            Date end = cal.getTime();
+
+            //xVals.add(new SimpleDateFormat("dd. MMM", Locale.GERMAN).format(begin) + " - " + new SimpleDateFormat("dd. MMM", Locale.GERMAN).format(end));
+            xVals.add("KW " + new SimpleDateFormat("w", Locale.GERMAN).format(begin));
+            yVals.add(new BarEntry(sum, i));
+            i++;
+        }
+
+        BarDataSet set1 = new BarDataSet(yVals, "");
+        set1.setBarSpacePercent(40f);
+
+        set1.setColors(new int[] {Color.parseColor("#99CC00"), Color.parseColor("#FFBB33")});
+
+        ArrayList<BarDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(xVals, dataSets);
+
+        // data.setValueFormatter(new MyValueFormatter());
+        data.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.02f", value) + "€";
+            }
+        });
+        data.setValueTextSize(10f);
+        return data;
+    }
+
+    public List<PriceEntity> getPriceEntitiesForMonth(int monthsAgo) {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7 * weeks_ago);
-        Date max = cal.getTime();
-        cal.add(Calendar.DATE, -7 * (weeks_ago+1));
+        cal.add(Calendar.MONTH, -monthsAgo);
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0);
         Date min = cal.getTime();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.getActualMaximum(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        Date max = cal.getTime();
         return getPriceEntitiesByDateInterval(min, max);
     }
 
-    public float getLastMonthValue() {
-
-        if(priceEntities == null || priceEntities.size() == 0)
-            return 0f;
-
-        float sum = 0f;
+    public List<Pair<Date, List<PriceEntity>>> getPriceEntitiesForMonthWeeks(int monthsAgo) {
         Calendar cal = Calendar.getInstance();
-        Date max = cal.getTime();
-        cal.add(Calendar.MONTH, -1);
-        Date min = cal.getTime();
-        for (PriceEntity p : getPriceEntitiesByDateInterval(min, max)) {
-            sum += p.getPrice();
+        cal.add(Calendar.MONTH, -monthsAgo);
+        cal.set(GregorianCalendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(GregorianCalendar.DAY_OF_WEEK_IN_MONTH, -1); // last sunday in month
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
+        Calendar firstDay = Calendar.getInstance();
+        firstDay.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, 0, 0);
+
+        List<Date> sundays = new ArrayList<>();
+        sundays.add(cal.getTime());
+        while(cal.getTime().after(firstDay.getTime())) {
+            cal.add(Calendar.DATE, -7);
+            sundays.add(cal.getTime());
         }
-        return sum;
+        Collections.reverse(sundays);
+
+        List<Pair<Date, List<PriceEntity>>> entities = new ArrayList<>();
+
+        for (int i = 0; i < sundays.size() - 1; i++) {
+
+            entities.add(new Pair<>(sundays.get(i), getPriceEntitiesByDateInterval(sundays.get(i), sundays.get(i+1))));
+        }
+        return entities;
     }
+
 
     public PriceEntity getPriceEntityByPosition(int position) {
         if (priceEntities.isEmpty())

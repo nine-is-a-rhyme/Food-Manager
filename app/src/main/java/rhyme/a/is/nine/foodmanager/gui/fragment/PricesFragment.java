@@ -1,21 +1,20 @@
 package rhyme.a.is.nine.foodmanager.gui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.Highlight;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.activity.WeekOverviewActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
-import rhyme.a.is.nine.foodmanager.gui.graph.BarGraph;
-import rhyme.a.is.nine.foodmanager.gui.graph.Bar;
-
 
 public class PricesFragment extends Fragment {
 
@@ -32,27 +31,60 @@ public class PricesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_prices, container, false);
+        final View view = inflater.inflate(R.layout.fragment_prices, container, false);
+        BarChart barChart = (BarChart) view.findViewById(R.id.price_graph_month);
 
-        ArrayList<Bar> bars = MainActivity.priceDatabase.getBars();
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                BarChart weekBarChart = (BarChart) view.findViewById(R.id.price_graph_week);
 
-        if(bars != null) {
-            BarGraph g = (BarGraph)view.findViewById(R.id.price_graph);
-            g.setBars(MainActivity.priceDatabase.getBars());
+                weekBarChart.setDrawBarShadow(false);
+                weekBarChart.setDrawValueAboveBar(true);
+                weekBarChart.setDescription("");
+                weekBarChart.setDrawGridBackground(false);
+                weekBarChart.getAxisLeft().setStartAtZero(true);
+                weekBarChart.getAxisLeft().setDrawGridLines(false);
+                weekBarChart.getAxisLeft().setEnabled(false);
+                weekBarChart.getAxisRight().setStartAtZero(true);
+                weekBarChart.getAxisRight().setDrawGridLines(false);
+                weekBarChart.getAxisRight().setEnabled(false);
+                weekBarChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+                weekBarChart.getXAxis().setDrawGridLines(false);
+                weekBarChart.getLegend().setEnabled(false);
 
-            g.setOnBarClickedListener(new BarGraph.OnBarClickedListener() {
-                @Override
-                public void onClick(int index) {
-                    Intent intent = new Intent(getActivity(), WeekOverviewActivity.class);
-                    Bundle b = new Bundle();
-                    b.putInt("WEEK_ID", 3 - index);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                }
-            });
-        }
-        TextView sum = (TextView) view.findViewById(R.id.price_value);
-        sum.setText(String.format("%.02f", MainActivity.priceDatabase.getLastMonthValue()) + "€");
+                weekBarChart.setData(MainActivity.priceDatabase.getWeekBarsForMonth(e.getXIndex()));
+
+                weekBarChart.setVisibleXRange(5);
+                weekBarChart.moveViewToX(weekBarChart.getBarData().getXValCount());
+                weekBarChart.invalidate();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setDescription("");
+        barChart.setDrawGridBackground(false);
+        barChart.getAxisLeft().setStartAtZero(true);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getAxisLeft().setEnabled(false);
+        barChart.getAxisRight().setStartAtZero(true);
+        barChart.getAxisRight().setDrawGridLines(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getLegend().setEnabled(false);
+
+        barChart.setData(MainActivity.priceDatabase.getMonthBars());
+
+        barChart.setVisibleXRange(5);
+        barChart.moveViewToX(barChart.getBarData().getXValCount());
+        barChart.invalidate();
 
         return view;
     }

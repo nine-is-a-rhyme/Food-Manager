@@ -25,6 +25,9 @@ repositories {
     maven {
         url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
     }
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -50,4 +53,7 @@ dependencies {
 
     //FloatingActionButton
     compile 'com.getbase:floatingactionbutton:1.9.0'
+
+    //ChartLibrary
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.0'
 }
