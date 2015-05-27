@@ -6,6 +6,7 @@ import com.robotium.solo.Solo;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.*;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
