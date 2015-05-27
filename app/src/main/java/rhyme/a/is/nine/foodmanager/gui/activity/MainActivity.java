@@ -29,8 +29,10 @@ import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.AboutFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.HelpFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
@@ -264,6 +266,14 @@ public class MainActivity extends ActionBarActivity {
             case 3:
                 // Movies fragment activity
                 fragment = new PricesFragment();
+                break;
+            case 4:
+                // Movies fragment activity
+                fragment = new SettingsFragment();
+                break;
+            case 5:
+                // Movies fragment activity
+                fragment = new HelpFragment();
                 break;
             case 6:
                 // Movies fragment activity
