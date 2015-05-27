@@ -20,22 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Bier"
-        android:id="@+id/shopping_list_product_category"
-        android:layout_below="@+id/shopping_list_product_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Anzahl: 5"
         android:id="@+id/shopping_list_product_count"
-        android:layout_below="@+id/shopping_list_product_category"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textStyle="bold" />
+        android:layout_alignParentStart="false"
+        android:textStyle="bold"
+        android:layout_below="@+id/shopping_list_product_name" />
 
     <Button
         style="?android:attr/buttonStyleSmall"

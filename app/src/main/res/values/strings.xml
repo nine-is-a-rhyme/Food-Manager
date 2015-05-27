@@ -18,4 +18,14 @@
     <string name="title_activity_recipe_external">Hello blank fragment</string>
     <string name="title_activity_recipe">Recipe</string>
     <string name="title_activity_week_overview">WeekOverviewActivity</string>
+
+    <string-array
+        name="navigation_items">
+        <item>Kühlschrank</item>
+        <item>Einkaufsliste</item>
+        <item>Rezepte</item>
+        <item>Preise</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
