@@ -21,16 +21,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
-import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.RecipeActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.gui.adapter.RecipeAdapter;
 import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.recipe.Recipe;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 import static android.view.View.OnClickListener;
 
+/**
+ * A simple {@link Fragment} subclass.
+ */
 
 public class RecipeFragment extends ListFragment implements OnClickListener {
 

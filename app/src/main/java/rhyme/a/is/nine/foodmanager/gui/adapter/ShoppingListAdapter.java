@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -72,8 +72,8 @@ public class ShoppingListAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void removeItem(int position) {
-        MainActivity.shoppingListDatabase.removeProductByPosition(position, true);
+    public void removeItem(int position, boolean completely) {
+        MainActivity.shoppingListDatabase.removeProductByPosition(position, completely);
     }
 
     public void decreaseProductCount(int position) {

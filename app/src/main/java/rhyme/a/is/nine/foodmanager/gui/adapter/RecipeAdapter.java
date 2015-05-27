@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.recipe.Recipe;
 

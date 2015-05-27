@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 
 /**
  * Created by martinmaritsch on 22/04/15.
@@ -13,12 +13,28 @@ public class BarcodeToProductConverter {
 
     private static final String REQUEST_URL = "http://www.codecheck.info/product.search?q=";
 
+    public static class ScannedProduct extends Product {
+        String[] categories;
+
+        public ScannedProduct(String name, String[] categories, String barcode, String size, int count) {
+            super(name, null, barcode, size, count);
+            this.categories = categories;
+        }
+
+        public String[] getCategories() {
+            return categories;
+        }
+    }
+
     public static Product getProductForBarcode(String barcode) {
 
         if (barcode == null)
             return null;
 
-        Product product = MainActivity.historyDatabase.getProductByBarcode(barcode);
+        Product product = null;
+
+        if(MainActivity.historyDatabase != null)
+            product = MainActivity.historyDatabase.getProductByBarcode(barcode);
 
         if(product != null) {
             product.setCount(1);
@@ -42,11 +58,11 @@ public class BarcodeToProductConverter {
             return null;
 
         String name = getProductName(webContent);
-        String category = getProductCategory(webContent);
+        String[] categories = getProductCategories(webContent);
         String size = getProductSize(webContent);
 
         if(name != null)
-            return new Product(name, category, barcode, size, 1);
+            return new ScannedProduct(name, categories, barcode, size, 1);
         else
             return null;
     }
@@ -65,14 +81,17 @@ public class BarcodeToProductConverter {
         return null;
     }
 
-    private static String getProductCategory(String content) {
+    private static String[] getProductCategories(String content) {
         Pattern pattern = Pattern.compile("pathList = \\[\"(.*?)\"\\]");
         Matcher matcher = pattern.matcher(content);
 
         if(matcher.find())
         {
-            String str =  matcher.group(1).split("\", \"")[2];
-            return parseUnicode(str);
+            String[] parsedCategories =  matcher.group(1).split("\", \"");
+            for(int i = 0; i<parsedCategories.length; ++i) {
+                parsedCategories[i]=parseUnicode(parsedCategories[i]);
+            }
+            return parsedCategories;
         }
 
 

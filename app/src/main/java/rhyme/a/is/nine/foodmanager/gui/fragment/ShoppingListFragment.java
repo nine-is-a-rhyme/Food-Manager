@@ -24,9 +24,6 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
  * A simple {@link Fragment} subclass.
  */
 public class ShoppingListFragment extends ListFragment {
-
-    private FragmentActivity myContext;
-
     private static ShoppingListAdapter shoppingListAdapter;
 
     public static ShoppingListAdapter getAdapter() {
@@ -39,7 +36,6 @@ public class ShoppingListFragment extends ListFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
         super.onAttach(activity);
     }
 
@@ -89,7 +85,7 @@ public class ShoppingListFragment extends ListFragment {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    shoppingListAdapter.removeItem(position);
+                                    shoppingListAdapter.removeItem(position, true);
                                 }
                                 shoppingListAdapter.notifyDataSetChanged();
                             }

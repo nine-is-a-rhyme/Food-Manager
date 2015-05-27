@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Puntigamer 0.50L"
+        android:id="@+id/fridge_product_name"
+        android:layout_alignTop="@+id/fridge_minus_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/fridge_minus_button"
+        android:layout_toStartOf="@+id/fridge_minus_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Haltbar bis: "
+        android:id="@+id/fridge_product_bestbefore"
+        android:layout_below="@+id/fridge_product_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Anzahl: 5"
+        android:id="@+id/fridge_product_count"
+        android:layout_below="@+id/fridge_product_bestbefore"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:id="@+id/fridge_minus_button"
+        android:layout_alignTop="@+id/fridge_plus_button"
+        android:layout_toLeftOf="@+id/fridge_plus_button"
+        android:layout_toStartOf="@+id/fridge_plus_button"
+        android:onClick="onMinusButtonFridgeClicked"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/fridge_plus_button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onPlusButtonFridgeClicked"/>
+
+</RelativeLayout>

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -23,13 +25,23 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
         // nothing to see here, move along
     }
 
-    public DatePickerDialogFragment(Activity activity, TextView view) {
+    public void setBestBeforeDateTextView(TextView view) {
         this.bestBeforeDate = view;
+    }
+
+    public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar cal = Calendar.getInstance();
+        Date date = null;
+        Calendar cal = new GregorianCalendar();
+        try {
+            date = new SimpleDateFormat("dd.MM.yyyy").parse(bestBeforeDate.getText().toString());
+            cal.setTimeInMillis(new SimpleDateFormat("dd.MM.yyyy").parse(bestBeforeDate.getText().toString()).getTime());
+        } catch (ParseException e) {
+            cal.setTimeInMillis(System.currentTimeMillis());
+        }
 
         return new DatePickerDialog(activity,
                 this, cal.get(Calendar.YEAR),

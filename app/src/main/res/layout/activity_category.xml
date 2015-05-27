@@ -1,0 +1,91 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        tools:context="rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity"
+    android:padding="6dp"
+    android:id="@+id/et_layout"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Vorschläge"
+        android:id="@+id/categoryVorschläge" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_vorschläge"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="false"
+        android:selectAllOnFocus="false"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Bezeichnung"
+        android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_name"
+        android:layout_gravity="center_horizontal"
+        android:singleLine="true"
+        android:selectAllOnFocus="false" />
+
+<!--
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Mengeneinheit"
+        android:id="@+id/textView5"
+        android:hint="250 ml" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_size"
+        android:singleLine="true" />
+        -->
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Haltbarkeitsdauer"
+        android:id="@+id/textView3"
+        android:singleLine="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:inputType="date"
+        android:id="@+id/et_bestbefore"
+        android:singleLine="true"
+        android:hint="Tage"
+       />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speichern"
+        android:id="@+id/button_save" />
+
+</LinearLayout>
+

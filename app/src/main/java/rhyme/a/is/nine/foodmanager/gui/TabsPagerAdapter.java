@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 
@@ -30,6 +31,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 // Movies fragment activity
                 return new RecipeFragment();
+            case 3:
+                // Movies fragment activity
+                return new PricesFragment();
         }
 
         return null;
@@ -38,7 +42,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // get item count - equal to number of tabs
-        return 3;
+        return 4;
     }
 
 }

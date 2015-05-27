@@ -12,7 +12,9 @@
         android:id="@+id/shopping_list_product_name"
         android:layout_alignTop="@+id/shopping_list_minus_button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/shopping_list_minus_button"
+        android:layout_toStartOf="@+id/shopping_list_minus_button" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +46,7 @@
         android:layout_alignTop="@+id/shopping_list_plus_button"
         android:layout_toLeftOf="@+id/shopping_list_plus_button"
         android:layout_toStartOf="@+id/shopping_list_plus_button"
-        android:onClick="onMinusButtonClicked"/>
+        android:onClick="onMinusButtonShoppingListClicked"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -55,6 +57,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onPlusButtonClicked"/>
+        android:onClick="onPlusButtonShoppingListClicked"/>
 
 </RelativeLayout>
