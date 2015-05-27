@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.Recipe;
+package rhyme.a.is.nine.foodmanager.recipe;
 
 import java.io.Serializable;
 
@@ -10,6 +10,9 @@ public class Ingredients implements Serializable {
 
     private String amount = null;
     private String name = null;
+
+    public Ingredients() {
+    }
 
     public String getAmount() {
         return amount;

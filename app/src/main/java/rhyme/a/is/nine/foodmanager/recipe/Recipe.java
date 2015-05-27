@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.Recipe;
+package rhyme.a.is.nine.foodmanager.recipe;
 
 import java.io.Serializable;
 import java.util.List;
