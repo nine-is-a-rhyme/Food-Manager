@@ -33,6 +33,13 @@ public class RecipeDatabase {
         return recipes;
     }
 
+    public Recipe getRecipeByPosition(int position){
+        if (recipes.isEmpty())
+            return null;
+
+        return recipes.get(position);
+    }
+
     public void readFromFile(Context context) {
 
         try {

@@ -17,6 +17,7 @@ import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
+import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
@@ -25,10 +26,10 @@ import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 public class MainActivity extends ActionBarActivity implements
         ActionBar.TabListener {
 
-    private List<String> recipe_search_entries_;
-    private String url;
+
 public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
+    public static RecipeDatabase recipeDatabase = null;
     public static ProductDatabase historyDatabase = null;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
@@ -77,10 +78,12 @@ public static ProductDatabase fridgeDatabase = null;
         fridgeDatabase = new ProductDatabase("fridge.db");
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
         historyDatabase = new ProductDatabase("history.db");
+        recipeDatabase = new RecipeDatabase("ichkoche.json");
 
         fridgeDatabase.readFromFile(getBaseContext());
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
+        recipeDatabase.readFromFile(getBaseContext());
     }
 
     @Override
@@ -118,7 +121,7 @@ public static ProductDatabase fridgeDatabase = null;
     }
  public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
         public void onClick(final View v) {
-            switch(v.getId()) {
+            /*switch(v.getId()) {
                 case R.id.button_web:
 
                     Intent myIntent = new Intent(MainActivity.this, Recipe.class);
@@ -127,36 +130,9 @@ public static ProductDatabase fridgeDatabase = null;
                     break;
 
 
-            }
+            }*/
         }
     };
 
 
-    public String createURL(){
-              /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
-
-        if(!recipe_search_entries_.isEmpty()) {
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
-
-            for(Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
-                stringBuilder.append(entry);
-                if(entry.hasNext()) {
-                    stringBuilder.append("+");
-                }
-            }
-
-            stringBuilder.append("/Rezepte.html");
-
-            url = stringBuilder.toString();
-
-        }
-        else {
-            url = null;
-        }
-
-        return url;
-    }
 }
