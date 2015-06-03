@@ -1,13 +1,9 @@
 package rhyme.a.is.nine.foodmanager.database;
 
-import android.content.Context;
+import android.util.Pair;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.product.Product;
@@ -32,6 +28,50 @@ public class ProductDatabase extends Database<Product> {
             return null;
 
         return list.get(position);
+    }
+
+    public LinkedHashMap<String, Integer> getAllCategories() {
+        if (list.isEmpty())
+            return null;
+
+        LinkedHashMap<String, Integer> categories = new LinkedHashMap<>();
+
+        for(Product product : list) {
+            if (!categories.containsKey(product.getCategory()))
+                categories.put(product.getCategory(), 1);
+            else
+                categories.put(product.getCategory(), categories.get(product.getCategory()) + 1);
+        }
+
+        return categories;
+    }
+
+    public Pair<String, Integer> getCategory(int id) {
+        if (list.isEmpty())
+            return null;
+
+        int i = 0;
+        for(String category : getAllCategories().keySet()) {
+            if (i == id)
+                return new Pair<>(category, getAllCategories().get(category));
+            i++;
+        }
+        return null;
+    }
+
+    public List<Product> getProductsForCategory(int id) {
+        if (list.isEmpty())
+            return null;
+
+        String category = getCategory(id).first;
+        List<Product> result = new ArrayList<>();
+        for(Product product : list)
+        {
+            if (product.getCategory().equals(category))
+                result.add(product);
+        }
+
+        return result;
     }
 
 

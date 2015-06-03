@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,7 +32,7 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FridgeFragment extends ListFragment implements View.OnClickListener {
+public class FridgeFragment extends Fragment implements View.OnClickListener {
 
     private static FridgeAdapter fridgeAdapter;
 
@@ -42,6 +44,8 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
     private FloatingActionsMenu fabMenu;
 
     private Object lastRemoved;
+
+    ExpandableListView expandableListView;
 
 
     public FridgeFragment() {
@@ -81,6 +85,9 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
         fabUndo.setColorNormal(Color.parseColor("#993300"));
         fabUndo.setColorPressed(Color.parseColor("#EE3300"));
 
+
+        expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_list);
+
         return view;
     }
 
@@ -92,22 +99,18 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
     }
 
     @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
         // Setting the array adapter to the listview
-        fridgeAdapter = new FridgeAdapter(getActivity().getBaseContext());
-        setListAdapter(fridgeAdapter);
+        fridgeAdapter = new FridgeAdapter();
+        fridgeAdapter.setContext(getActivity().getBaseContext());
+        expandableListView.setAdapter(fridgeAdapter);
 
         // enable swipe to delete
         final SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
                 new SwipeDismissListViewTouchListener(
-                        getListView(),
+                        expandableListView,
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
 
                             @Override
@@ -118,20 +121,30 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    lastRemoved = fridgeAdapter.getItem(position);
-                                    fridgeAdapter.removeItem(position, true);
+                                    //lastRemoved = fridgeAdapter.getItem(position);
+                                    //fridgeAdapter.removeItem(position, true);
                                     fabUndo.setVisibility(View.VISIBLE);
                                 }
                                 fridgeAdapter.notifyDataSetChanged();
-                                ShoppingListFragment.getAdapter().notifyDataSetChanged();
+                                if(ShoppingListFragment.getAdapter() != null)
+                                    ShoppingListFragment.getAdapter().notifyDataSetChanged();
                             }
                         }
                 );
         swipeDismissListViewTouchListener.setEnabled(true);
-        //getListView().setOnTouchListener(swipeDismissListViewTouchListener);
-        //getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
 
-        getListView().setOnTouchListener(new View.OnTouchListener() {
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
+                final String selected = (String) ((ExpandableListAdapter)expandableListView.getAdapter()).getChild(
+                        groupPosition, childPosition);
+                Toast.makeText(getActivity().getBaseContext(), selected, Toast.LENGTH_LONG)
+                        .show();
+                return true;
+            }
+        });
+
+        expandableListView.setOnTouchListener(new View.OnTouchListener() {
             private float initialY;
 
             @Override

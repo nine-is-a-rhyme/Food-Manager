@@ -153,9 +153,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onMinusButtonFridgeClicked(View v) {
-        Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
-        shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
-        FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        //Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
+        //shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
+        //FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
         try {
             ShoppingListFragment.getAdapter().notifyDataSetChanged();
@@ -166,7 +166,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onPlusButtonFridgeClicked(View v) {
-        FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        //FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
         FridgeFragment.getAdapter().notifyDataSetChanged();
     }
 
