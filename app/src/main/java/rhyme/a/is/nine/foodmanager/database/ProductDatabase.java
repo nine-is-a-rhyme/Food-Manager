@@ -22,6 +22,13 @@ public class ProductDatabase extends Database<Product> {
         return list;
     }
 
+    public boolean removeProduct(Product product) {
+        if(list.isEmpty())
+            return false;
+
+        return list.remove(product);
+    }
+
     public Product getProductByPosition(int position)
     {
         if (list.isEmpty())

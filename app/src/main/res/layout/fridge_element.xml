@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip">
+    android:paddingLeft="40dp"
+    android:paddingTop="6dp"
+    android:paddingRight="6dp"
+    android:paddingBottom="6dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +40,7 @@
         android:layout_alignParentStart="true"
         android:textStyle="bold" />
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,9 +49,12 @@
         android:layout_alignTop="@+id/fridge_plus_button"
         android:layout_toLeftOf="@+id/fridge_plus_button"
         android:layout_toStartOf="@+id/fridge_plus_button"
-        android:onClick="onMinusButtonFridgeClicked"/>
+        android:onClick="onMinusButtonFridgeClicked"
+        android:src="@drawable/ic_action_minus"
+        android:background="#FFAAAAAA"
+        android:layout_marginRight="5dp" />
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,6 +63,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onPlusButtonFridgeClicked"/>
+        android:onClick="onPlusButtonFridgeClicked"
+        android:src="@drawable/ic_action_plus"
+        android:background="#FFAAAAAA"  />
 
 </RelativeLayout>

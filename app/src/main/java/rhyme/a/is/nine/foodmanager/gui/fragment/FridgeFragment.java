@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -106,7 +107,10 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         fridgeAdapter = new FridgeAdapter();
         fridgeAdapter.setContext(getActivity().getBaseContext());
         expandableListView.setAdapter(fridgeAdapter);
+        expandableListView.bringToFront();
 
+        fabMenu.bringToFront();
+        fabUndo.bringToFront();
         // enable swipe to delete
         final SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
                 new SwipeDismissListViewTouchListener(
@@ -132,17 +136,6 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                         }
                 );
         swipeDismissListViewTouchListener.setEnabled(true);
-
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
-                final String selected = (String) ((ExpandableListAdapter)expandableListView.getAdapter()).getChild(
-                        groupPosition, childPosition);
-                Toast.makeText(getActivity().getBaseContext(), selected, Toast.LENGTH_LONG)
-                        .show();
-                return true;
-            }
-        });
 
         expandableListView.setOnTouchListener(new View.OnTouchListener() {
             private float initialY;
@@ -198,6 +191,13 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 Intent scanIntent = new Intent(getActivity(), ProductActivity.class);
                 scanIntent.putExtra("SCAN", true);
                 getActivity().startActivityForResult(scanIntent, 0);
+                break;
+            default:
+                final String selected = (String) ((ExpandableListAdapter)expandableListView.getAdapter()).getChild(
+                        Integer.parseInt(((String) view.getTag()).split("|")[0]),
+                        Integer.parseInt(((String) view.getTag()).split("|")[1]));
+                Toast.makeText(getActivity().getBaseContext(), selected, Toast.LENGTH_LONG)
+                        .show();
                 break;
         }
     }

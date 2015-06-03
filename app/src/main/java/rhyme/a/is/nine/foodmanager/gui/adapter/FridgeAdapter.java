@@ -2,15 +2,21 @@ package rhyme.a.is.nine.foodmanager.gui.adapter;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Set;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
@@ -29,17 +35,28 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return MainActivity.fridgeDatabase.getAllCategories().size();
+        try {
+            return MainActivity.fridgeDatabase.getAllCategories().size();
+        }
+        catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     @Override
     public int getChildrenCount(int group) {
-        return MainActivity.fridgeDatabase.getProductsForCategory(group).size();
+        try {
+            return MainActivity.fridgeDatabase.getProductsForCategory(group).size();
+        }
+        catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     @Override
     public Object getGroup(int group) {
-        return MainActivity.fridgeDatabase.getAllCategories().get(group);
+        Set<String> keys= MainActivity.fridgeDatabase.getAllCategories().keySet();
+        return keys.toArray(new String[keys.size()])[group];
     }
 
     @Override
@@ -70,13 +87,20 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
             convertView = layoutInflater.inflate(R.layout.fridge_group_element, null);
         }
         TextView title = (TextView) convertView.findViewById(R.id.fridge_group_element_title);
-        TextView count = (TextView) convertView.findViewById(R.id.fridge_group_element_count);
-
         Pair<String, Integer> group = MainActivity.fridgeDatabase.getCategory(groupId);
         if(group != null) {
-            title.setText(group.first);
-            count.setText(group.second + " Produkte");
+            title.setText(group.first + " (" + group.second + " Produkt" + (group.second > 1 ? "e" : "") + ")");
         }
+
+        Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(0);
+        if(product.getBestBeforeDate() == null)
+            convertView.setBackgroundColor(Color.LTGRAY);
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+            convertView.setBackgroundColor(Color.parseColor("#F7977A"));
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+            convertView.setBackgroundColor(Color.parseColor("#FFF79A"));
+        else
+            convertView.setBackgroundColor(Color.parseColor("#82CA9D"));
         return convertView;
     }
 
@@ -87,14 +111,35 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.fridge_element, null);
         }
-        TextView title = (TextView) convertView.findViewById(R.id.fridge_product_name);
-        TextView count = (TextView) convertView.findViewById(R.id.fridge_product_count);
-        TextView bestBeforeDate = (TextView) convertView.findViewById(R.id.fridge_product_bestbefore);
+
+        TextView productName = (TextView) convertView.findViewById(R.id.fridge_product_name);
+        TextView productBestBefore = (TextView) convertView.findViewById(R.id.fridge_product_bestbefore);
+        TextView productCount = (TextView) convertView.findViewById(R.id.fridge_product_count);
+        ImageButton minusButton = (ImageButton) convertView.findViewById(R.id.fridge_minus_button);
+        ImageButton plusButton = (ImageButton) convertView.findViewById(R.id.fridge_plus_button);
+        minusButton.setTag(groupId + "|" + childId);
+        plusButton.setTag(groupId + "|" + childId);
 
         Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(childId);
-        title.setText(product.getName());
-        count.setText("Anzahl: " + product.getCount());
-        bestBeforeDate.setText(product.getBestBeforeDate().toString());
+        if(product.getCount() <= 1)
+            minusButton.setImageResource(R.drawable.ic_action_discard);
+        else
+            minusButton.setImageResource(R.drawable.ic_action_minus);
+
+        productName.setText(product.getName());
+        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(product.getBestBeforeDate())));
+        productCount.setText("Anzahl: " + product.getCount());
+
+        if(product.getBestBeforeDate() == null)
+            convertView.setBackgroundColor(Color.LTGRAY);
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+            convertView.setBackgroundColor(Color.parseColor("#FFCAAD"));
+        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+            convertView.setBackgroundColor(Color.parseColor("#FFFFCD"));
+        else
+            convertView.setBackgroundColor(Color.parseColor("#B5FDD0"));
+
+        convertView.setTag(groupId + "|" + childId);
         return convertView;
     }
 

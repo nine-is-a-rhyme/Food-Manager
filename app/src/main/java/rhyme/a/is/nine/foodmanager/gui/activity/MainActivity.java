@@ -153,20 +153,26 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onMinusButtonFridgeClicked(View v) {
-        //Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
-        //shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
-        //FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        int groupId = Integer.getInteger(v.getTag().toString().split("|")[0]);
+        int childId = Integer.getInteger(v.getTag().toString().split("|")[1]);
+        Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+        shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
+        product.decreaseCount();
+
+        if(product.getCount() == 0)
+            fridgeDatabase.removeProduct(product);
+
         FridgeFragment.getAdapter().notifyDataSetChanged();
-        try {
+        if (ShoppingListFragment.getAdapter() != null)
             ShoppingListFragment.getAdapter().notifyDataSetChanged();
-        }
-        catch (Exception ex) {
-            //do nothing
-        }
     }
 
     public void onPlusButtonFridgeClicked(View v) {
-        //FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        int groupId = Integer.getInteger(v.getTag().toString().split("|")[0]);
+        int childId = Integer.getInteger(v.getTag().toString().split("|")[1]);
+        Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+        product.increaseCount();
+
         FridgeFragment.getAdapter().notifyDataSetChanged();
     }
 
@@ -229,7 +235,7 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         // Handle action buttons
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
         }
