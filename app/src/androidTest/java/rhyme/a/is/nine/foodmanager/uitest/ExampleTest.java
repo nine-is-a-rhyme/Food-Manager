@@ -16,10 +16,10 @@ import com.robotium.solo.Solo;
 import java.util.regex.Pattern;
 
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.CategoryActivity;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
-import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
-import rhyme.a.is.nine.foodmanager.gui.Recipe;
+import rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
@@ -112,7 +112,7 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
     public void testRecipe() {
         solo.clickOnText("Rezepte");
         solo.clickOnText("Rezept finden!");
-        solo.assertCurrentActivity("Test", Recipe.class);
+        solo.assertCurrentActivity("Test", RecipeActivity.class);
     }
 
     protected void swipeLeftOnText(String text) {

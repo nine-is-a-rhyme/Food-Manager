@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -123,11 +124,6 @@ public class MainActivity extends ActionBarActivity {
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
         priceDatabase.readFromFile(getBaseContext());
-
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -8);
-        priceDatabase.addPriceEntity(new PriceEntity("ad", 1.23f, new Date()));
-        priceDatabase.addPriceEntity(new PriceEntity("asfd", 12.23f, cal.getTime()));
     }
 
     @Override

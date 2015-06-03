@@ -42,10 +42,6 @@
             android:name=".gui.activity.RecipeActivity"
             android:label="@string/title_activity_recipe" >
         </activity>
-        <activity
-            android:name=".gui.activity.WeekOverviewActivity"
-            android:label="@string/title_activity_week_overview" >
-        </activity>
     </application>
 
 </manifest>

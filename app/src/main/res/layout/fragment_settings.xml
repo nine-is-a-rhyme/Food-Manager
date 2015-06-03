@@ -4,8 +4,7 @@
         tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,13 +22,40 @@
             android:text="Löscht alle Daten in der Datenbank! Dieser Vorgang kann nicht rückgängig gemacht werden!"
             android:id="@+id/textView11"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:gravity="center_horizontal" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alles Zurücksetzen"
             android:id="@+id/btn_reset"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Daten generieren"
+            android:id="@+id/textView12"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Generiert einige Fakedaten."
+            android:id="@+id/textView13"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daten generieren"
+            android:id="@+id/btn_generate_data"
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp" />
     </LinearLayout>
