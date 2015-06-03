@@ -1,3 +1,6 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent" android:layout_height="match_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
 android:layout_width="match_parent" android:layout_height="match_parent"
@@ -5,37 +8,39 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.RecipeActivity" tools:ignore="Mer
 
 
     <TextView
-        android:layout_width="331dp"
-        android:layout_height="36dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Zutaten"
         android:id="@+id/textzutaten"
-        android:textSize="24dp"
-        android:layout_above="@+id/ingredientslist"
+        android:textSize="23dp"
+        android:layout_below="@+id/duration"
         android:layout_alignLeft="@+id/duration"
         android:layout_alignStart="@+id/duration"
-        android:layout_marginLeft="20dp"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="245dp"
+        android:layout_width="fill_parent"
+        android:layout_height="160dp"
         android:id="@+id/ingredientslist"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/textzutaten"
         android:layout_alignLeft="@+id/textzubereitung"
-        android:layout_alignStart="@+id/textzubereitung"/>
+        android:layout_alignStart="@+id/textzubereitung"
+        android:layout_marginLeft="0dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Kochdauer"
         android:id="@+id/duration"
-        android:textSize="24dp"
-        android:layout_above="@+id/textzutaten"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="20dp"/>
+        android:textSize="23dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,10 +48,10 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.RecipeActivity" tools:ignore="Mer
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Zubereitung"
         android:id="@+id/textzubereitung"
-        android:layout_marginTop="41dp"
         android:layout_below="@+id/ingredientslist"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:textSize="23dp"
         android:layout_marginLeft="20dp"/>
 
     <TextView
@@ -61,16 +66,15 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.RecipeActivity" tools:ignore="Mer
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/imageView"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/duration"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/ingredientslist"
-        android:layout_alignEnd="@+id/ingredientslist"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/duration"
         android:layout_marginLeft="20dp"
+        android:layout_alignRight="@+id/textzutaten"
+        android:layout_alignEnd="@+id/textzutaten"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"/>
+        android:minHeight="200dp"/>
 
 </RelativeLayout>
+</ScrollView>

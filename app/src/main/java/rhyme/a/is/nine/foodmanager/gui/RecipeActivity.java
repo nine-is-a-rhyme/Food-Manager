@@ -16,8 +16,10 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AbsoluteLayout;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,8 @@ public class RecipeActivity extends ActionBarActivity {
         ListView ingredients = (ListView) findViewById(R.id.ingredientslist);
         IngredientsAdapter adapter = new IngredientsAdapter(getBaseContext(), rec);
         ingredients.setAdapter(adapter);
+
+        setListViewHeightBasedOnChildren(ingredients);
 
         TextView duration = (TextView) findViewById(R.id.duration);
         duration.setText("Kochdauer: " + rec.getDuration());
@@ -68,5 +72,27 @@ public class RecipeActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }
