@@ -74,7 +74,8 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.RecipeActivity" tools:ignore="Mer
         android:layout_alignRight="@+id/textzutaten"
         android:layout_alignEnd="@+id/textzutaten"
         android:layout_marginRight="20dp"
-        android:minHeight="200dp"/>
+        android:minHeight="200dp"
+        android:layout_marginTop="15dp" />
 
 </RelativeLayout>
 </ScrollView>
