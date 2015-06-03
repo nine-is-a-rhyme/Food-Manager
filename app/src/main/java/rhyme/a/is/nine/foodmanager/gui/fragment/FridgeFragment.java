@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -163,6 +164,27 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                System.out.println("hallo");
+                if (expandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    long packedPos = ((ExpandableListView) adapterView).getExpandableListPosition(position);
+                    int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
+                    ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition(childPosition);
+                    Intent intent = new Intent(getActivity(), ProductActivity.class);
+                    getActivity().startActivityForResult(intent, 0);
+
+
+                }
+
+
+                return false;
+            }
+        });
+
+
+
     }
 
     @Override
@@ -171,6 +193,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         switch ((String) view.getTag()) {
             case "ADD":
             case "ADDMANUAL":
+                ProductActivity.editProduct = null;
                 Intent intent = new Intent(getActivity(), ProductActivity.class);
                 getActivity().startActivityForResult(intent, 0);
                 break;
@@ -188,6 +211,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 fridgeAdapter.notifyDataSetChanged();
                 break;
             case "ADDSCAN":
+                ProductActivity.editProduct = null;
                 Intent scanIntent = new Intent(getActivity(), ProductActivity.class);
                 scanIntent.putExtra("SCAN", true);
                 getActivity().startActivityForResult(scanIntent, 0);

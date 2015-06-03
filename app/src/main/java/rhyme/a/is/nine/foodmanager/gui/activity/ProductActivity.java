@@ -37,12 +37,15 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     private Product product;
     private PriceEntity pos;
+    public static Product editProduct = null;
 
     private TextView bestBeforeView;
     public static Spinner category;
     public static String[] suggestedCategories;
     public static CategoryDatabase cat_db;
     private String startedBy = "Fridge";
+    private List<Category> cat_list;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +60,13 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             startedBy = "Fridge";
         }
 
-        product = new Product();
+        if(editProduct == null)
+            product = new Product();
+        else
+            product = editProduct;
+
         pos = new PriceEntity();
+
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
@@ -148,14 +156,16 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 }
 
                 if (!fail) {
-                    if(startedBy.equals("List")) {
-                        MainActivity.shoppingListDatabase.addProduct(product);
-                    } else
-                    {
-                        MainActivity.fridgeDatabase.addProduct(product);
-                        pos.setBuyDate(new Date());
-                        MainActivity.priceDatabase.addPriceEntity(pos);
+                    if(editProduct == null) {
+                        if (startedBy.equals("List")) {
+                            MainActivity.shoppingListDatabase.addProduct(product);
+                        } else {
+                            MainActivity.fridgeDatabase.addProduct(product);
+                            pos.setBuyDate(new Date());
+                            MainActivity.priceDatabase.addPriceEntity(pos);
+                        }
                     }
+
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
@@ -215,11 +225,18 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private void addProduct(Product product) {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
-        category.setSelection(/*product.getCategory()*/ 0);
-        /*EditText size = (EditText) findViewById(R.id.et_size);
-        size.setText(product.getSize());*/
-        EditText count = (EditText) findViewById(R.id.et_count);
+        category.setSelection(0);       EditText count = (EditText) findViewById(R.id.et_count);
         count.setText(String.valueOf(product.getCount()));
+        if(editProduct != null) {
+            for(int i = 0; i<cat_list.size();++i)
+                if(cat_list.get(i).getName().equals(product.getCategory())) {
+                    category.setSelection(i);
+                    break;
+                }
+            EditText size = (EditText) findViewById(R.id.et_count);
+            size.setText(product.getSize());
+        }
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
