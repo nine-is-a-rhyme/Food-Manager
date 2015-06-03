@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
@@ -101,6 +102,7 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
             convertView.setBackgroundColor(Color.parseColor("#FFF79A"));
         else
             convertView.setBackgroundColor(Color.parseColor("#82CA9D"));
+
         return convertView;
     }
 
@@ -138,6 +140,14 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
             convertView.setBackgroundColor(Color.parseColor("#FFFFCD"));
         else
             convertView.setBackgroundColor(Color.parseColor("#B5FDD0"));
+
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(context, ((String) view.getTag()), Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
 
         convertView.setTag(groupId + "|" + childId);
         return convertView;

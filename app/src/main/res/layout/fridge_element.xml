@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:paddingLeft="40dp"
     android:paddingTop="6dp"
     android:paddingRight="6dp"
@@ -44,27 +44,26 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-"
         android:id="@+id/fridge_minus_button"
-        android:layout_alignTop="@+id/fridge_plus_button"
-        android:layout_toLeftOf="@+id/fridge_plus_button"
-        android:layout_toStartOf="@+id/fridge_plus_button"
         android:onClick="onMinusButtonFridgeClicked"
         android:src="@drawable/ic_action_minus"
-        android:background="#FFAAAAAA"
-        android:layout_marginRight="5dp" />
+        android:background="#11000000"
+        android:tint="#555"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/fridge_plus_button"
+        android:layout_toStartOf="@+id/fridge_plus_button" />
 
     <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+"
         android:id="@+id/fridge_plus_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:onClick="onPlusButtonFridgeClicked"
         android:src="@drawable/ic_action_plus"
-        android:background="#FFAAAAAA"  />
+        android:background="#11000000"
+        android:tint="#555"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
