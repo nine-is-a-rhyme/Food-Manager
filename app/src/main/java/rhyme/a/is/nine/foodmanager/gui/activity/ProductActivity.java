@@ -60,11 +60,6 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             startedBy = "Fridge";
         }
 
-        if(editProduct == null)
-            product = new Product();
-        else
-            product = editProduct;
-
         pos = new PriceEntity();
 
 
@@ -72,7 +67,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
         category = (Spinner) findViewById(R.id.et_category);
         cat_db = new CategoryDatabase("category.db");
         cat_db.readFromFile(getBaseContext());
-        List<Category> cat_list = cat_db.getAllCategories();
+        cat_list = cat_db.getAllCategories();
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, cat_list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -87,6 +82,12 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
+        if(editProduct == null)
+            product = new Product();
+        else {
+            product = editProduct;
+            addProduct(editProduct);
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -225,7 +226,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private void addProduct(Product product) {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
-        category.setSelection(0);       EditText count = (EditText) findViewById(R.id.et_count);
+        category.setSelection(0);
+        EditText count = (EditText) findViewById(R.id.et_count);
         count.setText(String.valueOf(product.getCount()));
         if(editProduct != null) {
             for(int i = 0; i<cat_list.size();++i)
