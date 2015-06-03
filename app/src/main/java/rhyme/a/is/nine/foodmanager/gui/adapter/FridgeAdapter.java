@@ -1,6 +1,8 @@
 package rhyme.a.is.nine.foodmanager.gui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.util.Pair;
@@ -21,6 +23,7 @@ import java.util.Set;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -28,10 +31,10 @@ import rhyme.a.is.nine.foodmanager.product.Product;
  */
 public class FridgeAdapter extends BaseExpandableListAdapter {
 
-    private Context context;
+    private Activity activity;
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -83,7 +86,7 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupId, boolean isLastGroup, View convertView, ViewGroup viewGroup) {
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.fridge_group_element, null);
         }
@@ -107,9 +110,14 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    public long getCombinedChildId(long groupId, long childId) {
+        return super.getCombinedChildId(groupId, childId);
+    }
+
+    @Override
     public View getChildView(int groupId, int childId, boolean isLastChild, View convertView, ViewGroup viewGroup) {
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context
+            LayoutInflater layoutInflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.fridge_element, null);
         }
@@ -144,7 +152,15 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(context, ((String) view.getTag()), Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, ((String) view.getTag()), Toast.LENGTH_SHORT).show();
+                String[] token = ((String)view.getTag()).split("|");
+                Long groupId=Long.parseLong(token[1]);
+                Long childId=Long.parseLong(token[3]);
+                long i = getCombinedChildId(groupId, childId);
+
+                ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition((int)i);
+                Intent intent = new Intent(activity, ProductActivity.class);
+                ((Activity)activity).startActivityForResult(intent, 0);
                 return false;
             }
         });

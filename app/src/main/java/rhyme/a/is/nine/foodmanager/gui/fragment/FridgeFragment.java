@@ -117,7 +117,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
 
         // Setting the array adapter to the listview
         fridgeAdapter = new FridgeAdapter();
-        fridgeAdapter.setContext(getActivity().getBaseContext());
+        fridgeAdapter.setActivity(getActivity());
         expandableListView.setAdapter(fridgeAdapter);
         expandableListView.bringToFront();
 
@@ -179,7 +179,31 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         if(expandableListView.getChildAt(pos) == null)
             return false;
 
+
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                System.out.println("hallo");
+                if (expandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    long packedPos = ((ExpandableListView) adapterView).getExpandableListPosition(position);
+                    int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
+                    ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition(childPosition);
+                    Intent intent = new Intent(getActivity(), ProductActivity.class);
+                    getActivity().startActivityForResult(intent, 0);
+
+
+                }
+
+
+                return false;
+            }
+        });
+
+
+
+
         return expandableListView.getChildAt(pos).getBottom() > expandableListView.getHeight();
+
     }
 
     @Override
@@ -188,6 +212,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         switch ((String) view.getTag()) {
             case "ADD":
             case "ADDMANUAL":
+                ProductActivity.editProduct = null;
                 Intent intent = new Intent(getActivity(), ProductActivity.class);
                 getActivity().startActivityForResult(intent, 0);
                 break;
@@ -206,6 +231,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 fridgeAdapter.notifyDataSetChanged();
                 break;
             case "ADDSCAN":
+                ProductActivity.editProduct = null;
                 Intent scanIntent = new Intent(getActivity(), ProductActivity.class);
                 scanIntent.putExtra("SCAN", true);
                 getActivity().startActivityForResult(scanIntent, 0);
