@@ -27,16 +27,16 @@ public class RecipeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        //setContentView(R.layout.fragment_recipe_view);
         Recipe rec = (Recipe) getIntent().getExtras().get("recipe");
         setTitle(rec.getName());
-        ListView ingredients = (ListView) View.inflate(this, R.layout.activity_recipe, null);
-        //ListView ingredients = (ListView) findViewById(R.id.ingredientslist);
-        IngredientsAdapter adapter = new IngredientsAdapter(getBaseContext(), rec);
 
+        ListView ingredients = (ListView) findViewById(R.id.ingredientslist);
+        IngredientsAdapter adapter = new IngredientsAdapter(getBaseContext(), rec);
         ingredients.setAdapter(adapter);
+
         TextView duration = (TextView) findViewById(R.id.duration);
         duration.setText("Kochdauer: " + rec.getDuration());
+
         TextView preparation = (TextView) findViewById(R.id.preparation);
         preparation.setText(rec.getPreparation());
 
