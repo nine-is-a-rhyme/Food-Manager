@@ -6,10 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -31,7 +25,6 @@ import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.product.Product;
-import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
 /**
@@ -127,11 +120,11 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int group) {
-                for(int i = 0; i < fridgeAdapter.getGroupCount(); i++)
-                    if(i != group)
+                for (int i = 0; i < fridgeAdapter.getGroupCount(); i++)
+                    if (i != group)
                         expandableListView.collapseGroup(i);
 
-                if(fabMenu.getVisibility() == View.INVISIBLE && !canScroll()) {
+                if (fabMenu.getVisibility() == View.INVISIBLE && !canScroll()) {
                     final Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_move_in);
                     fabMenu.startAnimation(animation);
 
@@ -176,7 +169,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
 
     private boolean canScroll() {
         int pos = expandableListView.getLastVisiblePosition();
-        if(expandableListView.getChildAt(pos) == null)
+        if (expandableListView.getChildAt(pos) == null)
             return false;
 
 
@@ -190,18 +183,10 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                     ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition(childPosition);
                     Intent intent = new Intent(getActivity(), ProductActivity.class);
                     getActivity().startActivityForResult(intent, 0);
-
-
                 }
-
-
                 return false;
             }
         });
-
-
-
-
         return expandableListView.getChildAt(pos).getBottom() > expandableListView.getHeight();
 
     }
@@ -220,8 +205,8 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 ((Product) lastRemoved).increaseCount(); // because we deleted one to much
                 MainActivity.fridgeDatabase.addProduct((Product) lastRemoved);
 
-                for(int i = 0; i < ShoppingListFragment.getAdapter().getCount(); i++) {
-                    if (((Product)ShoppingListFragment.getAdapter().getItem(i)).getName().equals(((Product)lastRemoved).getName())) {
+                for (int i = 0; i < ShoppingListFragment.getAdapter().getCount(); i++) {
+                    if (((Product) ShoppingListFragment.getAdapter().getItem(i)).getName().equals(((Product) lastRemoved).getName())) {
                         ShoppingListFragment.getAdapter().removeItem(i, false);
                         ShoppingListFragment.getAdapter().notifyDataSetChanged();
                         break;
@@ -237,7 +222,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 getActivity().startActivityForResult(scanIntent, 0);
                 break;
             default:
-                final String selected = (String) ((ExpandableListAdapter)expandableListView.getAdapter()).getChild(
+                final String selected = (String) ((ExpandableListAdapter) expandableListView.getAdapter()).getChild(
                         Integer.parseInt(((String) view.getTag()).split("|")[0]),
                         Integer.parseInt(((String) view.getTag()).split("|")[1]));
                 Toast.makeText(getActivity().getBaseContext(), selected, Toast.LENGTH_LONG)

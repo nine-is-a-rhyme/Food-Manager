@@ -14,7 +14,6 @@ import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.AddRecipeActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
-import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 
 
 /**

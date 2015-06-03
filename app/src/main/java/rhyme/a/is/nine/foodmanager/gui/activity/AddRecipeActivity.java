@@ -2,9 +2,6 @@ package rhyme.a.is.nine.foodmanager.gui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 
 import rhyme.a.is.nine.foodmanager.R;
 

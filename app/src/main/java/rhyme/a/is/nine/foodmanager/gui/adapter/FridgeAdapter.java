@@ -3,19 +3,15 @@ package rhyme.a.is.nine.foodmanager.gui.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.ExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -41,8 +37,7 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
     public int getGroupCount() {
         try {
             return MainActivity.fridgeDatabase.getAllCategories().size();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return 0;
         }
     }
@@ -51,15 +46,14 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(int group) {
         try {
             return MainActivity.fridgeDatabase.getProductsForCategory(group).size();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return 0;
         }
     }
 
     @Override
     public Object getGroup(int group) {
-        Set<String> keys= MainActivity.fridgeDatabase.getAllCategories().keySet();
+        Set<String> keys = MainActivity.fridgeDatabase.getAllCategories().keySet();
         return keys.toArray(new String[keys.size()])[group];
     }
 
@@ -92,16 +86,16 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
         }
         TextView title = (TextView) convertView.findViewById(R.id.fridge_group_element_title);
         Pair<String, Integer> group = MainActivity.fridgeDatabase.getCategory(groupId);
-        if(group != null) {
+        if (group != null) {
             title.setText(group.first + " (" + group.second + " Produkt" + (group.second > 1 ? "e" : "") + ")");
         }
 
         Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(0);
-        if(product.getBestBeforeDate() == null)
+        if (product.getBestBeforeDate() == null)
             convertView.setBackgroundColor(Color.LTGRAY);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
             convertView.setBackgroundColor(Color.parseColor("#F7977A"));
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
             convertView.setBackgroundColor(Color.parseColor("#FFF79A"));
         else
             convertView.setBackgroundColor(Color.parseColor("#82CA9D"));
@@ -131,20 +125,20 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
         plusButton.setTag(groupId + "|" + childId);
 
         Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(childId);
-        if(product.getCount() <= 1)
+        if (product.getCount() <= 1)
             minusButton.setImageResource(R.drawable.ic_action_discard);
         else
             minusButton.setImageResource(R.drawable.ic_action_minus);
 
         productName.setText(product.getName());
-        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(product.getBestBeforeDate())));
+        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-" : new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(product.getBestBeforeDate())));
         productCount.setText("Anzahl: " + product.getCount());
 
-        if(product.getBestBeforeDate() == null)
+        if (product.getBestBeforeDate() == null)
             convertView.setBackgroundColor(Color.LTGRAY);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
             convertView.setBackgroundColor(Color.parseColor("#FFCAAD"));
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
             convertView.setBackgroundColor(Color.parseColor("#FFFFCD"));
         else
             convertView.setBackgroundColor(Color.parseColor("#B5FDD0"));
@@ -153,14 +147,14 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
             @Override
             public boolean onLongClick(View view) {
                 Toast.makeText(activity, ((String) view.getTag()), Toast.LENGTH_SHORT).show();
-                String[] token = ((String)view.getTag()).split("|");
-                Long groupId=Long.parseLong(token[1]);
-                Long childId=Long.parseLong(token[3]);
+                String[] token = ((String) view.getTag()).split("|");
+                Long groupId = Long.parseLong(token[1]);
+                Long childId = Long.parseLong(token[3]);
                 long i = getCombinedChildId(groupId, childId);
 
-                ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition((int)i);
+                ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition((int) i);
                 Intent intent = new Intent(activity, ProductActivity.class);
-                ((Activity)activity).startActivityForResult(intent, 0);
+                ((Activity) activity).startActivityForResult(intent, 0);
                 return false;
             }
         });
