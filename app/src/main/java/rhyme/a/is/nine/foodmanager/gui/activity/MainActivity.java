@@ -15,9 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -153,23 +157,44 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onMinusButtonFridgeClicked(View v) {
-        int groupId = Integer.getInteger(v.getTag().toString().split("|")[0]);
-        int childId = Integer.getInteger(v.getTag().toString().split("|")[1]);
-        Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
+        final Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
         shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
         product.decreaseCount();
-
-        if(product.getCount() == 0)
-            fridgeDatabase.removeProduct(product);
-
         FridgeFragment.getAdapter().notifyDataSetChanged();
+
+        if(product.getCount() == 0) {
+            final Animation animation = AnimationUtils.loadAnimation(this, R.anim.move_out);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    FridgeFragment.setLastRemoved((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    fridgeDatabase.removeProduct((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    FridgeFragment.getAdapter().notifyDataSetChanged();
+                    FridgeFragment.showUndoButton();
+                }
+            });
+            ((RelativeLayout)v.getParent()).startAnimation(animation);
+        }
+
         if (ShoppingListFragment.getAdapter() != null)
             ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
     public void onPlusButtonFridgeClicked(View v) {
-        int groupId = Integer.getInteger(v.getTag().toString().split("|")[0]);
-        int childId = Integer.getInteger(v.getTag().toString().split("|")[1]);
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
         Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
         product.increaseCount();
 
@@ -320,8 +345,6 @@ public class MainActivity extends ActionBarActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
-
 }
 
 

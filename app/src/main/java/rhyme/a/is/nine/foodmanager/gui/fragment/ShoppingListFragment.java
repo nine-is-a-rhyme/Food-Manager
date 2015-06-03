@@ -31,7 +31,7 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
  */
 public class ShoppingListFragment extends ListFragment implements View.OnClickListener {
 
-    private static ShoppingListAdapter shoppingListAdapter;
+    private static ShoppingListAdapter shoppingListAdapter = new ShoppingListAdapter();
 
     private AddFloatingActionButton fabAdd;
 
@@ -86,7 +86,8 @@ public class ShoppingListFragment extends ListFragment implements View.OnClickLi
         super.onStart();
 
         // Setting the array adapter to the listview
-        shoppingListAdapter = new ShoppingListAdapter(getActivity().getBaseContext(), getListView());
+        shoppingListAdapter.setContext(getActivity().getBaseContext());
+        shoppingListAdapter.setListView(getListView());
         setListAdapter(shoppingListAdapter);
 
         // enable swipe to delete
