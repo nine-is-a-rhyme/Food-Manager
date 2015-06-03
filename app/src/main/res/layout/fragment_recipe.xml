@@ -15,6 +15,8 @@
         android:text="Es wurden keine Rezepte zu den Zutaten im Kühlschrank gefunden!"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp" />
 
 </FrameLayout>

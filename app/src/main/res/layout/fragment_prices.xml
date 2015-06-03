@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,47 +11,38 @@
     android:paddingRight="0dp">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Ausgaben letztes Monat"
-        android:id="@+id/textView5"
+        android:text="Monatsübersicht"
+        android:id="@+id/textView6"
         android:gravity="center_horizontal"
-        android:layout_margin="20dp" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp" />
 
-    <TextView
+    <com.github.mikephil.charting.charts.BarChart
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="100,00 €"
-        android:id="@+id/price_value"
-        android:gravity="center_horizontal"
-        android:layout_below="@+id/textView5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp"  />
+        android:layout_height="200dp"
+        android:id="@+id/price_graph:month"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Wochenübersicht"
-        android:id="@+id/textView6"
+        android:id="@+id/week_bar_chart_title"
         android:gravity="center_horizontal"
         android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/price_graph"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="10dp" />
 
-    <rhyme.a.is.nine.foodmanager.gui.graph.BarGraph
+    <com.github.mikephil.charting.charts.BarChart
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/price_graph"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="20dp" />
-</RelativeLayout>
+        android:layout_height="200dp"
+        android:id="@+id/price_graph_week"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+</LinearLayout>
+</ScrollView>
