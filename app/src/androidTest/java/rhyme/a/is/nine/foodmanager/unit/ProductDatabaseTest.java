@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.unit;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
@@ -64,5 +64,25 @@ public class ProductDatabaseTest extends ApplicationTestCase<Application> {
         assertEquals("thisIsAFakeBarcode", newDb.getProductByName("name456").getBarcode());
     }
 
+    public void testGetCategory1() {
+        ProductDatabase db = new ProductDatabase(null);
+        db.addProduct(new Product("name", "category", "barcode", "size", 1));
+        assertEquals("category", db.getCategory(0).first);
+    }
+
+    public void testGetCategory2() {
+        ProductDatabase db = new ProductDatabase(null);
+        db.addProduct(new Product("name1", "category1", "barcode1", "size1", 1));
+        db.addProduct(new Product("name2", "category2", "barcode2", "size2", 1));
+        assertEquals("category1", db.getCategory(0).first);
+        assertEquals("category2", db.getCategory(1).first);
+    }
+
+    public void testGetCategory3() {
+        ProductDatabase db = new ProductDatabase(null);
+        db.addProduct(new Product("name1", "category1", "barcode1", "size1", 1));
+        db.addProduct(new Product("name2", "category1", "barcode2", "size2", 1));
+        assertEquals(2, (int)db.getCategory(0).second);
+    }
 
 }

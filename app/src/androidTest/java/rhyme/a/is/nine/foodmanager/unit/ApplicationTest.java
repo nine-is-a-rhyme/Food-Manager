@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager;
+package rhyme.a.is.nine.foodmanager.unit;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

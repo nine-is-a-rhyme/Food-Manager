@@ -1,28 +1,21 @@
-package rhyme.a.is.nine.foodmanager.uitest;
+package rhyme.a.is.nine.foodmanager.ui;
 
 /**
  * Created by Fabio on 5/20/2015.
  */
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.Display;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
-
-import java.util.regex.Pattern;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity;
-import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
 @SuppressWarnings("rawtypes")
 public class ExampleTest extends ActivityInstrumentationTestCase2 {
@@ -131,13 +124,6 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         solo.waitForText("May");
         solo.clickOnText("22");
         solo.clickOnText("OK");
-    }
-
-    public void testRecipe() {
-        swipeToRight();
-        solo.clickOnText("Rezepte");
-        solo.clickOnText("Rezept finden!");
-        solo.assertCurrentActivity("Test", RecipeActivity.class);
     }
 
     protected void swipeLeftOnText(String text) {
