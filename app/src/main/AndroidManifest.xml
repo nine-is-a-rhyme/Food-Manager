@@ -14,10 +14,6 @@
         android:label="@string/title_activity_product" >
         </activity>
         <activity
-            android:name=".gui.activity.AddRecipeActivity"
-            android:label="@string/title_activity_product" >
-        </activity>
-        <activity
             android:name=".gui.activity.CategoryActivity"
             android:label="@string/title_activity_category" >
         </activity>
