@@ -1,102 +1,174 @@
 package rhyme.a.is.nine.foodmanager.gui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-
+import java.util.Locale;
+import java.util.Set;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class FridgeAdapter extends BaseAdapter {
+public class FridgeAdapter extends BaseExpandableListAdapter {
 
-    private Context context;
+    private Activity activity;
 
-    public FridgeAdapter(Context context) {
-        this.context = context;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
-    public int getCount() {
-        List<Product> products = MainActivity.fridgeDatabase.getAllProducts();
-        if(products != null)
-            return products.size();
+    public int getGroupCount() {
+        try {
+            return MainActivity.fridgeDatabase.getAllCategories().size();
+        } catch (NullPointerException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getChildrenCount(int group) {
+        try {
+            return MainActivity.fridgeDatabase.getProductsForCategory(group).size();
+        } catch (NullPointerException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public Object getGroup(int group) {
+        Set<String> keys = MainActivity.fridgeDatabase.getAllCategories().keySet();
+        return keys.toArray(new String[keys.size()])[group];
+    }
+
+    @Override
+    public Object getChild(int group, int child) {
+        return MainActivity.fridgeDatabase.getProductsForCategory(group).get(child);
+    }
+
+    @Override
+    public long getGroupId(int i) {
         return 0;
     }
 
     @Override
-    public Object getItem(int position) {
-        return MainActivity.fridgeDatabase.getProductByPosition(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
+    public long getChildId(int i, int i2) {
         return 0;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public boolean hasStableIds() {
+        return false;
+    }
 
-        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
+    @Override
+    public View getGroupView(int groupId, boolean isLastGroup, View convertView, ViewGroup viewGroup) {
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.fridge_group_element, null);
+        }
+        TextView title = (TextView) convertView.findViewById(R.id.fridge_group_element_title);
+        Pair<String, Integer> group = MainActivity.fridgeDatabase.getCategory(groupId);
+        if (group != null) {
+            title.setText(group.first + " (" + group.second + " Produkt" + (group.second > 1 ? "e" : "") + ")");
+        }
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.fridge_element, null);
-        TextView productName = (TextView) rowView.findViewById(R.id.fridge_product_name);
-        TextView productBestBefore = (TextView) rowView.findViewById(R.id.fridge_product_bestbefore);
-        TextView productCount = (TextView) rowView.findViewById(R.id.fridge_product_count);
-        Button minusButton = (Button) rowView.findViewById(R.id.fridge_minus_button);
-        Button plusButton = (Button) rowView.findViewById(R.id.fridge_plus_button);
-        minusButton.setTag(position);
-        plusButton.setTag(position);
+        ImageView light = (ImageView) convertView.findViewById(R.id.fridge_group_element_light);
 
-        if(product.getCount() <= 1)
-            minusButton.setEnabled(false);
+        Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(0);
+        if (product.getBestBeforeDate() == null)
+            light.setColorFilter(Color.LTGRAY);
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+            light.setColorFilter(Color.parseColor("#CC0000"));
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+            light.setColorFilter(Color.parseColor("#FF8800"));
+        else
+            light.setColorFilter(Color.parseColor("#99CC00"));
+
+        return convertView;
+    }
+
+    @Override
+    public long getCombinedChildId(long groupId, long childId) {
+        return super.getCombinedChildId(groupId, childId);
+    }
+
+    @Override
+    public View getChildView(int groupId, int childId, boolean isLastChild, View convertView, ViewGroup viewGroup) {
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) activity
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.fridge_element, null);
+        }
+
+        TextView productName = (TextView) convertView.findViewById(R.id.fridge_product_name);
+        TextView productBestBefore = (TextView) convertView.findViewById(R.id.fridge_product_bestbefore);
+        TextView productCount = (TextView) convertView.findViewById(R.id.fridge_product_count);
+        ImageButton minusButton = (ImageButton) convertView.findViewById(R.id.fridge_minus_button);
+        ImageButton plusButton = (ImageButton) convertView.findViewById(R.id.fridge_plus_button);
+        minusButton.setTag(groupId + "|" + childId);
+        plusButton.setTag(groupId + "|" + childId);
+
+        Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(childId);
+        if (product.getCount() <= 1)
+            minusButton.setImageResource(R.drawable.ic_action_discard);
+        else
+            minusButton.setImageResource(R.drawable.ic_action_minus);
 
         productName.setText(product.getName());
-        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-": new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate())));
+        productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-" : new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(product.getBestBeforeDate())));
         productCount.setText("Anzahl: " + product.getCount());
 
-        if(product.getBestBeforeDate() == null)
-            rowView.setBackgroundColor(Color.LTGRAY);
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
-            rowView.setBackgroundColor(Color.parseColor("#F7977A"));
-        else if(product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
-            rowView.setBackgroundColor(Color.parseColor("#FFF79A"));
+        ImageView light = (ImageView) convertView.findViewById(R.id.fridge_light);
+
+        if (product.getBestBeforeDate() == null)
+            light.setColorFilter(Color.LTGRAY);
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
+            light.setColorFilter(Color.parseColor("#CC0000"));
+        else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
+            light.setColorFilter(Color.parseColor("#FF8800"));
         else
-            rowView.setBackgroundColor(Color.parseColor("#82CA9D"));
+            light.setColorFilter(Color.parseColor("#99CC00"));
 
-        return rowView;
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                String[] ids = ((String)view.getTag()).split("|");
+                final int groupId = Integer.parseInt(ids[1]);
+                final int childId = Integer.parseInt(ids[3]);
+                Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+
+                ProductActivity.editProduct = product;
+                Intent intent = new Intent(activity, ProductActivity.class);
+                ((Activity) activity).startActivityForResult(intent, 0);
+                return false;
+            }
+        });
+
+        convertView.setTag(groupId + "|" + childId);
+        return convertView;
     }
 
-    public void removeItem(int position, boolean completely) {
-        Product product = MainActivity.fridgeDatabase.getProductByPosition(position);
-        MainActivity.shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getBarcode(), product.getSize(), 1));
-        MainActivity.fridgeDatabase.removeProductByPosition(position, completely);
-    }
-
-    public void deleteAll()
-    {
-        MainActivity.fridgeDatabase.deleteAll();
-    }
-
-    public void decreaseProductCount(int position) {
-        MainActivity.fridgeDatabase.removeProductByPosition(position, false);
-    }
-
-    public void increaseProductCount(int position) {
-        MainActivity.fridgeDatabase.getProductByPosition(position).increaseCount();
+    @Override
+    public boolean isChildSelectable(int i, int i2) {
+        return true;
     }
 }

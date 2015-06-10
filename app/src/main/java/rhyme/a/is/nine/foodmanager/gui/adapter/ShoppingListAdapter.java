@@ -23,9 +23,15 @@ public class ShoppingListAdapter extends BaseAdapter {
     private Context context;
     private ListView listView;
 
-    public ShoppingListAdapter(Context context, ListView listView) {
-        this.context = context;
+    public void setListView(ListView listView) {
         this.listView = listView;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ShoppingListAdapter() {
     }
 
     @Override

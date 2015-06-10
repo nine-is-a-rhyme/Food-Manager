@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -24,13 +23,12 @@ import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.FridgeAdapter;
 import rhyme.a.is.nine.foodmanager.product.Product;
-import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FridgeFragment extends ListFragment implements View.OnClickListener {
+public class FridgeFragment extends Fragment implements View.OnClickListener {
 
     private static FridgeAdapter fridgeAdapter;
 
@@ -38,14 +36,24 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
         return fridgeAdapter;
     }
 
-    private FloatingActionButton fabUndo;
-    private FloatingActionsMenu fabMenu;
+    private static FloatingActionButton fabUndo;
+    private static FloatingActionsMenu fabMenu;
 
-    private Object lastRemoved;
+    private static Object lastRemoved;
+
+    ExpandableListView expandableListView;
 
 
     public FridgeFragment() {
         // Required empty public constructor
+    }
+
+    public static void showUndoButton() {
+        fabUndo.setVisibility(View.VISIBLE);
+    }
+
+    public static void setLastRemoved(Object lastRemoved_) {
+        lastRemoved = lastRemoved_;
     }
 
     @Override
@@ -81,6 +89,24 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
         fabUndo.setColorNormal(Color.parseColor("#993300"));
         fabUndo.setColorPressed(Color.parseColor("#EE3300"));
 
+
+        expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_list);
+
+        /*
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                if (expandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    long packedPos = ((ExpandableListView) adapterView).getExpandableListPosition(position);
+                    int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
+                    Toast.makeText(getActivity().getBaseContext(), "clicked!!!" + childPosition, Toast.LENGTH_LONG)
+                            .show();
+                }
+                return false;
+            }
+        });
+        */
         return view;
     }
 
@@ -88,66 +114,70 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
     public void onResume() {
         fabUndo.setVisibility(View.INVISIBLE);
         fridgeAdapter.notifyDataSetChanged();
+
+        if(fridgeAdapter.getGroupCount() == 0)
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.VISIBLE);
+        else
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.INVISIBLE);
+
         super.onResume();
     }
 
-    @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-    }
 
     @Override
     public void onStart() {
         super.onStart();
 
         // Setting the array adapter to the listview
-        fridgeAdapter = new FridgeAdapter(getActivity().getBaseContext());
-        setListAdapter(fridgeAdapter);
+        fridgeAdapter = new FridgeAdapter();
+        fridgeAdapter.setActivity(getActivity());
+        expandableListView.setAdapter(fridgeAdapter);
+        expandableListView.bringToFront();
 
-        // enable swipe to delete
-        final SwipeDismissListViewTouchListener swipeDismissListViewTouchListener =
-                new SwipeDismissListViewTouchListener(
-                        getListView(),
-                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+        fabMenu.bringToFront();
+        fabUndo.bringToFront();
 
-                            @Override
-                            public boolean canDismiss(int position) {
-                                return true;
-                            }
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int group) {
+                for (int i = 0; i < fridgeAdapter.getGroupCount(); i++)
+                    if (i != group)
+                        expandableListView.collapseGroup(i);
 
-                            @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    lastRemoved = fridgeAdapter.getItem(position);
-                                    fridgeAdapter.removeItem(position, true);
-                                    fabUndo.setVisibility(View.VISIBLE);
-                                }
-                                fridgeAdapter.notifyDataSetChanged();
-                                ShoppingListFragment.getAdapter().notifyDataSetChanged();
-                            }
-                        }
-                );
-        swipeDismissListViewTouchListener.setEnabled(true);
-        //getListView().setOnTouchListener(swipeDismissListViewTouchListener);
-        //getListView().setOnScrollListener(swipeDismissListViewTouchListener.makeScrollListener());
+                if (fabMenu.getVisibility() == View.INVISIBLE && !canScroll()) {
+                    final Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_move_in);
+                    fabMenu.startAnimation(animation);
+                    fabMenu.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
-        getListView().setOnTouchListener(new View.OnTouchListener() {
+        expandableListView.setLongClickable(true);
+
+        expandableListView.setOnTouchListener(new View.OnTouchListener() {
             private float initialY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                swipeDismissListViewTouchListener.onTouch(v, event);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         initialY = event.getY();
-                        return true;
+                        break;
                     case MotionEvent.ACTION_MOVE:
                         final float y = event.getY();
                         final float yDiff = y - initialY;
-                        if (yDiff > 0.0) {
+                        if (yDiff > 0.0 && canScroll() && fabMenu.getVisibility() == View.INVISIBLE) {
+
+                            final Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_move_in);
+                            fabMenu.startAnimation(animation);
+
                             fabMenu.setVisibility(View.VISIBLE);
                             break;
-                        } else if (yDiff < 0.0) {
+                        } else if (yDiff < 0.0 && canScroll() && fabMenu.getVisibility() == View.VISIBLE) {
+
+                            final Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_move_out);
+                            fabMenu.startAnimation(animation);
+
                             fabMenu.setVisibility(View.INVISIBLE);
                             break;
                         }
@@ -157,6 +187,18 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
             }
         });
 
+        if(fridgeAdapter.getGroupCount() == 0)
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.VISIBLE);
+        else
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.INVISIBLE);
+    }
+
+    private boolean canScroll() {
+        int pos = expandableListView.getLastVisiblePosition();
+        if (expandableListView.getChildAt(pos) == null)
+            return false;
+      
+        return expandableListView.getChildAt(pos).getBottom() > expandableListView.getHeight();
     }
 
     @Override
@@ -165,14 +207,16 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
         switch ((String) view.getTag()) {
             case "ADD":
             case "ADDMANUAL":
+                ProductActivity.editProduct = null;
                 Intent intent = new Intent(getActivity(), ProductActivity.class);
                 getActivity().startActivityForResult(intent, 0);
                 break;
             case "UNDO":
+                ((Product) lastRemoved).increaseCount(); // because we deleted one to much
                 MainActivity.fridgeDatabase.addProduct((Product) lastRemoved);
 
-                for(int i = 0; i < ShoppingListFragment.getAdapter().getCount(); i++) {
-                    if (((Product)ShoppingListFragment.getAdapter().getItem(i)).getName().equals(((Product)lastRemoved).getName())) {
+                for (int i = 0; i < ShoppingListFragment.getAdapter().getCount(); i++) {
+                    if (((Product) ShoppingListFragment.getAdapter().getItem(i)).getName().equals(((Product) lastRemoved).getName())) {
                         ShoppingListFragment.getAdapter().removeItem(i, false);
                         ShoppingListFragment.getAdapter().notifyDataSetChanged();
                         break;
@@ -182,9 +226,12 @@ public class FridgeFragment extends ListFragment implements View.OnClickListener
                 fridgeAdapter.notifyDataSetChanged();
                 break;
             case "ADDSCAN":
+                ProductActivity.editProduct = null;
                 Intent scanIntent = new Intent(getActivity(), ProductActivity.class);
                 scanIntent.putExtra("SCAN", true);
                 getActivity().startActivityForResult(scanIntent, 0);
+                break;
+            default:
                 break;
         }
     }

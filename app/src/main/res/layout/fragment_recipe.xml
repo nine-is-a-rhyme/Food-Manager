@@ -1,6 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:fab="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment">
 
     <ListView android:id="@id/android:list"
         android:layout_width="match_parent"
@@ -17,5 +20,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp" />
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/floating_action_button_add_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_alignParentEnd="false"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="right|bottom"/>
 
 </FrameLayout>

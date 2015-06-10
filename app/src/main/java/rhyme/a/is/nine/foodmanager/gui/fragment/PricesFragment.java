@@ -69,7 +69,7 @@ public class PricesFragment extends Fragment {
         monthBarChart.getLegend().setEnabled(false);
         monthBarChart.setPinchZoom(false);
         monthBarChart.setDoubleTapToZoomEnabled(false);
-        
+
         monthBarChart.setData(MainActivity.priceDatabase.getMonthBars());
 
         monthBarChart.setVisibleXRange(5);
