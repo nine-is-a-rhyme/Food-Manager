@@ -18,13 +18,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +38,6 @@ import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
-import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
@@ -161,20 +159,47 @@ public class MainActivity extends ActionBarActivity {
        }
 
     public void onMinusButtonFridgeClicked(View v) {
-        Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
+        final Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
         shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
-        FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        product.decreaseCount();
         FridgeFragment.getAdapter().notifyDataSetChanged();
-        try {
+
+        if(product.getCount() == 0) {
+            final Animation animation = AnimationUtils.loadAnimation(this, R.anim.move_out);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    FridgeFragment.setLastRemoved((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    fridgeDatabase.removeProduct((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    FridgeFragment.getAdapter().notifyDataSetChanged();
+                    FridgeFragment.showUndoButton();
+                }
+            });
+            ((RelativeLayout)v.getParent()).startAnimation(animation);
+        }
+
+        if (ShoppingListFragment.getAdapter() != null)
             ShoppingListFragment.getAdapter().notifyDataSetChanged();
-        }
-        catch (Exception ex) {
-            //do nothing
-        }
     }
 
     public void onPlusButtonFridgeClicked(View v) {
-        FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
+        Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+        product.increaseCount();
+
         FridgeFragment.getAdapter().notifyDataSetChanged();
     }
 
@@ -199,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         // Handle action buttons
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -284,8 +309,6 @@ public class MainActivity extends ActionBarActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
-
 }
 
 

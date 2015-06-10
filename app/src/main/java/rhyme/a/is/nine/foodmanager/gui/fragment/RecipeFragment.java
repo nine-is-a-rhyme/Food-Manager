@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
@@ -21,9 +23,9 @@ import static android.view.View.OnClickListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-
 public class RecipeFragment extends ListFragment implements OnClickListener {
 
+    private AddFloatingActionButton fabAdd;
 
     private RecipeAdapter recipeAdapter;
 
@@ -55,7 +57,6 @@ public class RecipeFragment extends ListFragment implements OnClickListener {
 
         recipeAdapter = new RecipeAdapter(getActivity().getBaseContext());
         setListAdapter(recipeAdapter);
-
     }
 
 

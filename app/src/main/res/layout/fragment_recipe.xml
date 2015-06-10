@@ -21,4 +21,16 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp" />
 
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/floating_action_button_add_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_alignParentEnd="false"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="right|bottom"/>
+
 </FrameLayout>
