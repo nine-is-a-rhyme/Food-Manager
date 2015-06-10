@@ -13,11 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -96,6 +92,21 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
 
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_list);
 
+        /*
+        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                if (expandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+                    long packedPos = ((ExpandableListView) adapterView).getExpandableListPosition(position);
+                    int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
+                    Toast.makeText(getActivity().getBaseContext(), "clicked!!!" + childPosition, Toast.LENGTH_LONG)
+                            .show();
+                }
+                return false;
+            }
+        });
+        */
         return view;
     }
 
@@ -111,6 +122,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
 
         super.onResume();
     }
+
 
     @Override
     public void onStart() {
@@ -139,6 +151,8 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+
+        expandableListView.setLongClickable(true);
 
         expandableListView.setOnTouchListener(new View.OnTouchListener() {
             private float initialY;
@@ -183,6 +197,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
         int pos = expandableListView.getLastVisiblePosition();
         if (expandableListView.getChildAt(pos) == null)
             return false;
+      
         return expandableListView.getChildAt(pos).getBottom() > expandableListView.getHeight();
     }
 
@@ -217,11 +232,6 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 getActivity().startActivityForResult(scanIntent, 0);
                 break;
             default:
-                final String selected = (String) ((ExpandableListAdapter) expandableListView.getAdapter()).getChild(
-                        Integer.parseInt(((String) view.getTag()).split("|")[0]),
-                        Integer.parseInt(((String) view.getTag()).split("|")[1]));
-                Toast.makeText(getActivity().getBaseContext(), selected, Toast.LENGTH_LONG)
-                        .show();
                 break;
         }
     }
