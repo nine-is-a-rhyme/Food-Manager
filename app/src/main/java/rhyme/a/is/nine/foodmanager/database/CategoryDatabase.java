@@ -19,8 +19,6 @@ public class CategoryDatabase extends Database<Category> {
     public List<Category> getAllCategories() {
         if (list.size() == 0) {
             list = new ArrayList<>();
-            list.add(new Category("Lebensmittel", 10));
-            list.add(new Category("Getränke", 30));
         }
         return list;
     }

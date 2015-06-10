@@ -135,4 +135,12 @@ public class ProductDatabase extends Database<Product> {
                 list.remove(position);
         }
     }
+
+    public void changeCategory(String newName, String oldName) {
+        for (Product i : list) {
+            if (i.getCategory().equals(oldName)) {
+                i.setCategory(newName);
+            }
+        }
+    }
 }

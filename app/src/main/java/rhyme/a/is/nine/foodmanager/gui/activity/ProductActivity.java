@@ -64,8 +64,9 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
-        cat_db = new CategoryDatabase("category.db");
-        cat_db.readFromFile(getBaseContext());
+        //cat_db = new CategoryDatabase("category.db");
+        //cat_db.readFromFile(getBaseContext());
+        cat_db = MainActivity.categoryDatabase;
         cat_list = cat_db.getAllCategories();
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, cat_list);
@@ -169,7 +170,8 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                             MainActivity.priceDatabase.addPriceEntity(pos);
                         }
                     }
-
+                    suggestedCategories = null;
+                    editProduct = null;
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();

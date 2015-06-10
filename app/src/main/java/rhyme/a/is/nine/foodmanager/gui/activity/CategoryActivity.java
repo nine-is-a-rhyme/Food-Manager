@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.adapter.CategoryAdapter;
 import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
@@ -22,6 +24,8 @@ public class CategoryActivity extends ActionBarActivity  {
     private Product product;
     private TextView bestBeforeView;
     private Spinner category;
+
+    public static Category editCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,11 @@ public class CategoryActivity extends ActionBarActivity  {
 
         }
 
+        if(editCategory != null) {
+            ((EditText) findViewById(R.id.et_name)).setText(editCategory.getName());
+            ((EditText) findViewById(R.id.et_bestbefore)).setText(Integer.toString(editCategory.getBestBeforeDays()));
+        }
+
         Button add_button = (Button) findViewById(R.id.button_save);
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,35 +69,39 @@ public class CategoryActivity extends ActionBarActivity  {
                 if (string_date.length() == 0)
                     string_date = "0";
                 int bbf_date = Integer.parseInt(string_date);
-                if (desc_name.length() == 0)
-                {
+                if (desc_name.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Kein Kategoriename gewählt", Toast.LENGTH_LONG).show();
                     return;
                 }
-                ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
-                if (isInList(desc_name))
-                {
+                List<Category> categories = MainActivity.categoryDatabase.getAllCategories();
+                if (isInList(desc_name)) {
                     Toast.makeText(getApplicationContext(), "Kategorie schon vorhanden", Toast.LENGTH_LONG).show();
                     finish();
                     return;
                 }
-                Category cat = new Category(desc_name, bbf_date);
-                adapter.add(cat);
+                if (editCategory == null) {
+                    Category cat = new Category(desc_name, bbf_date);
+                    ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
+                    adapter.add(cat);
+                    ProductActivity.category.setSelection(adapter.getCount());
+                } else {
+                    MainActivity.fridgeDatabase.changeCategory(desc_name, editCategory.getName());
+                    editCategory.setName(desc_name);
+                    editCategory.setBestBeforeDays(bbf_date);
+                }
                 //ProductActivity.cat_db.addCategory(cat);
-                ProductActivity.category.setSelection(adapter.getCount());
+                editCategory = null;
                 finish();
-            }});
+            }
+        });
     }
 
     public boolean isInList(String category)
     {
-        ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
-        for (int i = 0; i < adapter.getCount(); i++)
-        {
-            if (adapter.getItem(i).toString().equals(category)) {
+        List<Category> categories = MainActivity.categoryDatabase.getAllCategories();
+        for(Category c : categories)
+            if(c.getName().equals(category) && c != editCategory)
                 return true;
-            }
-        }
         return false;
     }
 }
