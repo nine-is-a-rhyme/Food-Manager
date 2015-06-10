@@ -9,6 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +43,9 @@ import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
 import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
+import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
 /**
  * Created by Fabio on 5/27/2015.
@@ -52,15 +59,14 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private String[] NavigationItems;
 
-    private List<String> recipe_search_entries_;
-    private String url;
     public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
+    public static RecipeDatabase recipeDatabase = null;
     public static ProductDatabase historyDatabase = null;
     public static PriceDatabase priceDatabase = null;
     public static CategoryDatabase categoryDatabase = null;
     private ActionBar actionBar;
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,8 +130,10 @@ public class MainActivity extends ActionBarActivity {
         historyDatabase = new ProductDatabase("history.db");
         priceDatabase = new PriceDatabase("prices.db");
         categoryDatabase = new CategoryDatabase("categories.db");
+        recipeDatabase = new RecipeDatabase("ichkoche.json");
 
         fridgeDatabase.readFromFile(getBaseContext());
+        recipeDatabase.readFromFile(getBaseContext());
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
         priceDatabase.readFromFile(getBaseContext());
@@ -159,7 +167,7 @@ public class MainActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_tab, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+       }
 
     public void onMinusButtonFridgeClicked(View v) {
         String[] ids = ((String)v.getTag()).split("|");
@@ -237,45 +245,7 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
-        public void onClick(final View v) {
-            switch (v.getId()) {
-                case R.id.button_web:
 
-                    Intent myIntent = new Intent(MainActivity.this, RecipeActivity.class);
-                    //myIntent.putExtra("key", value); //Optional parameters
-                    MainActivity.this.startActivity(myIntent);
-                    break;
-            }
-        }
-    };
-
-    public String createURL() {
-              /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
-
-        if (!recipe_search_entries_.isEmpty()) {
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
-
-            for (Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
-                stringBuilder.append(entry);
-                if (entry.hasNext()) {
-                    stringBuilder.append("+");
-                }
-            }
-
-            stringBuilder.append("/Rezepte.html");
-
-            url = stringBuilder.toString();
-
-        } else {
-            url = null;
-        }
-
-        return url;
-    }
 
 
     @Override

@@ -6,12 +6,21 @@
              tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment">
 
 
-    <Button
+    <ListView android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"/>
+
+    <TextView android:id="@id/android:empty"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rezept finden!"
-        android:id="@+id/button_web"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_height="418dp"
+        android:text="Es wurden keine Rezepte zu den Zutaten im Kühlschrank gefunden!"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp" />
 
     <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/floating_action_button_add_1"
