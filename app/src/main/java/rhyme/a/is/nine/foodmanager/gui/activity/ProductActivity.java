@@ -153,6 +153,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     } else
                     {
                         MainActivity.fridgeDatabase.addProduct(product);
+                        MainActivity.recipeDatabase.getRecipes();
                         pos.setBuyDate(new Date());
                         MainActivity.priceDatabase.addPriceEntity(pos);
                     }

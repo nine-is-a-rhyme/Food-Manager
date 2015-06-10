@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.recipe.Ingredients;
 import rhyme.a.is.nine.foodmanager.recipe.Recipe;
 
@@ -56,13 +59,36 @@ public class IngredientsAdapter extends BaseAdapter {
         }
 
 
-        ingredient.setTextColor(Color.BLACK);
+        if (isInFridge(((Ingredients) getItem(position)).getName()))
+        {
+            ingredient.setTextColor(Color.rgb(0, 150, 0));
+        }
+        else
+        {
+            ingredient.setTextColor(Color.rgb(200, 0, 0));
+        }
         ingredient.setHeight(70);
         ingredient.setGravity(Gravity.CENTER_VERTICAL);
         ingredient.setPadding(50,0,0,0);
 
 
         return ingredient;
+    }
+
+    private boolean isInFridge(String ing_name)
+    {
+        List<Product> products = MainActivity.fridgeDatabase.getAllProducts();
+        List<String> cat_names = new ArrayList<String>();
+        List<String> prod_names = new ArrayList<String>();
+        for (int i = 0; i < products.size(); i++)
+        {
+            cat_names.add(products.get(i).getCategory());
+            prod_names.add(products.get(i).getName());
+        }
+
+        if (cat_names.contains(ing_name) || prod_names.contains(ing_name))
+            return true;
+        return  false;
     }
 
 }

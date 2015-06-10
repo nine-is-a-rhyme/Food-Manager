@@ -1,12 +1,16 @@
 package rhyme.a.is.nine.foodmanager.recipe;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
  * Created by Stefan on 20.05.2015.
  */
-public class Recipe implements Serializable {
+public class Recipe implements Serializable, Comparable<Recipe> {
 
 
 
@@ -56,5 +60,34 @@ public class Recipe implements Serializable {
     public String getPreparation() {return preparation;}
     public String getDuration() {return duration;}
     public List<Ingredients> getIngredients() {return ingredients;}
+
+    @Override
+    public int compareTo(Recipe another) {
+        List<Product> products = MainActivity.fridgeDatabase.getAllProducts();
+        List<String> cat_names = new ArrayList<String>();
+        List<String> prod_names = new ArrayList<String>();
+        for (int i = 0; i < products.size(); i++)
+        {
+            cat_names.add(products.get(i).getCategory());
+            prod_names.add(products.get(i).getName());
+        }
+        int num_this = countIngredients(this.getIngredients(), cat_names, prod_names);
+        int num_another = countIngredients(another.getIngredients(), cat_names, prod_names);
+
+        return  num_another - num_this;
+    }
+
+    private int countIngredients(List<Ingredients> ingredients, List<String> categories, List<String> products)
+    {
+        int count = 0;
+        for (int i = 0; i < ingredients.size(); i++)
+        {
+            if (categories.contains(ingredients.get(i).getName()) || products.contains(ingredients.get(i).getName()))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
 }
 
