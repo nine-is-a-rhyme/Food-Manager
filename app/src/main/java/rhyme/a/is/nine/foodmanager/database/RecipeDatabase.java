@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.recipe.Ingredients;
@@ -30,13 +32,14 @@ public class RecipeDatabase {
     }
 
     public List<Recipe> getRecipes() {
+        Collections.sort(recipes);
         return recipes;
     }
 
     public Recipe getRecipeByPosition(int position){
         if (recipes.isEmpty())
             return null;
-
+        Collections.sort(recipes);
         return recipes.get(position);
     }
 

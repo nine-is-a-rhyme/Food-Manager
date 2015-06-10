@@ -53,6 +53,15 @@ public class RecipeAdapter extends BaseAdapter {
         recipe_name.setGravity(Gravity.CENTER_VERTICAL);
         recipe_name.setPadding(50,0,0,0);
 
+        if (position % 2 == 0)
+        {
+           recipe_name.setBackgroundColor(Color.rgb(224, 224, 224));
+        }
+        else
+        {
+            recipe_name.setBackgroundColor(Color.rgb(200, 200, 200));
+        }
+
 
         return recipe_name;
     }

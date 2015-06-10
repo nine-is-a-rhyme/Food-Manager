@@ -161,14 +161,14 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 }
 
                 if (!fail) {
-                    if(editProduct == null) {
-                        if (startedBy.equals("List")) {
-                            MainActivity.shoppingListDatabase.addProduct(product);
-                        } else {
-                            MainActivity.fridgeDatabase.addProduct(product);
-                            pos.setBuyDate(new Date());
-                            MainActivity.priceDatabase.addPriceEntity(pos);
-                        }
+                    if(startedBy.equals("List")) {
+                        MainActivity.shoppingListDatabase.addProduct(product);
+                    } else
+                    {
+                        MainActivity.fridgeDatabase.addProduct(product);
+                        MainActivity.recipeDatabase.getRecipes();
+                        pos.setBuyDate(new Date());
+                        MainActivity.priceDatabase.addPriceEntity(pos);
                     }
                     suggestedCategories = null;
                     editProduct = null;
@@ -216,8 +216,6 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_product, menu);
         return true;
     }
 
