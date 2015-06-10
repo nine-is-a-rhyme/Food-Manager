@@ -1,30 +1,19 @@
 package rhyme.a.is.nine.foodmanager.gui.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 
 import rhyme.a.is.nine.foodmanager.R;
-
 import rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity;
-import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.CategoryAdapter;
-import rhyme.a.is.nine.foodmanager.gui.adapter.ShoppingListAdapter;
-import rhyme.a.is.nine.foodmanager.gui.fragment.dummy.DummyContent;
 import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
 
 public class CategoryFragment extends ListFragment implements View.OnClickListener {
@@ -77,7 +66,7 @@ public class CategoryFragment extends ListFragment implements View.OnClickListen
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    categoryListAdapter.removeItem(position, true);
+                                    categoryListAdapter.removeItem(position);
                                 }
                                 categoryListAdapter.notifyDataSetChanged();
                             }

@@ -43,4 +43,11 @@ public class CategoryDatabase extends Database<Category> {
         setList(new_list);
     }
 
+    public void removeCategoryByPosition(int position) {
+        if(list.isEmpty())
+            return;
+
+        list.remove(position);
+    }
+
 }

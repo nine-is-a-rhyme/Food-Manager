@@ -223,6 +223,20 @@ public class MainActivity extends ActionBarActivity {
         MainActivity.this.startActivity(myIntent);
     }
 
+    public void onDiscardButtonCategoryClicked(View v) {
+        Category c = categoryDatabase.getAllCategories().get((int)v.getTag());
+        CategoryActivity.editCategory = c;
+        if(!MainActivity.fridgeDatabase.categoryExists(c.getName()))
+        {
+            categoryDatabase.removeCategoryByPosition((int)v.getTag());
+            CategoryFragment.getAdapter().notifyDataSetChanged();
+        }
+        else
+        {
+            Toast.makeText(this, "Kategorie kann nicht entfernt werden.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
         public void onClick(final View v) {
             switch (v.getId()) {

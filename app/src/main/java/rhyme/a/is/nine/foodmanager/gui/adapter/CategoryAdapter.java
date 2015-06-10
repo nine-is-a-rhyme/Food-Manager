@@ -64,15 +64,17 @@ public class CategoryAdapter extends BaseAdapter {
         View rowView = inflater.inflate(R.layout.category_list_element, null);
         TextView categoryName = (TextView) rowView.findViewById(R.id.category_list_name);
         ImageButton editButton = (ImageButton) rowView.findViewById(R.id.category_list_edit);
+        ImageButton discardButton = (ImageButton) rowView.findViewById(R.id.category_list_discard);
         editButton.setTag(position);
+        discardButton.setTag(position);
 
         categoryName.setText(category.getName());
 
         return rowView;
     }
 
-    public void removeItem(int position, boolean completely) {
-        //MainActivity.categoryDatabase.removeCategoryByPosition(position, completely);
+    public void removeItem(int position) {
+        MainActivity.categoryDatabase.removeCategoryByPosition(position);
     }
 
     public void deleteAll()

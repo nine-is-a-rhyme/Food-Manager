@@ -143,4 +143,13 @@ public class ProductDatabase extends Database<Product> {
             }
         }
     }
+
+    public boolean categoryExists(String name) {
+        for (Product i : list) {
+            if (i.getCategory().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
