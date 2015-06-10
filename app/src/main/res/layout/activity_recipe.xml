@@ -1,5 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent" android:layout_height="match_parent">
+            android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingRight="6dp"
+    android:paddingBottom="6dp"
+    android:paddingTop="6dp">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
@@ -36,7 +39,7 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity" tools:ig
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Kochdauer"
         android:id="@+id/duration"
-        android:textSize="23dp"
+        android:textSize="16dp"
         android:layout_below="@+id/imageView"
         android:layout_marginLeft="20dp"
         android:layout_alignParentRight="true"
@@ -62,7 +65,8 @@ tools:context="rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity" tools:ig
         android:id="@+id/preparation"
         android:layout_below="@+id/textzubereitung"
         android:layout_alignLeft="@+id/textzubereitung"
-        android:layout_alignStart="@+id/textzubereitung"/>
+        android:layout_alignStart="@+id/textzubereitung"
+        android:textSize="14dp" />
 
     <ImageView
         android:layout_width="fill_parent"

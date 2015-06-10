@@ -214,8 +214,6 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_product, menu);
         return true;
     }
 
