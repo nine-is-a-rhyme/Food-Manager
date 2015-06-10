@@ -81,6 +81,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
+        bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
+        bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+        bestBeforeView.setOnClickListener(this);
+
         if(editProduct == null)
             product = new Product();
         else {
@@ -173,10 +177,6 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
-        bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
-        bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
-        bestBeforeView.setOnClickListener(this);
-
         if(startedBy.equals("List")) {
             bestBeforeView.setVisibility(View.GONE);
             TextView tw_bestbefore = (TextView) findViewById(R.id.textView3);
@@ -185,6 +185,14 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             tw_category.setVisibility(View.GONE);
             LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
             et_dropdown.setVisibility(View.GONE);
+            TextView tw_price = (TextView) findViewById(R.id.textView5);
+            tw_price.setVisibility(View.GONE);
+            LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
+            ll_price.setVisibility(View.GONE);
+        }
+
+        if(ProductActivity.editProduct != null)
+        {
             TextView tw_price = (TextView) findViewById(R.id.textView5);
             tw_price.setVisibility(View.GONE);
             LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
@@ -234,9 +242,10 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     category.setSelection(i);
                     break;
                 }
-            EditText size = (EditText) findViewById(R.id.et_count);
-            size.setText(product.getSize());
+            TextView best_before = (TextView) findViewById(R.id.et_bestbefore);
+            best_before.setText(new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate()));
         }
+
 
     }
 

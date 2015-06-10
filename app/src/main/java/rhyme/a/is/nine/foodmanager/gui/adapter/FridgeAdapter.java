@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,6 +19,7 @@ import java.util.Set;
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
+import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
 /**
@@ -146,13 +146,12 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(activity, ((String) view.getTag()), Toast.LENGTH_SHORT).show();
-                String[] token = ((String) view.getTag()).split("|");
-                Long groupId = Long.parseLong(token[1]);
-                Long childId = Long.parseLong(token[3]);
-                long i = getCombinedChildId(groupId, childId);
+                String[] ids = ((String)view.getTag()).split("|");
+                final int groupId = Integer.parseInt(ids[1]);
+                final int childId = Integer.parseInt(ids[3]);
+                Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
 
-                ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition((int) i);
+                ProductActivity.editProduct = product;
                 Intent intent = new Intent(activity, ProductActivity.class);
                 ((Activity) activity).startActivityForResult(intent, 0);
                 return false;
