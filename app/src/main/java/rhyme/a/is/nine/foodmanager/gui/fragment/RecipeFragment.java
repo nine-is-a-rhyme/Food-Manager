@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.gui.activity.AddRecipeActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
 import rhyme.a.is.nine.foodmanager.gui.adapter.RecipeAdapter;
@@ -22,8 +26,9 @@ import static android.view.View.OnClickListener;
  * A simple {@link Fragment} subclass.
  */
 
-public class RecipeFragment extends ListFragment implements OnClickListener {
+public class RecipeFragment extends ListFragment implements View.OnClickListener {
 
+    private AddFloatingActionButton fabAdd;
 
     private RecipeAdapter recipeAdapter;
 
@@ -37,6 +42,12 @@ public class RecipeFragment extends ListFragment implements OnClickListener {
                              Bundle savedInstanceState) {
 
         View fragmentView = inflater.inflate(R.layout.fragment_recipe, container, false);
+
+
+        fabAdd = (AddFloatingActionButton) fragmentView.findViewById(R.id.floating_action_button_add_1);
+        fabAdd.setOnClickListener(this);
+        fabAdd.setTag("ADD");
+        fabAdd.setStrokeVisible(true);
 
         return fragmentView;
     }
@@ -58,10 +69,15 @@ public class RecipeFragment extends ListFragment implements OnClickListener {
 
     }
 
-
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), ProductActivity.class);
-        getActivity().startActivityForResult(intent, 0);
+        switch ((String) v.getTag()){
+            case "ADD":
+        Intent intent = new Intent(getActivity(), AddRecipeActivity.class);
+        //intent.putExtra("started by", "Recipe");
+        getActivity().startActivity(intent);
+        break;
     }
+}
+
 }

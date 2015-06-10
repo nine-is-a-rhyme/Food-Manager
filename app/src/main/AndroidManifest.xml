@@ -13,6 +13,10 @@
             android:name=".gui.activity.ProductActivity"
             android:label="@string/title_activity_product" >
         </activity>
+        <activity android:name=".gui.activity.AddRecipeActivity"
+                  android:label="Rezept hinzufügen">
+
+        </activity>
         <activity
             android:name=".gui.activity.CategoryActivity"
             android:label="@string/title_activity_category" >
