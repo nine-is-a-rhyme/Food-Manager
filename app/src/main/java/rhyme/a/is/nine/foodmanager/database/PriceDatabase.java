@@ -22,23 +22,21 @@ import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 /**
  * Created by martinmaritsch on 20/05/15.
  */
-public class PriceDatabase extends Database {
-    private List<PriceEntity> priceEntities;
-
+public class PriceDatabase extends Database<PriceEntity> {
     public PriceDatabase(String fileName) {
         super(fileName);
-        this.priceEntities = new ArrayList<>();
+        this.list = new ArrayList<>();
     }
 
     public List<PriceEntity> getAllPriceEntities() {
-        return priceEntities;
+        return list;
     }
 
 
     private int numberOfMonthsInDatabase() {
         Calendar startCalendar = new GregorianCalendar();
-        startCalendar.setTime(priceEntities.get(0).getBuyDate());
-        for (PriceEntity p : priceEntities) {
+        startCalendar.setTime(list.get(0).getBuyDate());
+        for (PriceEntity p : list) {
             if (startCalendar.getTime().after(p.getBuyDate()))
                 startCalendar.setTime(p.getBuyDate());
         }
@@ -51,7 +49,7 @@ public class PriceDatabase extends Database {
 
     public BarData getMonthBars() {
 
-        if (priceEntities == null || priceEntities.size() == 0)
+        if (list == null || list.size() == 0)
             return null;
 
         int months = numberOfMonthsInDatabase();
@@ -93,7 +91,7 @@ public class PriceDatabase extends Database {
 
     public BarData getWeekBarsForMonth(int monthIndex) {
 
-        if (priceEntities == null || priceEntities.size() == 0)
+        if (list == null || list.size() == 0)
             return null;
 
         List<Pair<Date, List<PriceEntity>>> entities = getPriceEntitiesForMonthWeeks(numberOfMonthsInDatabase() - monthIndex);
@@ -182,17 +180,17 @@ public class PriceDatabase extends Database {
 
 
     public PriceEntity getPriceEntityByPosition(int position) {
-        if (priceEntities.isEmpty())
+        if (list.isEmpty())
             return null;
 
-        return priceEntities.get(position);
+        return list.get(position);
     }
 
     public PriceEntity getPriceEntityByName(String name) {
-        if (priceEntities.isEmpty())
+        if (list.isEmpty())
             return null;
 
-        for (PriceEntity i : priceEntities) {
+        for (PriceEntity i : list) {
             if (i.getName().equals(name))
                 return i;
         }
@@ -200,12 +198,12 @@ public class PriceDatabase extends Database {
     }
 
     public List<PriceEntity> getPriceEntitiesByDateInterval(Date min, Date max) {
-        if (priceEntities.isEmpty())
+        if (list.isEmpty())
             return null;
 
         List<PriceEntity> values = new ArrayList<>();
 
-        for (PriceEntity i : priceEntities) {
+        for (PriceEntity i : list) {
             if (i.getBuyDate().after(min) && i.getBuyDate().before(max))
                 values.add(i);
         }
@@ -213,10 +211,10 @@ public class PriceDatabase extends Database {
     }
 
     public void deleteAll() {
-        priceEntities.clear();
+        list.clear();
     }
 
     public void addPriceEntity(PriceEntity priceEntity) {
-        priceEntities.add(priceEntity);
+        list.add(priceEntity);
     }
 }

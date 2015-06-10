@@ -40,11 +40,11 @@ public class PriceDatabaseTest extends ApplicationTestCase<Application> {
     }
 
     public void testSaveAndReadDb() {
-        PriceDatabase db = new PriceDatabase("price_test.db");
+        PriceDatabase db = new PriceDatabase("pricetest.db");
         db.addPriceEntity(new PriceEntity("name", 123.45f, Calendar.getInstance().getTime()));
         db.writeToFile(getSystemContext());
 
-        PriceDatabase newDb = new PriceDatabase("price_test.db");
+        PriceDatabase newDb = new PriceDatabase("pricetest.db");
         newDb.readFromFile(getSystemContext());
         assertNotNull(newDb.getPriceEntityByName("name"));
         assertEquals(123.45f, newDb.getPriceEntityByName("name").getPrice());

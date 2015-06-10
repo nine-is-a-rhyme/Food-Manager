@@ -57,7 +57,8 @@
         android:background="#11000000"
         android:tint="#555"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/fridge_light"/>
+        android:layout_toLeftOf="@+id/fridge_light"
+        android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="wrap_content"
