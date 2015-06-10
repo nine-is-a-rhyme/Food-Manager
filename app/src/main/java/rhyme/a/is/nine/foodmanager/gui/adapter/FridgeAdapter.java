@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,15 +91,17 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
             title.setText(group.first + " (" + group.second + " Produkt" + (group.second > 1 ? "e" : "") + ")");
         }
 
+        ImageView light = (ImageView) convertView.findViewById(R.id.fridge_group_element_light);
+
         Product product = MainActivity.fridgeDatabase.getProductsForCategory(groupId).get(0);
         if (product.getBestBeforeDate() == null)
-            convertView.setBackgroundColor(Color.LTGRAY);
+            light.setColorFilter(Color.LTGRAY);
         else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
-            convertView.setBackgroundColor(Color.parseColor("#F7977A"));
+            light.setColorFilter(Color.parseColor("#CC0000"));
         else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
-            convertView.setBackgroundColor(Color.parseColor("#FFF79A"));
+            light.setColorFilter(Color.parseColor("#FF8800"));
         else
-            convertView.setBackgroundColor(Color.parseColor("#82CA9D"));
+            light.setColorFilter(Color.parseColor("#99CC00"));
 
         return convertView;
     }
@@ -134,14 +137,16 @@ public class FridgeAdapter extends BaseExpandableListAdapter {
         productBestBefore.setText("Haltbar bis: " + (product.getBestBeforeDate() == null ? "-" : new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).format(product.getBestBeforeDate())));
         productCount.setText("Anzahl: " + product.getCount());
 
+        ImageView light = (ImageView) convertView.findViewById(R.id.fridge_light);
+
         if (product.getBestBeforeDate() == null)
-            convertView.setBackgroundColor(Color.LTGRAY);
+            light.setColorFilter(Color.LTGRAY);
         else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < -1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 1/* days */)
-            convertView.setBackgroundColor(Color.parseColor("#FFCAAD"));
+            light.setColorFilter(Color.parseColor("#CC0000"));
         else if (product.getBestBeforeDate().getTime() - System.currentTimeMillis() < 1000/* milliseconds */ * 60/* seconds */ * 60/* minutes */ * 24/* hours */ * 2/* days */)
-            convertView.setBackgroundColor(Color.parseColor("#FFFFCD"));
+            light.setColorFilter(Color.parseColor("#FF8800"));
         else
-            convertView.setBackgroundColor(Color.parseColor("#B5FDD0"));
+            light.setColorFilter(Color.parseColor("#99CC00"));
 
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

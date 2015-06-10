@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -101,6 +103,12 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         fabUndo.setVisibility(View.INVISIBLE);
         fridgeAdapter.notifyDataSetChanged();
+
+        if(fridgeAdapter.getGroupCount() == 0)
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.VISIBLE);
+        else
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.INVISIBLE);
+
         super.onResume();
     }
 
@@ -127,7 +135,6 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 if (fabMenu.getVisibility() == View.INVISIBLE && !canScroll()) {
                     final Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_move_in);
                     fabMenu.startAnimation(animation);
-
                     fabMenu.setVisibility(View.VISIBLE);
                 }
             }
@@ -141,7 +148,7 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         initialY = event.getY();
-                        return true;
+                        break;
                     case MotionEvent.ACTION_MOVE:
                         final float y = event.getY();
                         final float yDiff = y - initialY;
@@ -165,30 +172,18 @@ public class FridgeFragment extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
+
+        if(fridgeAdapter.getGroupCount() == 0)
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.VISIBLE);
+        else
+            getActivity().findViewById(R.id.no_entries).setVisibility(View.INVISIBLE);
     }
 
     private boolean canScroll() {
         int pos = expandableListView.getLastVisiblePosition();
         if (expandableListView.getChildAt(pos) == null)
             return false;
-
-
-        expandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                System.out.println("hallo");
-                if (expandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-                    long packedPos = ((ExpandableListView) adapterView).getExpandableListPosition(position);
-                    int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
-                    ProductActivity.editProduct = MainActivity.fridgeDatabase.getProductByPosition(childPosition);
-                    Intent intent = new Intent(getActivity(), ProductActivity.class);
-                    getActivity().startActivityForResult(intent, 0);
-                }
-                return false;
-            }
-        });
         return expandableListView.getChildAt(pos).getBottom() > expandableListView.getHeight();
-
     }
 
     @Override
