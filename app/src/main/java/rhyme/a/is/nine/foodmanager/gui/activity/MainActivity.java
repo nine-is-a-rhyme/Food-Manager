@@ -9,34 +9,43 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.CategoryDatabase;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.AboutFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.CategoryFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.HelpFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
-import rhyme.a.is.nine.foodmanager.product.PriceEntity;
+import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
+import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
+import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 
 /**
  * Created by Fabio on 5/27/2015.
@@ -50,14 +59,14 @@ public class MainActivity extends ActionBarActivity {
     private CharSequence mTitle;
     private String[] NavigationItems;
 
-    private List<String> recipe_search_entries_;
-    private String url;
     public static ProductDatabase fridgeDatabase = null;
     public static ProductDatabase shoppingListDatabase = null;
+    public static RecipeDatabase recipeDatabase = null;
     public static ProductDatabase historyDatabase = null;
     public static PriceDatabase priceDatabase = null;
+    public static CategoryDatabase categoryDatabase = null;
     private ActionBar actionBar;
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +76,9 @@ public class MainActivity extends ActionBarActivity {
                 R.drawable.ic_action_fridge,
                 R.drawable.ic_action_list,
                 R.drawable.ic_action_recipe,
+                R.drawable.ic_action_categories,
                 R.drawable.ic_action_graph,
                 R.drawable.ic_action_settings,
-                R.drawable.ic_action_help,
                 R.drawable.ic_action_about
         };
 
@@ -119,11 +128,15 @@ public class MainActivity extends ActionBarActivity {
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
         historyDatabase = new ProductDatabase("history.db");
         priceDatabase = new PriceDatabase("prices.db");
+        categoryDatabase = new CategoryDatabase("categories.db");
+        recipeDatabase = new RecipeDatabase("ichkoche.json");
 
         fridgeDatabase.readFromFile(getBaseContext());
+        recipeDatabase.readFromFile(getBaseContext());
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
         priceDatabase.readFromFile(getBaseContext());
+        categoryDatabase.readFromFile(getBaseContext());
     }
 
     @Override
@@ -131,7 +144,8 @@ public class MainActivity extends ActionBarActivity {
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
-        priceDatabase.readFromFile(getBaseContext());
+        priceDatabase.writeToFile(getBaseContext());
+        categoryDatabase.writeToFile(getBaseContext());
 
         super.onDestroy();
     }
@@ -142,31 +156,57 @@ public class MainActivity extends ActionBarActivity {
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+        priceDatabase.writeToFile(getBaseContext());
+        categoryDatabase.writeToFile(getBaseContext());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main_tab, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+        return true;
+       }
 
     public void onMinusButtonFridgeClicked(View v) {
-        Product product = (Product) FridgeFragment.getAdapter().getItem((int) v.getTag());
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
+        final Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
         shoppingListDatabase.addProduct(new Product(product.getName(), product.getCategory(), product.getCategory(), product.getSize(), 1));
-        FridgeFragment.getAdapter().decreaseProductCount((int) v.getTag());
+        product.decreaseCount();
         FridgeFragment.getAdapter().notifyDataSetChanged();
-        try {
+
+        if(product.getCount() == 0) {
+            final Animation animation = AnimationUtils.loadAnimation(this, R.anim.move_out);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    FridgeFragment.setLastRemoved((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    fridgeDatabase.removeProduct((Product) FridgeFragment.getAdapter().getChild(groupId, childId));
+                    FridgeFragment.getAdapter().notifyDataSetChanged();
+                    FridgeFragment.showUndoButton();
+                }
+            });
+            ((RelativeLayout)v.getParent()).startAnimation(animation);
+        }
+
+        if (ShoppingListFragment.getAdapter() != null)
             ShoppingListFragment.getAdapter().notifyDataSetChanged();
-        }
-        catch (Exception ex) {
-            //do nothing
-        }
     }
 
     public void onPlusButtonFridgeClicked(View v) {
-        FridgeFragment.getAdapter().increaseProductCount((int) v.getTag());
+        String[] ids = ((String)v.getTag()).split("|");
+        final int groupId = Integer.parseInt(ids[1]);
+        final int childId = Integer.parseInt(ids[3]);
+        Product product = (Product) FridgeFragment.getAdapter().getChild(groupId, childId);
+        product.increaseCount();
+
         FridgeFragment.getAdapter().notifyDataSetChanged();
     }
 
@@ -180,45 +220,28 @@ public class MainActivity extends ActionBarActivity {
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
-    public View.OnClickListener mGlobal_OnClickListener = new View.OnClickListener() {
-        public void onClick(final View v) {
-            switch (v.getId()) {
-                case R.id.button_web:
-
-                    Intent myIntent = new Intent(MainActivity.this, RecipeActivity.class);
-                    //myIntent.putExtra("key", value); //Optional parameters
-                    MainActivity.this.startActivity(myIntent);
-                    break;
-            }
-        }
-    };
-
-    public String createURL() {
-              /* creates something like http://www.chefkoch.de/ms/s0/karotte+kartoffel/Rezepte.html */
-
-        if (!recipe_search_entries_.isEmpty()) {
-
-            StringBuilder stringBuilder = new StringBuilder();
-
-            stringBuilder.append("http://mobile.chefkoch.de/ms/s0/");
-
-            for (Iterator<String> entry = recipe_search_entries_.iterator(); entry.hasNext(); ) {
-                stringBuilder.append(entry);
-                if (entry.hasNext()) {
-                    stringBuilder.append("+");
-                }
-            }
-
-            stringBuilder.append("/Rezepte.html");
-
-            url = stringBuilder.toString();
-
-        } else {
-            url = null;
-        }
-
-        return url;
+    public void onEditButtonCategoryClicked(View v) {
+        Category c = categoryDatabase.getAllCategories().get((int)v.getTag());
+        CategoryActivity.editCategory = c;
+        Intent myIntent = new Intent(MainActivity.this, CategoryActivity.class);
+        MainActivity.this.startActivity(myIntent);
     }
+
+    public void onDiscardButtonCategoryClicked(View v) {
+        Category c = categoryDatabase.getAllCategories().get((int)v.getTag());
+        CategoryActivity.editCategory = c;
+        if(!MainActivity.fridgeDatabase.categoryExists(c.getName()))
+        {
+            categoryDatabase.removeCategoryByPosition((int)v.getTag());
+            CategoryFragment.getAdapter().notifyDataSetChanged();
+        }
+        else
+        {
+            Toast.makeText(this, "Kategorie kann nicht entfernt werden.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 
     @Override
@@ -229,7 +252,7 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         // Handle action buttons
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -260,16 +283,15 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new RecipeFragment();
                 break;
             case 3:
-                // Movies fragment activity
-                fragment = new PricesFragment();
+                fragment = new CategoryFragment();
                 break;
             case 4:
                 // Movies fragment activity
-                fragment = new SettingsFragment();
+                fragment = new PricesFragment();
                 break;
             case 5:
                 // Movies fragment activity
-                fragment = new HelpFragment();
+                fragment = new SettingsFragment();
                 break;
             case 6:
                 // Movies fragment activity
@@ -314,8 +336,6 @@ public class MainActivity extends ActionBarActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-
-
 }
 
 

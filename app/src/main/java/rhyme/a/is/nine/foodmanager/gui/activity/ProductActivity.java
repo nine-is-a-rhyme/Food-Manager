@@ -3,11 +3,14 @@ package rhyme.a.is.nine.foodmanager.gui.activity;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +23,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,12 +40,15 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     private Product product;
     private PriceEntity pos;
+    public static Product editProduct = null;
 
     private TextView bestBeforeView;
     public static Spinner category;
     public static String[] suggestedCategories;
     public static CategoryDatabase cat_db;
     private String startedBy = "Fridge";
+    private List<Category> cat_list;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +63,13 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             startedBy = "Fridge";
         }
 
-        product = new Product();
         pos = new PriceEntity();
+
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
-        cat_db = new CategoryDatabase("category.db");
-        cat_db.readFromFile(getBaseContext());
-        List<Category> cat_list = cat_db.getAllCategories();
+        cat_db = MainActivity.categoryDatabase;
+        cat_list = cat_db.getAllCategories();
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, cat_list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -79,6 +84,16 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
+        bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
+        bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+        bestBeforeView.setOnClickListener(this);
+
+        if(editProduct == null)
+            product = new Product();
+        else {
+            product = editProduct;
+            addProduct(editProduct);
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -96,7 +111,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     name.setError("Bitte Bezeichnung eingeben!");
                 }
 
-                if(category.getSelectedItem().toString().length() > 0)
+                if(category.getSelectedItem() != null)
                 {
                     product.setCategory(category.getSelectedItem().toString());
 
@@ -104,18 +119,18 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     fail = true;
                     //category.setBackgroundColor(Color.RED);
                     TextView category_view = (TextView) category.getSelectedView();
-                    category_view.setError("Bitte Kategorie eingeben!");
+                    if( category_view != null) {
+                        category_view.setError("Bitte Kategorie eingeben!");
+                    }
+                    else
+                    {
+                        category_view = (TextView) findViewById(R.id.spinner_error);
+                        category_view.requestFocus();
+                        category_view.setError("Bitte Kategorie eingeben!");
+                    }
                 }
 
-                /*EditText size = (EditText) findViewById(R.id.et_size);
-                if(size.getText().toString().length() > 0)
-                {
-                    product.setSize(size.getText().toString());
-                    size.setBackgroundColor(Color.GREEN);
-                } else {
-                    fail = true;
-                    size.setBackgroundColor(Color.RED);
-                }*/
+
                 EditText count = (EditText) findViewById(R.id.et_count);
                 try {
                     product.setCount(Integer.parseInt(count.getText().toString()));
@@ -128,7 +143,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 if(!startedBy.equals("List")) {
                 EditText price = (EditText) findViewById(R.id.et_price);
                 try {
-                    pos.setPrice(Float.parseFloat(count.getText().toString()));
+                    pos.setPrice(Float.parseFloat(price.getText().toString()) * Float.parseFloat(count.getText().toString()));
 
                 } catch (Exception e) {
                     pos.setPrice(0);
@@ -153,9 +168,12 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     } else
                     {
                         MainActivity.fridgeDatabase.addProduct(product);
+                        MainActivity.recipeDatabase.getRecipes();
                         pos.setBuyDate(new Date());
                         MainActivity.priceDatabase.addPriceEntity(pos);
                     }
+                    suggestedCategories = null;
+                    editProduct = null;
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
@@ -163,9 +181,26 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             }
         });
 
-        bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
-        bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
-        bestBeforeView.setOnClickListener(this);
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Category selected = MainActivity.categoryDatabase.getAllCategories().get(position);
+                bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
+                Calendar c = Calendar.getInstance();
+                c.setTime(new Date());
+                c.add(Calendar.DATE, selected.getBestBeforeDays());  // number of days to add
+                bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(c.getTime()));
+                TextView category_view = (TextView) findViewById(R.id.spinner_error);
+                category_view.clearFocus();
+                category_view.setError(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
 
         if(startedBy.equals("List")) {
             bestBeforeView.setVisibility(View.GONE);
@@ -175,6 +210,14 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
             tw_category.setVisibility(View.GONE);
             LinearLayout et_dropdown = (LinearLayout) findViewById(R.id.et_dropdown);
             et_dropdown.setVisibility(View.GONE);
+            TextView tw_price = (TextView) findViewById(R.id.textView5);
+            tw_price.setVisibility(View.GONE);
+            LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
+            ll_price.setVisibility(View.GONE);
+        }
+
+        if(ProductActivity.editProduct != null)
+        {
             TextView tw_price = (TextView) findViewById(R.id.textView5);
             tw_price.setVisibility(View.GONE);
             LinearLayout ll_price = (LinearLayout) findViewById(R.id.ll_price);
@@ -196,8 +239,6 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_product, menu);
         return true;
     }
 
@@ -215,11 +256,20 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
     private void addProduct(Product product) {
         EditText name = (EditText) findViewById(R.id.et_name);
         name.setText(product.getName());
-        category.setSelection(/*product.getCategory()*/ 0);
-        /*EditText size = (EditText) findViewById(R.id.et_size);
-        size.setText(product.getSize());*/
+        category.setSelection(0);
         EditText count = (EditText) findViewById(R.id.et_count);
         count.setText(String.valueOf(product.getCount()));
+        if(editProduct != null) {
+            for(int i = 0; i<cat_list.size();++i)
+                if(cat_list.get(i).getName().equals(product.getCategory())) {
+                    category.setSelection(i);
+                    break;
+                }
+            TextView best_before = (TextView) findViewById(R.id.et_bestbefore);
+            best_before.setText(new SimpleDateFormat("dd.MM.yyyy").format(product.getBestBeforeDate()));
+        }
+
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {

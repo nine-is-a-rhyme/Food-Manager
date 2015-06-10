@@ -1,13 +1,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:fab="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment">
 
+    <ListView android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"/>
 
-    <Button
+    <TextView android:id="@id/android:empty"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rezept finden!"
-        android:id="@+id/button_web"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_height="418dp"
+        android:text="Es wurden keine Rezepte zu den Zutaten im Kühlschrank gefunden!"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp" />
+
 
 </FrameLayout>

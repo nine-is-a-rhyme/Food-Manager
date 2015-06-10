@@ -38,6 +38,7 @@ public class SettingsFragment extends Fragment {
                 MainActivity.fridgeDatabase.deleteAll();
                 MainActivity.shoppingListDatabase.deleteAll();
                 MainActivity.priceDatabase.deleteAll();
+                MainActivity.categoryDatabase.deleteAll();
             }
         });
 

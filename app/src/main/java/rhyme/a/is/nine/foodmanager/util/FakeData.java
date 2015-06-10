@@ -2,9 +2,11 @@ package rhyme.a.is.nine.foodmanager.util;
 
 import java.util.Calendar;
 
+import rhyme.a.is.nine.foodmanager.database.CategoryDatabase;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.PriceEntity;
 import rhyme.a.is.nine.foodmanager.product.Product;
 
@@ -17,6 +19,7 @@ public class FakeData {
 
         PriceDatabase priceDatabase = MainActivity.priceDatabase;
         ProductDatabase fridgeDatabase = MainActivity.fridgeDatabase;
+        CategoryDatabase categoryDatabase = MainActivity.categoryDatabase;
 
         Calendar cal = Calendar.getInstance();
         priceDatabase.addPriceEntity(new PriceEntity("", 10.23f, cal.getTime()));
@@ -57,5 +60,11 @@ public class FakeData {
         fridgeDatabase.addProduct(new Product("Butter", "Milchprodukte", "12345", "", 1, cal.getTime()));
         cal.add(Calendar.DATE, 10);
         fridgeDatabase.addProduct(new Product("Saft", "Getränke", "123456", "", 6, cal.getTime()));
+
+        categoryDatabase.addCategory(new Category("Getränke", 20));
+        categoryDatabase.addCategory(new Category("Gemüse", 5));
+        categoryDatabase.addCategory(new Category("Milchprodukte", 5));
+
+
     }
 }

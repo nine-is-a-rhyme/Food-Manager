@@ -10,12 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import rhyme.a.is.nine.foodmanager.product.Product;
-
 /**
  * Created by martinmaritsch on 29/04/15.
  */
-public class Database<T> implements Serializable {
+public abstract class Database<T> implements Serializable {
 
     protected List<T> list;
 
@@ -54,7 +52,7 @@ public class Database<T> implements Serializable {
             e.printStackTrace();
         }
 
-        if(object != null)
+        if (object != null)
             this.list = (List<T>) object;
     }
 }

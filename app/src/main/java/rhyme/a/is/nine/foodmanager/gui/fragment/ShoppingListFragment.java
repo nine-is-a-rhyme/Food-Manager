@@ -2,11 +2,9 @@ package rhyme.a.is.nine.foodmanager.gui.fragment;
 
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,8 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import rhyme.a.is.nine.foodmanager.R;
 import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
@@ -31,7 +27,7 @@ import rhyme.a.is.nine.foodmanager.util.SwipeDismissListViewTouchListener;
  */
 public class ShoppingListFragment extends ListFragment implements View.OnClickListener {
 
-    private static ShoppingListAdapter shoppingListAdapter;
+    private static ShoppingListAdapter shoppingListAdapter = new ShoppingListAdapter();
 
     private AddFloatingActionButton fabAdd;
 
@@ -77,16 +73,12 @@ public class ShoppingListFragment extends ListFragment implements View.OnClickLi
     }
 
     @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
         // Setting the array adapter to the listview
-        shoppingListAdapter = new ShoppingListAdapter(getActivity().getBaseContext(), getListView());
+        shoppingListAdapter.setContext(getActivity().getBaseContext());
+        shoppingListAdapter.setListView(getListView());
         setListAdapter(shoppingListAdapter);
 
         // enable swipe to delete

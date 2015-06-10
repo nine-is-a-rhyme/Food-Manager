@@ -1,36 +1,31 @@
-package rhyme.a.is.nine.foodmanager.uitest;
+package rhyme.a.is.nine.foodmanager.ui;
 
 /**
  * Created by Fabio on 5/20/2015.
  */
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.Display;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.robotium.solo.Solo;
 
-import java.util.regex.Pattern;
-
 import rhyme.a.is.nine.foodmanager.R;
-import rhyme.a.is.nine.foodmanager.gui.CategoryActivity;
-import rhyme.a.is.nine.foodmanager.gui.MainActivity;
-import rhyme.a.is.nine.foodmanager.gui.ProductActivity;
-import rhyme.a.is.nine.foodmanager.gui.Recipe;
-import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
-import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
+import rhyme.a.is.nine.foodmanager.gui.activity.CategoryActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.MainActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.ProductActivity;
+import rhyme.a.is.nine.foodmanager.gui.activity.RecipeActivity;
 
 @SuppressWarnings("rawtypes")
 public class ExampleTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
-    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "rhyme.a.is.nine.foodmanager.gui.MainActivity";
+    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "rhyme.a.is.nine.foodmanager.gui.activity.MainActivity";
 
     private static Class<?> launcherActivityClass;
-    static{
+
+    static {
         try {
             launcherActivityClass = Class.forName(LAUNCHER_ACTIVITY_FULL_CLASSNAME);
         } catch (ClassNotFoundException e) {
@@ -55,27 +50,47 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         super.tearDown();
     }
 
-    public void testTabs() {
+    public void testNavigationDrawer() {
         solo.assertCurrentActivity("Test", MainActivity.class);
+        swipeToRight();
         solo.clickOnText("Einkaufsliste");
+        swipeToRight();
         solo.clickOnText("Rezepte");
+        swipeToRight();
+        solo.clickOnText("Kategorien");
+        swipeToRight();
+        solo.clickOnText("Ausgaben");
+        swipeToRight();
+        solo.clickOnText("Einstellungen");
+        swipeToRight();
+        solo.clickOnText(".?ber");
+        swipeToRight();
         solo.clickOnText("K.?hlschrank");
-
 
     }
 
+    private void swipeToRight() {
+        Display display = solo.getCurrentActivity().getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+        float xStart = 0;
+        float xEnd = width / 2;
+        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
+    }
+
     public void testAddProducts() {
-        //solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_menu));
         solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
         solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
         solo.assertCurrentActivity("Test", ProductActivity.class);
         solo.enterText(0, "Produkt1");
         solo.clickOnText("Speichern");
         solo.assertCurrentActivity("Test", MainActivity.class);
+        solo.clickInList(0);
         solo.waitForText("Produkt1");
-        solo.clickOnButton(1);
-        solo.clickOnButton(0);
-        swipeLeftOnText("Produkt1");
+        solo.clickOnImageButton(1);
+        solo.clickOnImageButton(0);
+        solo.clickOnImageButton(0);
+        swipeToRight();
         solo.clickOnText("Einkaufsliste");
         solo.waitForText("Produkt1");
         swipeLeftOnText("Produkt1");
@@ -95,24 +110,11 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         solo.scrollToTop(); // I put this in here so that it always keeps the list at start
         solo.waitForText("Kategorie1");
         solo.clickOnText("Kategorie1");
-    }
-
-    public void testBestBeforeDate() {
-        solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
-        solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
-        solo.assertCurrentActivity("Test", ProductActivity.class);
-        TextView beforedate = (TextView) getActivity().findViewById(R.id.et_bestbefore);
-        solo.clickOnView(beforedate);
-        //solo.clickOnText("20[.]5[.]2015");
-        solo.waitForText("May");
-        solo.clickOnText("22");
-        solo.clickOnText("OK");
-    }
-
-    public void testRecipe() {
-        solo.clickOnText("Rezepte");
-        solo.clickOnText("Rezept finden!");
-        solo.assertCurrentActivity("Test", Recipe.class);
+        solo.goBack();
+        swipeToRight();
+        solo.clickOnText("Kategorie");
+        solo.waitForText("Kategorie1");
+        swipeLeftOnText("Kategorie1");
     }
 
     protected void swipeLeftOnText(String text) {
