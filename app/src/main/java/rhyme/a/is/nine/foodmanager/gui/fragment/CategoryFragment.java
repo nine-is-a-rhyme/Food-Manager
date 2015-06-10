@@ -20,8 +20,6 @@ public class CategoryFragment extends ListFragment implements View.OnClickListen
 
     private static CategoryAdapter categoryListAdapter = new CategoryAdapter();
 
-    private AddFloatingActionButton fabAdd;
-
     public static CategoryAdapter getAdapter() {
         return categoryListAdapter;
     }
@@ -34,19 +32,19 @@ public class CategoryFragment extends ListFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view =  inflater.inflate(R.layout.fragment_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_category, container, false);
         return view;
     }
 
     @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+    public void onResume() {
+        categoryListAdapter.notifyDataSetChanged();
+        super.onResume();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         // Setting the array adapter to the listview
         categoryListAdapter.setContext(getActivity().getBaseContext());
         categoryListAdapter.setListView(getListView());

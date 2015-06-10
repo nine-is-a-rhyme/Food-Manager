@@ -73,11 +73,6 @@ public class ShoppingListFragment extends ListFragment implements View.OnClickLi
     }
 
     @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
