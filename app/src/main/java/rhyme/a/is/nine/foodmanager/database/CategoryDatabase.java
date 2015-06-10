@@ -14,14 +14,10 @@ public class CategoryDatabase extends Database<Category> {
 
     public CategoryDatabase(String fileName) {
         super(fileName);
+        list = new ArrayList<>();
     }
 
     public List<Category> getAllCategories() {
-        if (list.size() == 0) {
-            list = new ArrayList<>();
-            list.add(new Category("Lebensmittel", 10));
-            list.add(new Category("Getränke", 30));
-        }
         return list;
     }
 
@@ -43,6 +39,17 @@ public class CategoryDatabase extends Database<Category> {
             new_list.add(cats.getItem(counter));
         }
         setList(new_list);
+    }
+
+    public void removeCategoryByPosition(int position) {
+        if(list.isEmpty())
+            return;
+
+        list.remove(position);
+    }
+
+    public void deleteAll() {
+        list.clear();
     }
 
 }

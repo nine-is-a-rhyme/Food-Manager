@@ -33,7 +33,9 @@ public class PriceDatabase extends Database<PriceEntity> {
     }
 
 
-    private int numberOfMonthsInDatabase() {
+    public int numberOfMonthsInDatabase() {
+        if (list == null || list.size() == 0)
+            return 0;
         Calendar startCalendar = new GregorianCalendar();
         startCalendar.setTime(list.get(0).getBuyDate());
         for (PriceEntity p : list) {
@@ -71,14 +73,13 @@ public class PriceDatabase extends Database<PriceEntity> {
         BarDataSet set1 = new BarDataSet(yVals, "");
         set1.setBarSpacePercent(40f);
 
-        set1.setColor(Color.rgb(148, 212, 212)/*Color.parseColor("#FFBB33")*/);
+        set1.setColor(Color.rgb(148, 212, 212));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
 
         BarData data = new BarData(xVals, dataSets);
 
-        // data.setValueFormatter(new MyValueFormatter());
         data.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {

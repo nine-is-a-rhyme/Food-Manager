@@ -40,6 +40,9 @@ public class AboutFragment extends Fragment {
         TextView attr4 = (TextView) view.findViewById(R.id.tw_attr4);
         attr4.setMovementMethod(LinkMovementMethod.getInstance());
 
+        TextView attr5 = (TextView) view.findViewById(R.id.tw_attr5);
+        attr5.setMovementMethod(LinkMovementMethod.getInstance());
+
         return view;
     }
 

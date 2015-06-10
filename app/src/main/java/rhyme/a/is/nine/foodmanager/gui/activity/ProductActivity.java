@@ -8,6 +8,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +23,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +68,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
 
         Button button = (Button) findViewById(R.id.button_save);
         category = (Spinner) findViewById(R.id.et_category);
-        cat_db = new CategoryDatabase("category.db");
-        cat_db.readFromFile(getBaseContext());
+        cat_db = MainActivity.categoryDatabase;
         cat_list = cat_db.getAllCategories();
 
         ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, cat_list);
@@ -108,7 +111,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     name.setError("Bitte Bezeichnung eingeben!");
                 }
 
-                if(category.getSelectedItem().toString().length() > 0)
+                if(category.getSelectedItem() != null)
                 {
                     product.setCategory(category.getSelectedItem().toString());
 
@@ -116,18 +119,18 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                     fail = true;
                     //category.setBackgroundColor(Color.RED);
                     TextView category_view = (TextView) category.getSelectedView();
-                    category_view.setError("Bitte Kategorie eingeben!");
+                    if( category_view != null) {
+                        category_view.setError("Bitte Kategorie eingeben!");
+                    }
+                    else
+                    {
+                        category_view = (TextView) findViewById(R.id.spinner_error);
+                        category_view.requestFocus();
+                        category_view.setError("Bitte Kategorie eingeben!");
+                    }
                 }
 
-                /*EditText size = (EditText) findViewById(R.id.et_size);
-                if(size.getText().toString().length() > 0)
-                {
-                    product.setSize(size.getText().toString());
-                    size.setBackgroundColor(Color.GREEN);
-                } else {
-                    fail = true;
-                    size.setBackgroundColor(Color.RED);
-                }*/
+
                 EditText count = (EditText) findViewById(R.id.et_count);
                 try {
                     product.setCount(Integer.parseInt(count.getText().toString()));
@@ -169,12 +172,34 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                         pos.setBuyDate(new Date());
                         MainActivity.priceDatabase.addPriceEntity(pos);
                     }
-
+                    suggestedCategories = null;
+                    editProduct = null;
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Bitte überprüfe deine Eingaben.", Toast.LENGTH_LONG).show();
                 }
             }
+        });
+
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Category selected = MainActivity.categoryDatabase.getAllCategories().get(position);
+                bestBeforeView = (TextView) findViewById(R.id.et_bestbefore);
+                Calendar c = Calendar.getInstance();
+                c.setTime(new Date());
+                c.add(Calendar.DATE, selected.getBestBeforeDays());  // number of days to add
+                bestBeforeView.setText(new SimpleDateFormat("dd.MM.yyyy").format(c.getTime()));
+                TextView category_view = (TextView) findViewById(R.id.spinner_error);
+                category_view.clearFocus();
+                category_view.setError(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
 
         if(startedBy.equals("List")) {

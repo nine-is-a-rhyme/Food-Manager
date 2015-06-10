@@ -23,21 +23,25 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.List;
 
 import rhyme.a.is.nine.foodmanager.R;
+import rhyme.a.is.nine.foodmanager.database.CategoryDatabase;
 import rhyme.a.is.nine.foodmanager.database.PriceDatabase;
 import rhyme.a.is.nine.foodmanager.database.ProductDatabase;
 import rhyme.a.is.nine.foodmanager.gui.adapter.DrawerAdapter;
 import rhyme.a.is.nine.foodmanager.gui.fragment.AboutFragment;
+import rhyme.a.is.nine.foodmanager.gui.fragment.CategoryFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.FridgeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.HelpFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.PricesFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.SettingsFragment;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
+import rhyme.a.is.nine.foodmanager.product.Category;
 import rhyme.a.is.nine.foodmanager.product.Product;
 import rhyme.a.is.nine.foodmanager.database.RecipeDatabase;
 import rhyme.a.is.nine.foodmanager.gui.fragment.ShoppingListFragment;
@@ -60,6 +64,7 @@ public class MainActivity extends ActionBarActivity {
     public static RecipeDatabase recipeDatabase = null;
     public static ProductDatabase historyDatabase = null;
     public static PriceDatabase priceDatabase = null;
+    public static CategoryDatabase categoryDatabase = null;
     private ActionBar actionBar;
   
     @Override
@@ -71,9 +76,9 @@ public class MainActivity extends ActionBarActivity {
                 R.drawable.ic_action_fridge,
                 R.drawable.ic_action_list,
                 R.drawable.ic_action_recipe,
+                R.drawable.ic_action_categories,
                 R.drawable.ic_action_graph,
                 R.drawable.ic_action_settings,
-                R.drawable.ic_action_help,
                 R.drawable.ic_action_about
         };
 
@@ -123,6 +128,7 @@ public class MainActivity extends ActionBarActivity {
         shoppingListDatabase = new ProductDatabase("shopping_list.db");
         historyDatabase = new ProductDatabase("history.db");
         priceDatabase = new PriceDatabase("prices.db");
+        categoryDatabase = new CategoryDatabase("categories.db");
         recipeDatabase = new RecipeDatabase("ichkoche.json");
 
         fridgeDatabase.readFromFile(getBaseContext());
@@ -130,6 +136,7 @@ public class MainActivity extends ActionBarActivity {
         shoppingListDatabase.readFromFile(getBaseContext());
         historyDatabase.readFromFile(getBaseContext());
         priceDatabase.readFromFile(getBaseContext());
+        categoryDatabase.readFromFile(getBaseContext());
     }
 
     @Override
@@ -137,7 +144,8 @@ public class MainActivity extends ActionBarActivity {
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
-        priceDatabase.readFromFile(getBaseContext());
+        priceDatabase.writeToFile(getBaseContext());
+        categoryDatabase.writeToFile(getBaseContext());
 
         super.onDestroy();
     }
@@ -148,6 +156,8 @@ public class MainActivity extends ActionBarActivity {
         fridgeDatabase.writeToFile(getBaseContext());
         shoppingListDatabase.writeToFile(getBaseContext());
         historyDatabase.writeToFile(getBaseContext());
+        priceDatabase.writeToFile(getBaseContext());
+        categoryDatabase.writeToFile(getBaseContext());
     }
 
     @Override
@@ -210,6 +220,27 @@ public class MainActivity extends ActionBarActivity {
         ShoppingListFragment.getAdapter().notifyDataSetChanged();
     }
 
+    public void onEditButtonCategoryClicked(View v) {
+        Category c = categoryDatabase.getAllCategories().get((int)v.getTag());
+        CategoryActivity.editCategory = c;
+        Intent myIntent = new Intent(MainActivity.this, CategoryActivity.class);
+        MainActivity.this.startActivity(myIntent);
+    }
+
+    public void onDiscardButtonCategoryClicked(View v) {
+        Category c = categoryDatabase.getAllCategories().get((int)v.getTag());
+        CategoryActivity.editCategory = c;
+        if(!MainActivity.fridgeDatabase.categoryExists(c.getName()))
+        {
+            categoryDatabase.removeCategoryByPosition((int)v.getTag());
+            CategoryFragment.getAdapter().notifyDataSetChanged();
+        }
+        else
+        {
+            Toast.makeText(this, "Kategorie kann nicht entfernt werden.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 
 
@@ -252,16 +283,15 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new RecipeFragment();
                 break;
             case 3:
-                // Movies fragment activity
-                fragment = new PricesFragment();
+                fragment = new CategoryFragment();
                 break;
             case 4:
                 // Movies fragment activity
-                fragment = new SettingsFragment();
+                fragment = new PricesFragment();
                 break;
             case 5:
                 // Movies fragment activity
-                fragment = new HelpFragment();
+                fragment = new SettingsFragment();
                 break;
             case 6:
                 // Movies fragment activity
