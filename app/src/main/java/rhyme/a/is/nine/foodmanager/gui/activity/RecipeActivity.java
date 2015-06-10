@@ -1,4 +1,4 @@
-package rhyme.a.is.nine.foodmanager.gui;
+package rhyme.a.is.nine.foodmanager.gui.activity;
 
 import android.content.Context;
 import android.content.Intent;

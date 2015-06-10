@@ -48,7 +48,13 @@ public class IngredientsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView ingredient = new TextView(context);
-        ingredient.setText( ( (Ingredients) getItem(position)).getAmount() + " - " + ( (Ingredients) getItem(position)).getName());
+        if(((Ingredients) getItem(position)).getAmount().equals(" ") ){
+            ingredient.setText(( (Ingredients) getItem(position)).getName());
+        }
+        else{
+            ingredient.setText( ( (Ingredients) getItem(position)).getAmount() + " - " + ( (Ingredients) getItem(position)).getName());
+        }
+
 
         ingredient.setTextColor(Color.BLACK);
         ingredient.setHeight(70);
