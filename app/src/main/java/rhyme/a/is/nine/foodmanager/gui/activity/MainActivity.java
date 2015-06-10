@@ -79,7 +79,6 @@ public class MainActivity extends ActionBarActivity {
                 R.drawable.ic_action_categories,
                 R.drawable.ic_action_graph,
                 R.drawable.ic_action_settings,
-                R.drawable.ic_action_help,
                 R.drawable.ic_action_about
         };
 
@@ -295,10 +294,6 @@ public class MainActivity extends ActionBarActivity {
                 fragment = new SettingsFragment();
                 break;
             case 6:
-                // Movies fragment activity
-                fragment = new HelpFragment();
-                break;
-            case 7:
                 // Movies fragment activity
                 fragment = new AboutFragment();
                 break;

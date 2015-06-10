@@ -84,13 +84,11 @@ public class CategoryActivity extends ActionBarActivity  {
                     ArrayAdapter<Category> adapter = (ArrayAdapter) ProductActivity.category.getAdapter();
                     adapter.add(cat);
                     ProductActivity.category.setSelection(adapter.getCount());
-                   // MainActivity.categoryDatabase.addCategory(cat);
                 } else {
                     MainActivity.fridgeDatabase.changeCategory(desc_name, editCategory.getName());
                     editCategory.setName(desc_name);
                     editCategory.setBestBeforeDays(bbf_date);
                 }
-                //ProductActivity.cat_db.addCategory(cat);
                 editCategory = null;
                 finish();
             }
