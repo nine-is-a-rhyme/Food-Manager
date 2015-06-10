@@ -6,6 +6,7 @@ package rhyme.a.is.nine.foodmanager.uitest;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,10 +28,11 @@ import rhyme.a.is.nine.foodmanager.gui.fragment.RecipeFragment;
 public class ExampleTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
-    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "rhyme.a.is.nine.foodmanager.gui.MainActivity";
+    private static final String LAUNCHER_ACTIVITY_FULL_CLASSNAME = "rhyme.a.is.nine.foodmanager.gui.activity.MainActivity";
 
     private static Class<?> launcherActivityClass;
-    static{
+
+    static {
         try {
             launcherActivityClass = Class.forName(LAUNCHER_ACTIVITY_FULL_CLASSNAME);
         } catch (ClassNotFoundException e) {
@@ -55,13 +57,34 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         super.tearDown();
     }
 
-    public void testTabs() {
+    public void testNavigationDrawer() {
         solo.assertCurrentActivity("Test", MainActivity.class);
+        swipeToRight();
         solo.clickOnText("Einkaufsliste");
+        swipeToRight();
         solo.clickOnText("Rezepte");
+        swipeToRight();
+        solo.clickOnText("Kategorien");
+        swipeToRight();
+        solo.clickOnText("Ausgaben");
+        swipeToRight();
+        solo.clickOnText("Einstellungen");
+        swipeToRight();
+        solo.clickOnText("Hilfe");
+        swipeToRight();
+        solo.clickOnText(".?ber");
+        swipeToRight();
         solo.clickOnText("K.?hlschrank");
 
+    }
 
+    private void swipeToRight() {
+        Display display = solo.getCurrentActivity().getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+        float xStart = 0;
+        float xEnd = width / 2;
+        solo.drag(xStart, xEnd, height / 2, height / 2, 1);
     }
 
     public void testAddProducts() {
@@ -76,6 +99,7 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnButton(1);
         solo.clickOnButton(0);
         swipeLeftOnText("Produkt1");
+        swipeToRight();
         solo.clickOnText("Einkaufsliste");
         solo.waitForText("Produkt1");
         swipeLeftOnText("Produkt1");
@@ -110,6 +134,7 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testRecipe() {
+        swipeToRight();
         solo.clickOnText("Rezepte");
         solo.clickOnText("Rezept finden!");
         solo.assertCurrentActivity("Test", RecipeActivity.class);

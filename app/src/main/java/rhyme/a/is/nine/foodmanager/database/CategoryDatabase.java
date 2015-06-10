@@ -14,12 +14,10 @@ public class CategoryDatabase extends Database<Category> {
 
     public CategoryDatabase(String fileName) {
         super(fileName);
+        list = new ArrayList<>();
     }
 
     public List<Category> getAllCategories() {
-        if (list.size() == 0) {
-            list = new ArrayList<>();
-        }
         return list;
     }
 
