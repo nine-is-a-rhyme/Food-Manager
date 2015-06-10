@@ -48,4 +48,8 @@ public class CategoryDatabase extends Database<Category> {
         list.remove(position);
     }
 
+    public void deleteAll() {
+        list.clear();
+    }
+
 }

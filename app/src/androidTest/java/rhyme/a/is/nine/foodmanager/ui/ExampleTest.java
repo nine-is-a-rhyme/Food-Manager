@@ -63,8 +63,6 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         swipeToRight();
         solo.clickOnText("Einstellungen");
         swipeToRight();
-        solo.clickOnText("Hilfe");
-        swipeToRight();
         solo.clickOnText(".?ber");
         swipeToRight();
         solo.clickOnText("K.?hlschrank");
@@ -81,17 +79,17 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
     }
 
     public void testAddProducts() {
-        //solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_menu));
         solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
         solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
         solo.assertCurrentActivity("Test", ProductActivity.class);
         solo.enterText(0, "Produkt1");
         solo.clickOnText("Speichern");
         solo.assertCurrentActivity("Test", MainActivity.class);
+        solo.clickInList(0);
         solo.waitForText("Produkt1");
-        solo.clickOnButton(1);
-        solo.clickOnButton(0);
-        swipeLeftOnText("Produkt1");
+        solo.clickOnImageButton(1);
+        solo.clickOnImageButton(0);
+        solo.clickOnImageButton(0);
         swipeToRight();
         solo.clickOnText("Einkaufsliste");
         solo.waitForText("Produkt1");
@@ -112,18 +110,11 @@ public class ExampleTest extends ActivityInstrumentationTestCase2 {
         solo.scrollToTop(); // I put this in here so that it always keeps the list at start
         solo.waitForText("Kategorie1");
         solo.clickOnText("Kategorie1");
-    }
-
-    public void testBestBeforeDate() {
-        solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
-        solo.clickOnView(getActivity().findViewById(R.id.floating_action_button_add_manual));
-        solo.assertCurrentActivity("Test", ProductActivity.class);
-        TextView beforedate = (TextView) getActivity().findViewById(R.id.et_bestbefore);
-        solo.clickOnView(beforedate);
-        //solo.clickOnText("20[.]5[.]2015");
-        solo.waitForText("May");
-        solo.clickOnText("22");
-        solo.clickOnText("OK");
+        solo.goBack();
+        swipeToRight();
+        solo.clickOnText("Kategorie");
+        solo.waitForText("Kategorie1");
+        swipeLeftOnText("Kategorie1");
     }
 
     protected void swipeLeftOnText(String text) {
