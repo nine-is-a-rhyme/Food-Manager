@@ -141,7 +141,7 @@ public class ProductActivity extends ActionBarActivity implements View.OnClickLi
                 if(!startedBy.equals("List")) {
                 EditText price = (EditText) findViewById(R.id.et_price);
                 try {
-                    pos.setPrice(Float.parseFloat(count.getText().toString()));
+                    pos.setPrice(Float.parseFloat(price.getText().toString()) * Float.parseFloat(count.getText().toString()));
 
                 } catch (Exception e) {
                     pos.setPrice(0);
